@@ -69,10 +69,16 @@ function testScreeningStylesDoNotBreakTrack1(taskCase) {
   for (const style of SCREENING_STYLE_IDS) {
     const prompt = buildSystemPrompt(style, family);
     assert.ok(prompt.length > 100, `${style} prompt too short`);
+    const hasTrack1Role = prompt.includes(
+      "You are a scheduling agent for an appliance repair company"
+    );
+    // S_md_short is the markdown scaffold plus that exact Track-1 role line.
     assert.equal(
-      prompt.includes("You are a scheduling agent for an appliance repair company"),
-      false,
-      `${style} must not add Track-1 role folklore`
+      hasTrack1Role,
+      style === "S_md_short",
+      style === "S_md_short"
+        ? `${style} must include the Track-1 short role line`
+        : `${style} must not add Track-1 role folklore`
     );
     assert.equal(
       buildUserPrompt(taskCase),
