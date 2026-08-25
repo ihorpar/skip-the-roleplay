@@ -19,7 +19,7 @@ Luz de Araujo et al. [2025] ask when personas *should* help via three desiderata
 | Contrast | Desideratum lens | What we can claim here |
 |----------|------------------|------------------------|
 | A2 − A1 | **Expertise Advantage** (thin, domain-matched short role vs no-persona) | Under the locked rule: **no clear positive or negative** Expertise Advantage on end-to-end pass on this dense tool stack (Luna). |
-| A3 − A2 | **Robustness-adjacent** (soft generic virtues on the role; not name/color probes, not exam coaching) | Point estimates lean negative in places (esp. B1); **CI includes 0** → no clear Robustness failure under the rule; right *hypothesis class*. |
+| A3 − A2 | **Robustness-adjacent** (soft generic virtues on the role; not name/color probes, not exam coaching) | Point estimates lean negative in places (esp. B1); **CI includes 0**, so no clear robustness failure under the rule. |
 | A3 − A1 | Bundle vs baseline | No clear effect under the rule. |
 | Longer pure persona − A1 (`gpt-4.1-mini`, appendix) | Stronger careful-design / Robustness-style warning | Met the **hurt** threshold on that mid-band stack; reported as a separate appendix claim. |
 
@@ -58,7 +58,7 @@ The confirmatory claim is one frontier model (`gpt-5.6-luna`), one domain, one S
 
 ### Protocol lock vs formal pre-registration
 
-The analysis plan was locked internally before the confirmatory 120-case matrix. That is stronger than post-hoc story-fitting, but **not** the same as a public OSF/AsPredicted registry. Disclose as **internal protocol lock**.
+The analysis plan was locked internally before the confirmatory 120-case matrix. That is stronger than fitting the story after seeing the numbers. It is not a public OSF or AsPredicted registration.
 
 ### Prompt length
 

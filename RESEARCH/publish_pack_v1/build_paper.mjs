@@ -49,7 +49,7 @@ const sections = [
   ['3. Methods', demote(stripMeta(read('03_methods.md')))],
   ['4. Results', demote(stripMeta(read('04_results.md')))],
   ['5. Discussion', demote(stripMeta(read('05_discussion.md')))],
-  ['Appendix A. Exploratory checks', demote(stripMeta(read('06_appendix_exploratory.md'), { keepFences: true }))],
+  ['Appendix A. Exploratory checks', demote(stripMeta(read('06_appendix_exploratory.md')))],
   ['Appendix B. Reproducibility', fitRepro(demote(stripMeta(read('07_reproducibility.md'))))],
   ['References', references],
 ];

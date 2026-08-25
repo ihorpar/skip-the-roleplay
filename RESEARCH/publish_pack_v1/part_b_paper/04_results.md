@@ -92,4 +92,4 @@ Mode is not a prompt-style contrast, but the lift is large and consistent. Overa
 
 ## Exploratory work
 
-The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On `gpt-4.1-mini` (B1 only, 1440 graded attempts) a longer pure persona **hurt** (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat `gemini-3.5-flash-lite` screen (~76–80% by style) is appendix-only and not claim-ready. Numbers and protocols are in Appendix A.
+The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On `gpt-4.1-mini` (B1 only, 1440 graded attempts) a longer pure persona **hurt** (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat `gemini-3.5-flash-lite` screen (~76–80% by style) is appendix-only and is not a confirmatory result. Numbers and protocols are in Appendix A.

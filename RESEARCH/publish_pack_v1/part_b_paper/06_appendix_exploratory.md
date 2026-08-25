@@ -1,22 +1,19 @@
 # Appendix: exploratory checks
 
-**Label:** Exploratory / directional / stopped where noted; **not** the primary claim.  
-**Does not change** `RESEARCH/track1_role_study_package/CLAIM.md` (Luna confirmatory short-role null).  
-**Authority for main claim:** locked analysis plan + Luna confirmatory matrix only.  
-**Wording:** Prefer public terms in `TERMINOLOGY.md` (exam **case**, not lab “ticket”).
+This appendix is exploratory. It does not change the Luna confirmatory short-role result.
 
 ---
 
 ## Purpose of this appendix
 
-After the Luna short-role null, we ran cheaper pilots and checks to ask whether a **longer pure persona**, or a **weaker / mid-band model**, might show a different pattern. Those materials motivate follow-ups; they are **not** pooled into the primary prompt-style claim and must not appear in the abstract as confirmatory results.
+After the Luna short-role null, we ran cheaper pilots and checks to ask whether a **longer pure persona**, or a **weaker / mid-band model**, might show a different pattern. Those materials motivate follow-ups. They are not pooled into the primary prompt-style claim.
 
 ---
 
 ## Long pure persona pilots
 
 Protocol: `RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md`.  
-Longer pure persona arm = identity / experience / qualities only (`S_role_long_pure`); no exam cheat-sheet coaching in the persona block.
+Longer pure persona arm = identity / experience / qualities only (`S_role_long_pure`); no exam-specific coaching in the persona block.
 
 ### Stage 1: Luna, instant, 40-case rehearsal, 1 repeat
 
@@ -25,7 +22,7 @@ Longer pure persona arm = identity / experience / qualities only (`S_role_long_p
 | A1_task | 92.5% (37/40) |
 | S_role_long_pure | 92.5% (37/40) |
 
-Paired net **0**. **Stop / pivot**: no Stage 2 Luna B1 matrix.  
+Paired net **0**. We did not run a larger Luna B1 matrix.  
 Findings: `…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md`
 
 ### Stage 1b: `gpt-5.4-nano`, thinking, same 40 cases, 1 repeat
@@ -35,8 +32,8 @@ Findings: `…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md`
 | A1_task | 47.5% (19/40) |
 | S_role_long_pure | 52.5% (21/40) |
 
-Δ **+5.0 pp**; paired net **+2**. **Stop / do not expand**: noisy, no clear coherent fail pattern for a larger nano matrix.  
-Earlier **cross-batch** nano longer-persona ~65% vs factorial A1 ~50% **did not hold** same-batch; treat that older story as cautionary only.  
+Δ **+5.0 pp**; paired net **+2**. Noisy, no clear fail pattern, so we did not expand this into a larger nano matrix.  
+Earlier **cross-batch** nano longer-persona ~65% vs factorial A1 ~50% **did not hold** same-batch; treat that older comparison as cautionary only.  
 Findings: `…/nano54_b2_pure_long_pilot_20260722T153848/STAGE1B_PILOT_FINDINGS.md`
 
 ---
@@ -58,7 +55,7 @@ Also: `06_supporting_nano_probe/` · `NANO_COMPARE_FINDINGS.md` under `benchmark
 
 **Takeaway.** The Luna role null is *not* “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; `gpt-4.1-mini` ~63% is a different protocol (120×3).
 
-Mid-band role checks on `gpt-5.4-nano` and related factorials live in the same supporting folder; keep them **out of** the abstract and main claim map unless upgraded later under the same analysis rule.
+Mid-band role checks on `gpt-5.4-nano` and related factorials live in the same supporting folder. They are not part of the confirmatory claim.
 
 ---
 
@@ -69,7 +66,7 @@ Claim findings: `…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md`
 Analysis: `…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json`  
 Claim card: `track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md`  
 
-**Does not rewrite** Luna `CLAIM.md`.
+This does not rewrite the Luna confirmatory claim.
 
 **Design:** `openai:gpt-4.1-mini` · 120 exam cases · A1 / A2 / A3 / longer pure persona (`S_role_long_pure`) · **B1 only** · **3 repeats** · **1440** graded attempts · 0 technical failures.
 
@@ -111,9 +108,9 @@ Protocol: `RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOC
 Findings: `…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md`  
 Summary JSON: `…/exploratory_r1_glued/glued_summary.json`
 
-**Label:** Exploratory only; **not** a claim. **Does not rewrite** Luna or `gpt-4.1-mini` claims. No paired-bootstrap claim bar applied (single repeat).
+One repeat, exploratory only. It does not rewrite the Luna or `gpt-4.1-mini` claims. No paired-bootstrap claim bar (single repeat).
 
-**Design:** `gemini:gemini-3.5-flash-lite` · `full_120` · A1 / A2 / A3 / `S_role_long_pure` · **B1 only** · **1** repeat · **480** graded · 0 infra in glued set. Family batches glued after free-tier gap-fills on the final Gemini structured-output harness.
+**Design:** `gemini:gemini-3.5-flash-lite` · `full_120` · A1 / A2 / A3 / `S_role_long_pure` · **B1 only** · **1** repeat · **480** graded attempts · 0 technical failures in the glued set. Family batches were glued after gap-fills on the Gemini structured-output harness.
 
 ### Pass rates
 
@@ -126,20 +123,6 @@ One repeat; 120 graded attempts per style.
 | A3_comp | **76.7%** |
 | S_role_long_pure | **75.8%** |
 
-Point-estimate deltas vs A1: A2 **−2.5** pp · A3 **−3.3** pp · pureLong **−4.2** pp. Directionally flat-to-slightly-down; **do not** promote to a confirmatory null or “hurt” without r2/r3.
+Point-estimate deltas vs A1: A2 **−2.5** pp · A3 **−3.3** pp · pureLong **−4.2** pp. Directionally flat-to-slightly-down. This is not a confirmatory null or a “hurt” claim.
 
 **Takeaway.** A mid-band capability screen (~76–80% overall). Short role does not look helpful here either; longer persona is not the clear hurt seen on `gpt-4.1-mini`’s 3-rep claim.
-
----
-
-## Placement reminder
-
-| Material | Paper placement |
-|----------|-----------------|
-| Luna A1/A2/A3 × B1/B2 × 120 × 3 | Main |
-| B2 vs B1 lift | Main Results, secondary |
-| Long persona Stage 1 / 1b | This appendix |
-| Nano / mini floors (40-case ladder) | This appendix (reference) |
-| gpt-4.1-mini 3-rep claim (longer persona hurt; short role null) | This appendix (separate model claim) |
-| gemini-3.5-flash-lite 1-rep glued screen | This appendix (exploratory only) |
-| Markdown × role factorials, rich-role screens | Out of paper or footnote only |

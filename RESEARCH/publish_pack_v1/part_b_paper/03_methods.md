@@ -115,7 +115,7 @@ Locked role/competency lines (short quotes; full task instructions are longer):
 | Graded attempts | **2160** (= 120 × 3 × 2 × 3) |
 | Technical API failures (main matrix) | 0 |
 
-A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues; rehearsal numbers are provisional and do not support claim language. Only the frozen 120 under this analysis plan is claim-ready.
+A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues. Those numbers do not support the confirmatory claim. Only the frozen 120 under this analysis plan does.
 
 ## Analysis rule
 

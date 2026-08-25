@@ -82,7 +82,7 @@
 <h2>2. Related work</h2>
 <p>Short role lines (“you are a scheduling agent”) and soft competency text remain standard practice in production agents. Prior literature shows that persona and instruction effects are real in some settings and null in others, but almost always on QA, reasoning, or open-ended writing, not on dense tool-using instruction stacks with deterministic business gold. We situate our confirmatory study in four strands.</p>
 <h3>Role and persona prompting</h3>
-<p>Persona / role prompting is a crowded area, now surveyed as LLM <em>role-playing</em> (assigning a persona to the model) versus <em>personalization</em> (conditioning on a user persona) [Tseng et al., 2024; Chen et al., 2024]. Early positive results encouraged the folklore: Kong et al. [2024] report that strategically designed role-play prompting improves zero-shot reasoning over standard prompting on most of twelve benchmarks (e.g., AQuA 53.5%→63.8% with ChatGPT), acting as an implicit chain-of-thought trigger. Xu et al. [2023] (<em>ExpertPrompting</em>) show that detailed, auto-synthesized expert biographies, often tailored per instruction, can raise judged answer quality and support stronger instruction-tuned assistants. That is a different intervention from the short “you are a scheduling agent” line practitioners add on top of an already dense task stack (our A2/A3). These gains are typically measured with soft or LLM-as-judge metrics, or on math/symbolic tasks without tools.</p>
+<p>Persona / role prompting is a crowded area, now surveyed as LLM <em>role-playing</em> (assigning a persona to the model) versus <em>personalization</em> (conditioning on a user persona) [Tseng et al., 2024; Chen et al., 2024]. Early positive results include Kong et al. [2024], who report that strategically designed role-play prompting improves zero-shot reasoning over standard prompting on most of twelve benchmarks (e.g., AQuA 53.5%→63.8% with ChatGPT), acting as an implicit chain-of-thought trigger. Xu et al. [2023] (<em>ExpertPrompting</em>) show that detailed, auto-synthesized expert biographies, often tailored per instruction, can raise judged answer quality and support stronger instruction-tuned assistants. That is a different intervention from the short “you are a scheduling agent” line practitioners add on top of an already dense task stack (our A2/A3). These gains are typically measured with soft or LLM-as-judge metrics, or on math/symbolic tasks without tools.</p>
 <p>Negative and mixed evidence is equally important. Zheng et al. [2024] systematically evaluate 162 social / expert roles as system-prompt personas across multiple model families and 2,410 factual questions, finding that adding a persona does <strong>not</strong> improve objective accuracy relative to a no-persona control; any per-question “best persona” effect is hard to select automatically and often indistinguishable from chance. Luz de Araujo et al. [2025] (<em>Principled Personas</em>) then measure expert-persona prompting against explicit desiderata across many models and tasks: expert personas are usually positive or non-significant, while irrelevant persona details can hurt sharply. That is useful framing for when identity text should matter, though still mostly outside dense tool+schema business workflows with deterministic end-to-end gold. Zheng remains the closest published analogue to our confirmatory null; Principled Personas is the closest recent measurement framework. Neither is a locked A/B of short role / soft competency text under fixed tools, schemas, and pass criteria. We therefore re-measure that operational intervention in our scheduling exam.</p>
 <h3>System prompts and instruction following</h3>
 <p>Modern chat APIs separate system instructions from user turns; alignment work (InstructGPT; Ouyang et al., 2022) made following those instructions a first-class capability. Evaluation has moved toward <em>verifiable</em> compliance: IFEval [Zhou et al., 2023] scores objective constraints (length, keywords, format) with deterministic checkers rather than LLM judges. That design matches our scheduling exam, where tools, fields, and exact phrases are programmatically scored, but IFEval does not ask whether adding identity text on top of an already dense instruction stack changes pass rates. In deployment, the practical question is often incremental: given a long, correct task policy, do short role or competency appendages still move outcomes? Prior instruction-following work rarely isolates that contrast under a fixed tool/schema harness.</p>
@@ -273,7 +273,7 @@
 <td>0</td>
 </tr>
 </tbody></table></div>
-<p>A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues; rehearsal numbers are provisional and do not support claim language. Only the frozen 120 under this analysis plan is claim-ready.</p>
+<p>A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues. Those numbers do not support the confirmatory claim. Only the frozen 120 under this analysis plan does.</p>
 <div class="keep"><h3>Analysis rule</h3>
 <p>Unit of analysis is the <strong>exam case</strong>, not the raw API call:</p>
 <ol>
@@ -488,7 +488,7 @@
 <p>720 graded attempts per style. Tool-argument accuracy is 100% in every cell. These rates are not confirmatory endpoints.</p>
 <p><strong>What failures look like.</strong> Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.</p>
 <h3>Exploratory work</h3>
-<p>The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) a longer pure persona <strong>hurt</strong> (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat <code>gemini-3.5-flash-lite</code> screen (~76–80% by style) is appendix-only and not claim-ready. Numbers and protocols are in Appendix A.</p>
+<p>The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) a longer pure persona <strong>hurt</strong> (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat <code>gemini-3.5-flash-lite</code> screen (~76–80% by style) is appendix-only and is not a confirmatory result. Numbers and protocols are in Appendix A.</p>
 <h2>5. Discussion</h2>
 <h3>What the claim is</h3>
 <p>The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a>).</p>
@@ -512,7 +512,7 @@
 <tr>
 <td>A3 − A2</td>
 <td><strong>Robustness-adjacent</strong> (soft generic virtues on the role; not name/color probes, not exam coaching)</td>
-<td>Point estimates lean negative in places (esp. B1); <strong>CI includes 0</strong> → no clear Robustness failure under the rule; right <em>hypothesis class</em>.</td>
+<td>Point estimates lean negative in places (esp. B1); <strong>CI includes 0</strong>, so no clear robustness failure under the rule.</td>
 </tr>
 <tr>
 <td>A3 − A1</td>
@@ -546,7 +546,7 @@
 <h4>One model, one domain</h4>
 <p>The confirmatory claim is one frontier model (<code>gpt-5.6-luna</code>), one domain, one Structured Outputs + tool-schema stack. Appendix work extends the <em>story</em> to other tiers; it does not widen the locked Luna claim. API drift matters for re-runs (see reproducibility).</p>
 <h4>Protocol lock vs formal pre-registration</h4>
-<p>The analysis plan was locked internally before the confirmatory 120-case matrix. That is stronger than post-hoc story-fitting, but <strong>not</strong> the same as a public OSF/AsPredicted registry. Disclose as <strong>internal protocol lock</strong>.</p>
+<p>The analysis plan was locked internally before the confirmatory 120-case matrix. That is stronger than fitting the story after seeing the numbers. It is not a public OSF or AsPredicted registration.</p>
 <h4>Prompt length</h4>
 <p>Prompt length was not tightly matched across A1/A2/A3 (content-over-length by design). Task instructions were hardened in rehearsal before the confirmatory freeze, so the dense baseline is a strong competitor for any short role add-on.</p>
 <hr>
@@ -557,13 +557,13 @@
 <h3>Implication for deployment</h3>
 <p>For practitioners running dense, correct task rules on a strong model in a similar exam: prioritize instructions, tools/schemas, and reasoning effort where available over short persona text. For researchers: a citeable confirmatory null under a locked reading plan, plus a clear secondary mode lift, with exploratory follow-ups fenced in the appendix.</p>
 <h2>Appendix A. Exploratory checks</h2>
-<p><strong>Label:</strong> Exploratory / directional / stopped where noted; <strong>not</strong> the primary claim.<br><strong>Does not change</strong> <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>RESEARCH/track1_role_study_package/CLAIM.md</code></a> (Luna confirmatory short-role null).<br><strong>Authority for main claim:</strong> locked analysis plan + Luna confirmatory matrix only.  </p>
+<p>This appendix is exploratory. It does not change the Luna confirmatory short-role result.</p>
 <hr>
 <h3>Purpose of this appendix</h3>
-<p>After the Luna short-role null, we ran cheaper pilots and checks to ask whether a <strong>longer pure persona</strong>, or a <strong>weaker / mid-band model</strong>, might show a different pattern. Those materials motivate follow-ups; they are <strong>not</strong> pooled into the primary prompt-style claim and must not appear in the abstract as confirmatory results.</p>
+<p>After the Luna short-role null, we ran cheaper pilots and checks to ask whether a <strong>longer pure persona</strong>, or a <strong>weaker / mid-band model</strong>, might show a different pattern. Those materials motivate follow-ups. They are not pooled into the primary prompt-style claim.</p>
 <hr>
 <h3>Long pure persona pilots</h3>
-<p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></a>.<br>Longer pure persona arm = identity / experience / qualities only (<code>S_role_long_pure</code>); no exam cheat-sheet coaching in the persona block.</p>
+<p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></a>.<br>Longer pure persona arm = identity / experience / qualities only (<code>S_role_long_pure</code>); no exam-specific coaching in the persona block.</p>
 <h4>Stage 1: Luna, instant, 40-case rehearsal, 1 repeat</h4>
 <table>
 <thead>
@@ -581,7 +581,7 @@
 <td>92.5% (37/40)</td>
 </tr>
 </tbody></table></div>
-<p>Paired net <strong>0</strong>. <strong>Stop / pivot</strong>: no Stage 2 Luna B1 matrix.<br>Findings: <code>…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md</code></p>
+<p>Paired net <strong>0</strong>. We did not run a larger Luna B1 matrix.<br>Findings: <code>…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md</code></p>
 <div class="keep"><h4>Stage 1b: <code>gpt-5.4-nano</code>, thinking, same 40 cases, 1 repeat</h4>
 <table>
 <thead>
@@ -599,7 +599,7 @@
 <td>52.5% (21/40)</td>
 </tr>
 </tbody></table></div>
-<p>Δ <strong>+5.0 pp</strong>; paired net <strong>+2</strong>. <strong>Stop / do not expand</strong>: noisy, no clear coherent fail pattern for a larger nano matrix.<br>Earlier <strong>cross-batch</strong> nano longer-persona ~65% vs factorial A1 ~50% <strong>did not hold</strong> same-batch; treat that older story as cautionary only.<br>Findings: <code>…/nano54_b2_pure_long_pilot_20260722T153848/STAGE1B_PILOT_FINDINGS.md</code></p>
+<p>Δ <strong>+5.0 pp</strong>; paired net <strong>+2</strong>. Noisy, no clear fail pattern, so we did not expand this into a larger nano matrix.<br>Earlier <strong>cross-batch</strong> nano longer-persona ~65% vs factorial A1 ~50% <strong>did not hold</strong> same-batch; treat that older comparison as cautionary only.<br>Findings: <code>…/nano54_b2_pure_long_pilot_20260722T153848/STAGE1B_PILOT_FINDINGS.md</code></p>
 <hr>
 <div class="keep"><h3>Nano and mini floors</h3>
 <p>Same exam can be near-impossible for weak models under A1×B1. Supporting probes on the <strong>40-case Task-only Instant</strong> screen:</p>
@@ -633,11 +633,11 @@
 </tbody></table></div>
 <p>Findings: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md"><code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md</code></a><br>Also: <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe"><code>06_supporting_nano_probe/</code></a> · <code>NANO_COMPARE_FINDINGS.md</code> under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs"><code>benchmark_pack_v1/runs/</code></a>.</p>
 <p><strong>Takeaway.</strong> The Luna role null is <em>not</em> “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; <code>gpt-4.1-mini</code> ~63% is a different protocol (120×3).</p>
-<p>Mid-band role checks on <code>gpt-5.4-nano</code> and related factorials live in the same supporting folder; keep them <strong>out of</strong> the abstract and main claim map unless upgraded later under the same analysis rule.</p>
+<p>Mid-band role checks on <code>gpt-5.4-nano</code> and related factorials live in the same supporting folder. They are not part of the confirmatory claim.</p>
 <hr>
 <h3>A separate claim on <code>gpt-4.1-mini</code></h3>
 <p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code></a><br>Claim findings: <code>…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md</code><br>Analysis: <code>…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json</code><br>Claim card: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md"><code>track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md</code></a>  </p>
-<p><strong>Does not rewrite</strong> Luna <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a>.</p>
+<p>This does not rewrite the Luna confirmatory claim.</p>
 <p><strong>Design:</strong> <code>openai:gpt-4.1-mini</code> · 120 exam cases · A1 / A2 / A3 / longer pure persona (<code>S_role_long_pure</code>) · <strong>B1 only</strong> · <strong>3 repeats</strong> · <strong>1440</strong> graded attempts · 0 technical failures.</p>
 <div class="keep"><h4>Pooled pass rates</h4>
 <p>Each style pools 360 graded attempts.</p>
@@ -711,8 +711,8 @@
 <hr>
 <h3>Exploratory screen on <code>gemini-3.5-flash-lite</code></h3>
 <p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code></a><br>Findings: <code>…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code><br>Summary JSON: <code>…/exploratory_r1_glued/glued_summary.json</code></p>
-<p><strong>Label:</strong> Exploratory only; <strong>not</strong> a claim. <strong>Does not rewrite</strong> Luna or <code>gpt-4.1-mini</code> claims. No paired-bootstrap claim bar applied (single repeat).</p>
-<p><strong>Design:</strong> <code>gemini:gemini-3.5-flash-lite</code> · <code>full_120</code> · A1 / A2 / A3 / <code>S_role_long_pure</code> · <strong>B1 only</strong> · <strong>1</strong> repeat · <strong>480</strong> graded · 0 infra in glued set. Family batches glued after free-tier gap-fills on the final Gemini structured-output harness.</p>
+<p>One repeat, exploratory only. It does not rewrite the Luna or <code>gpt-4.1-mini</code> claims. No paired-bootstrap claim bar (single repeat).</p>
+<p><strong>Design:</strong> <code>gemini:gemini-3.5-flash-lite</code> · <code>full_120</code> · A1 / A2 / A3 / <code>S_role_long_pure</code> · <strong>B1 only</strong> · <strong>1</strong> repeat · <strong>480</strong> graded attempts · 0 technical failures in the glued set. Family batches were glued after gap-fills on the Gemini structured-output harness.</p>
 <div class="keep"><h4>Pass rates</h4>
 <p>One repeat; 120 graded attempts per style.</p>
 <table>
@@ -739,46 +739,8 @@
 <td align="right"><strong>75.8%</strong></td>
 </tr>
 </tbody></table></div>
-<p>Point-estimate deltas vs A1: A2 <strong>−2.5</strong> pp · A3 <strong>−3.3</strong> pp · pureLong <strong>−4.2</strong> pp. Directionally flat-to-slightly-down; <strong>do not</strong> promote to a confirmatory null or “hurt” without r2/r3.</p>
+<p>Point-estimate deltas vs A1: A2 <strong>−2.5</strong> pp · A3 <strong>−3.3</strong> pp · pureLong <strong>−4.2</strong> pp. Directionally flat-to-slightly-down. This is not a confirmatory null or a “hurt” claim.</p>
 <p><strong>Takeaway.</strong> A mid-band capability screen (~76–80% overall). Short role does not look helpful here either; longer persona is not the clear hurt seen on <code>gpt-4.1-mini</code>’s 3-rep claim.</p>
-<hr>
-<div class="keep"><h3>Placement reminder</h3>
-<table>
-<thead>
-<tr>
-<th>Material</th>
-<th>Paper placement</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Luna A1/A2/A3 × B1/B2 × 120 × 3</td>
-<td>Main</td>
-</tr>
-<tr>
-<td>B2 vs B1 lift</td>
-<td>Main Results, secondary</td>
-</tr>
-<tr>
-<td>Long persona Stage 1 / 1b</td>
-<td>This appendix</td>
-</tr>
-<tr>
-<td>Nano / mini floors (40-case ladder)</td>
-<td>This appendix (reference)</td>
-</tr>
-<tr>
-<td>gpt-4.1-mini 3-rep claim (longer persona hurt; short role null)</td>
-<td>This appendix (separate model claim)</td>
-</tr>
-<tr>
-<td>gemini-3.5-flash-lite 1-rep glued screen</td>
-<td>This appendix (exploratory only)</td>
-</tr>
-<tr>
-<td>Markdown × role factorials, rich-role screens</td>
-<td>Out of paper or footnote only</td>
-</tr>
-</tbody></table></div>
 <h2>Appendix B. Reproducibility</h2>
 <p>Public repository: <a href="https://github.com/ihorpar/skip-the-roleplay">github.com/ihorpar/skip-the-roleplay</a>. Paths below are relative to that repo. Cite this preprint with the concept DOI <a href="https://doi.org/10.5281/zenodo.22089532">10.5281/zenodo.22089532</a> (always the latest version).</p>
 <div class="keep"><h3>Pinned models</h3>
@@ -786,7 +748,7 @@
 <thead>
 <tr>
 <th>Role</th>
-<th>Model id (as used in harness / claim pack)</th>
+<th>Model id (as used in the harness)</th>
 <th>Notes</th>
 </tr>
 </thead>
@@ -823,7 +785,7 @@
 <tr>
 <td>Mid-band (separate claim)</td>
 <td><code>gpt-4.1-mini</code> / <code>openai:gpt-4.1-mini</code></td>
-<td>B1 only; 3-rep claim pack under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension"><code>gpt41mini_extension/</code></a></td>
+<td>B1 only; 3-rep study under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension"><code>gpt41mini_extension/</code></a></td>
 </tr>
 <tr>
 <td>Mid-band (exploratory screen)</td>
@@ -831,9 +793,9 @@
 <td>B1 only; 1-rep glued full_120 under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2"><code>gemini35flashlite_free_tier_v2/exploratory_r1_glued/</code></a>; <strong>not</strong> a claim</td>
 </tr>
 </tbody></table></div>
-<p><strong>API drift:</strong> Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit when sharing numbers.</p>
+<p><strong>API drift:</strong> Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit.</p>
 <hr>
-<div class="keep"><h3>Claim pack</h3>
+<div class="keep"><h3>Study files</h3>
 <p>Root: <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package"><code>RESEARCH/track1_role_study_package/</code></a></p>
 <table>
 <thead>
@@ -872,7 +834,7 @@
 </tr>
 <tr>
 <td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1"><code>03_main_runs/r1</code></a>–<code>r3/</code></td>
-<td>Summaries + <code>smoke_raw_runs_latest.json</code></td>
+<td>Per-repeat summaries</td>
 </tr>
 <tr>
 <td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_FINDINGS_2026-07-21.md"><code>04_analysis/main120_FINDINGS_2026-07-21.md</code></a></td>
@@ -887,17 +849,17 @@
 <td>Exploratory pointers only</td>
 </tr>
 </tbody></table></div>
-<p>Also: live bundle under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120"><code>RESEARCH/benchmark_pack_v1/full_120/</code></a> (same exam family used by the harness).</p>
+<p>The live exam bundle used by the harness is <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120"><code>RESEARCH/benchmark_pack_v1/full_120/</code></a>. Raw API traces (<code>smoke_raw_runs*.json</code>) are not in the public repo. The analysis JSON is enough to recompute the confirmatory contrasts.</p>
 <hr>
 <h3>Analysis plan</h3>
 <p><strong>Clear help / clear harm</strong> only if the case-level paired bootstrap <strong>95% CI excludes 0</strong> for the contrast of interest (A2−A1, A3−A2, A3−A1), within B1, within B2, and/or pooled as specified in the analysis plan.</p>
-<p>Disclose: this was an <strong>internal protocol lock</strong> before the confirmatory 120-case matrix, not automatically a public OSF/AsPredicted pre-registration unless separately registered.</p>
+<p>This was an <strong>internal protocol lock</strong> before the confirmatory 120-case matrix, not a public OSF or AsPredicted registration.</p>
 <hr>
 <h3>Re-running the eval</h3>
-<p>From repo root (PowerShell-friendly):</p>
+<p>From the repository root:</p>
 <pre><code class="language-powershell">npm run smoke:eval -- --bundle RESEARCH/benchmark_pack_v1/full_120/full_120_bundle_v1.json
 </code></pre>
-<p>Useful variants (see pack READMEs):</p>
+<p>Useful variants:</p>
 <pre><code class="language-powershell">npm run smoke:eval -- --bundle &lt;bundle&gt; --limit 5
 npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </code></pre>
@@ -921,11 +883,11 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td><code>…/04_analysis/main120_FINDINGS_2026-07-21.md</code></td>
 </tr>
 <tr>
-<td>Raw repeats</td>
-<td><code>…/03_main_runs/r{1,2,3}/smoke_raw_runs_latest.json</code></td>
+<td>Per-repeat summaries</td>
+<td><code>…/03_main_runs/r1</code>–<code>r3/smoke_summary_latest.json</code></td>
 </tr>
 </tbody></table></div>
-<p>Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a> and the analysis plan.</p>
+<p>Recompute paired contrasts from the analysis JSON. Locked claim wording is in <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a>.</p>
 <hr>
 <div class="keep"><h3>Exploratory protocols</h3>
 <table>
@@ -951,75 +913,11 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td>gemini-3.5-flash-lite 1-rep screen</td>
 <td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code></a> · <code>exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code></td>
 </tr>
-<tr>
-<td>Publish claim map</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md"><code>RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md</code></a></td>
-</tr>
 </tbody></table></div>
+<p>With the frozen bundle, evaluation spec, analysis JSON, and harness commit, a reader can recompute A2−A1 / A3−A2 / A3−A1. Record model id, mode settings, date window, and git commit with any re-run numbers.</p>
 <hr>
-<div class="keep"><h3>Release checklist</h3>
-<p><strong>What ships with / via the claim pack (intended public artifacts):</strong></p>
-<table>
-<thead>
-<tr>
-<th>Artifact</th>
-<th>Path / note</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Locked claim + fences</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a></td>
-</tr>
-<tr>
-<td>Analysis plan + protocol lock</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/results-reading-plan-v1.md"><code>00_protocol/results-reading-plan-v1.md</code></a>, <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md"><code>protocol_lock_v1.md</code></a></td>
-</tr>
-<tr>
-<td>Evaluation spec (gold / scoring)</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md"><code>00_protocol/evaluation_spec_v1.md</code></a></td>
-</tr>
-<tr>
-<td>Frozen 120-case exam bundle</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/01_datasets/full_120_bundle_v1.json"><code>01_datasets/full_120_bundle_v1.json</code></a> (+ live copy under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120"><code>benchmark_pack_v1/full_120/</code></a>)</td>
-</tr>
-<tr>
-<td>Prompt / schema / evaluator snapshots</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/02_prompts_and_eval"><code>02_prompts_and_eval/</code></a></td>
-</tr>
-<tr>
-<td>Findings + analysis JSON</td>
-<td><code>04_analysis/main120_FINDINGS_*.md</code>, <code>main120_analysis_v1.json</code></td>
-</tr>
-<tr>
-<td>Per-repeat run summaries</td>
-<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1"><code>03_main_runs/r1</code></a>–<code>r3/</code></td>
-</tr>
-<tr>
-<td>Harness entry</td>
-<td><code>npm run smoke:eval</code> → <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/scripts/smoke-eval.js"><code>scripts/smoke-eval.js</code></a>; <code>npm run harness:self-test</code></td>
-</tr>
-</tbody></table>
-<p><strong>Often gated / local-only (ask owner if needed):</strong></p>
-<table>
-<thead>
-<tr>
-<th>Artifact</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Full raw API traces (<code>smoke_raw_runs*.json</code> bodies)</td>
-<td>Large; may be gitignored; enough analysis JSON ships to recompute contrasts</td>
-</tr>
-<tr>
-<td>Live API keys / <code>.env</code></td>
-<td><strong>Never</strong> ship</td>
-</tr>
-</tbody></table></div>
-<p><strong>Minimum recompute bar:</strong> with the frozen bundle, evaluation spec, analysis JSON, and harness commit, an external reader should recompute A2−A1 / A3−A2 / A3−A1 tables without Slack. Record model id, mode settings, date window, and git commit when publishing numbers.</p>
-<hr>
-<h3>Ethics and compute</h3>
-<p>No human subjects; synthetic / scripted exam cases. Cost is API inference for the confirmatory matrix (<em>N</em> = 2160 on <code>gpt-5.6-luna</code>) plus later exploratory pilots. Do not ship API keys or <code>.env</code> in any share zip.</p>
+<h3>Ethics</h3>
+<p>No human subjects. Cases are synthetic.</p>
 <h2>References</h2>
 <ol>
 <li><p><strong>Tseng, Y.-M., Huang, Y.-C., Hsiao, T.-Y., Chen, W.-L., Huang, C.-W., Meng, Y., &amp; Chen, Y.-N.</strong> (2024). <em>Two Tales of Persona in LLMs: A Survey of Role-Playing and Personalization.</em> Findings of EMNLP 2024. <a href="https://doi.org/10.18653/v1/2024.findings-emnlp.969">https://doi.org/10.18653/v1/2024.findings-emnlp.969</a> · <a href="https://aclanthology.org/2024.findings-emnlp.969/">https://aclanthology.org/2024.findings-emnlp.969/</a></p>
