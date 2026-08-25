@@ -6,6 +6,8 @@
 
 ---
 
+Public repository: [github.com/ihorpar/skip-the-roleplay](https://github.com/ihorpar/skip-the-roleplay). Paths below are relative to that repo. Cite this preprint with the concept DOI [10.5281/zenodo.22089532](https://doi.org/10.5281/zenodo.22089532) (always the latest version).
+
 ## Pinned models
 
 | Role | Model id (as used in harness / claim pack) | Notes |

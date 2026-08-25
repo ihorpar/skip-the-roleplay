@@ -124,7 +124,7 @@ We cite τ-bench as a cousin for business-ops agent evaluation. The contribution
 
 Evaluation is **rule-based and deterministic** (no LLM judge). Mapping to tool-eval vocabulary (e.g., BFCL-style AST matching):
 
-- **Required calls:** tool name, position/order in the family rubric, and **normalized** arguments must match gold (ZIP → 5-digit; names/enums/datetimes normalized per `evaluation_spec_v1.md`).
+- **Required calls:** tool name, position/order in the family rubric, and **normalized** arguments must match gold (ZIP → 5-digit; names/enums/datetimes normalized per [`evaluation_spec_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md)).
 - **Forbidden / unexpected calls:** fail the case (e.g., booking when gold says stop; calling `check_slots` when the family forbids it).
 - **Abstention / no-call families:** extraction-only and stop-early cases require **not** calling booking tools; correct abstention is part of gold.
 - **Serial vs parallel:** the exam expects **serial** tool sequences as specified per family; it is not a parallel-call stress test.
@@ -135,7 +135,7 @@ Primary success is the full required tool trace (name, normalized arguments, ord
 
 ### Gold labels and deterministic evaluation
 
-Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (`track1_role_study_package/00_protocol/evaluation_spec_v1.md`).
+Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec ([`track1_role_study_package/00_protocol/evaluation_spec_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md)).
 
 Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trace) are counted as **technical problems**, not model exam fails. Main pass rates use only graded attempts. If a case lacks a graded result in any cell needed for a contrast after re-queue, that case is dropped from the contrast (no silent fail imputation; no unequal case sets).
 
@@ -287,7 +287,7 @@ The exam is not a toy for every model. Under task-only instant, nano models sit 
 
 ### What the claim is
 
-The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI `gpt-5.6-luna`, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, **did not show a clear help or clear harm** on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (`CLAIM.md`).
+The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI `gpt-5.6-luna`, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, **did not show a clear help or clear harm** on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check ([`CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md)).
 
 If you run this kind of agent, do not treat the short persona line as a primary lever when "success" means the whole case matches gold. Follow-up work on longer personas and other model tiers (appendix) did not overturn that.
 
@@ -362,7 +362,7 @@ For practitioners running dense, correct task rules on a strong model in a simil
 ## Appendix A. Exploratory checks
 
 **Label:** Exploratory / directional / stopped where noted; **not** the primary claim.  
-**Does not change** `RESEARCH/track1_role_study_package/CLAIM.md` (Luna confirmatory short-role null).  
+**Does not change** [`RESEARCH/track1_role_study_package/CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md) (Luna confirmatory short-role null).  
 **Authority for main claim:** locked analysis plan + Luna confirmatory matrix only.  
 
 ---
@@ -375,7 +375,7 @@ After the Luna short-role null, we ran cheaper pilots and checks to ask whether 
 
 ### Long pure persona pilots
 
-Protocol: `RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md`.  
+Protocol: [`RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md).  
 Longer pure persona arm = identity / experience / qualities only (`S_role_long_pure`); no exam cheat-sheet coaching in the persona block.
 
 #### Stage 1: Luna, instant, 40-case rehearsal, 1 repeat
@@ -413,8 +413,8 @@ Same exam can be near-impossible for weak models under A1×B1. Supporting probes
 | `gpt-5.4-nano` | ~40% |
 | `gpt-5.4-mini` | **75%** |
 
-Findings: `RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md`  
-Also: `06_supporting_nano_probe/` · `NANO_COMPARE_FINDINGS.md` under `benchmark_pack_v1/runs/`.
+Findings: [`RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md)  
+Also: [`06_supporting_nano_probe/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe) · `NANO_COMPARE_FINDINGS.md` under [`benchmark_pack_v1/runs/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs).
 
 **Takeaway.** The Luna role null is *not* “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; `gpt-4.1-mini` ~63% is a different protocol (120×3).
 
@@ -424,12 +424,12 @@ Mid-band role checks on `gpt-5.4-nano` and related factorials live in the same s
 
 ### A separate claim on `gpt-4.1-mini`
 
-Protocol: `RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md`  
+Protocol: [`RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md)  
 Claim findings: `…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md`  
 Analysis: `…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json`  
-Claim card: `track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md`  
+Claim card: [`track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md)  
 
-**Does not rewrite** Luna `CLAIM.md`.
+**Does not rewrite** Luna [`CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md).
 
 **Design:** `openai:gpt-4.1-mini` · 120 exam cases · A1 / A2 / A3 / longer pure persona (`S_role_long_pure`) · **B1 only** · **3 repeats** · **1440** graded attempts · 0 technical failures.
 
@@ -467,7 +467,7 @@ Case-level paired bootstrap, 10,000 resamples.
 
 ### Exploratory screen on `gemini-3.5-flash-lite`
 
-Protocol: `RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md`  
+Protocol: [`RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md)  
 Findings: `…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md`  
 Summary JSON: `…/exploratory_r1_glued/glued_summary.json`
 
@@ -506,6 +506,8 @@ Point-estimate deltas vs A1: A2 **−2.5** pp · A3 **−3.3** pp · pureLong **
 
 ## Appendix B. Reproducibility
 
+Public repository: [github.com/ihorpar/skip-the-roleplay](https://github.com/ihorpar/skip-the-roleplay). Paths below are relative to that repo. Cite this preprint with the concept DOI [10.5281/zenodo.22089532](https://doi.org/10.5281/zenodo.22089532) (always the latest version).
+
 ### Pinned models
 
 | Role | Model id (as used in harness / claim pack) | Notes |
@@ -515,9 +517,9 @@ Point-estimate deltas vs A1: A2 **−2.5** pp · A3 **−3.3** pp · pureLong **
 | Mode B2 | `reasoning.effort=medium` | Thinking |
 | Long-persona Stage 1 | `gpt-5.6-luna` · B1 only | Exploratory pilot |
 | Long-persona Stage 1b | `gpt-5.4-nano` · B2 | Exploratory pilot |
-| Floor / mid ladder | `gpt-5-nano`, `gpt-5-mini`, `gpt-5.4-nano`, `gpt-5.4-mini` | 40-case A1×B1 screens; see `mini_ladder_screens/` |
-| Mid-band (separate claim) | `gpt-4.1-mini` / `openai:gpt-4.1-mini` | B1 only; 3-rep claim pack under `gpt41mini_extension/` |
-| Mid-band (exploratory screen) | `gemini-3.5-flash-lite` | B1 only; 1-rep glued full_120 under `gemini35flashlite_free_tier_v2/exploratory_r1_glued/`; **not** a claim |
+| Floor / mid ladder | `gpt-5-nano`, `gpt-5-mini`, `gpt-5.4-nano`, `gpt-5.4-mini` | 40-case A1×B1 screens; see [`mini_ladder_screens/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens) |
+| Mid-band (separate claim) | `gpt-4.1-mini` / `openai:gpt-4.1-mini` | B1 only; 3-rep claim pack under [`gpt41mini_extension/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension) |
+| Mid-band (exploratory screen) | `gemini-3.5-flash-lite` | B1 only; 1-rep glued full_120 under [`gemini35flashlite_free_tier_v2/exploratory_r1_glued/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2); **not** a claim |
 
 **API drift:** Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit when sharing numbers.
 
@@ -525,23 +527,23 @@ Point-estimate deltas vs A1: A2 **−2.5** pp · A3 **−3.3** pp · pureLong **
 
 ### Claim pack
 
-Root: `RESEARCH/track1_role_study_package/`
+Root: [`RESEARCH/track1_role_study_package/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package)
 
 | Path | What |
 |------|------|
-| `CLAIM.md` | Locked plain-language claim + fences |
-| `00_protocol/results-reading-plan-v1.md` | How contrasts are read (also mirrored at `RESEARCH/results-reading-plan-v1.md`) |
-| `00_protocol/protocol_lock_v1.md` | Protocol lock |
-| `00_protocol/evaluation_spec_v1.md` | Pass definition |
-| `00_protocol/track1_contract.md` | Study contract |
-| `01_datasets/full_120_bundle_v1.json` | Frozen 120-case exam (pack copy) |
-| `02_prompts_and_eval/` | Prompt / schema / evaluator snapshots |
-| `03_main_runs/r1`–`r3/` | Summaries + `smoke_raw_runs_latest.json` |
-| `04_analysis/main120_FINDINGS_2026-07-21.md` | Tables + claim wording |
-| `04_analysis/main120_analysis_v1.json` | Case-level analysis for recomputation |
-| `06_supporting_nano_probe/` | Exploratory pointers only |
+| [`CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md) | Locked plain-language claim + fences |
+| [`00_protocol/results-reading-plan-v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/results-reading-plan-v1.md) | How contrasts are read (also mirrored at [`RESEARCH/results-reading-plan-v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/results-reading-plan-v1.md)) |
+| [`00_protocol/protocol_lock_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md) | Protocol lock |
+| [`00_protocol/evaluation_spec_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md) | Pass definition |
+| [`00_protocol/track1_contract.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/track1_contract.md) | Study contract |
+| [`01_datasets/full_120_bundle_v1.json`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/01_datasets/full_120_bundle_v1.json) | Frozen 120-case exam (pack copy) |
+| [`02_prompts_and_eval/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/02_prompts_and_eval) | Prompt / schema / evaluator snapshots |
+| [`03_main_runs/r1`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1)–`r3/` | Summaries + `smoke_raw_runs_latest.json` |
+| [`04_analysis/main120_FINDINGS_2026-07-21.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_FINDINGS_2026-07-21.md) | Tables + claim wording |
+| [`04_analysis/main120_analysis_v1.json`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json) | Case-level analysis for recomputation |
+| [`06_supporting_nano_probe/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe) | Exploratory pointers only |
 
-Also: live bundle under `RESEARCH/benchmark_pack_v1/full_120/` (same exam family used by the harness).
+Also: live bundle under [`RESEARCH/benchmark_pack_v1/full_120/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120) (same exam family used by the harness).
 
 ---
 
@@ -568,8 +570,8 @@ npm run smoke:eval -- --bundle <bundle> --limit 5
 npm run smoke:eval -- --bundle <bundle> --families F5_full_flow
 ```
 
-Entrypoint: `package.json` script `smoke:eval` → `node scripts/smoke-eval.js`.  
-Prompt style / mode flags and model selection follow the multi-turn harness docs under `RESEARCH/` (e.g. `--styles`, `--modes`, `--models`). Self-checks: `npm run harness:self-test`.
+Entrypoint: [`package.json`](https://github.com/ihorpar/skip-the-roleplay/blob/master/package.json) script `smoke:eval` → `node scripts/smoke-eval.js`.  
+Prompt style / mode flags and model selection follow the multi-turn harness docs under [`RESEARCH/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH) (e.g. `--styles`, `--modes`, `--models`). Self-checks: `npm run harness:self-test`.
 
 **Success metric:** binary end-to-end pass vs deterministic gold (tools + fields + exact allowed customer phrase where required), not an LLM judge.
 
@@ -579,11 +581,11 @@ Prompt style / mode flags and model selection follow the multi-turn harness docs
 
 | Artifact | Path |
 |----------|------|
-| Confirmatory analysis | `RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json` |
+| Confirmatory analysis | [`RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json) |
 | Findings prose | `…/04_analysis/main120_FINDINGS_2026-07-21.md` |
 | Raw repeats | `…/03_main_runs/r{1,2,3}/smoke_raw_runs_latest.json` |
 
-Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating `CLAIM.md` and the analysis plan.
+Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating [`CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md) and the analysis plan.
 
 ---
 
@@ -591,11 +593,11 @@ Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs;
 
 | Study | Protocol / findings |
 |-------|---------------------|
-| Long persona extension | `RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md` |
-| Mini ladder screens | `RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md` · `MINI_LADDER_FINDINGS.md` |
-| gpt-4.1-mini 3-rep claim | `RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md` · `GPT41MINI_CLAIM_FINDINGS.md` |
-| gemini-3.5-flash-lite 1-rep screen | `RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md` · `exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md` |
-| Publish claim map | `RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md` |
+| Long persona extension | [`RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md) |
+| Mini ladder screens | [`RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md) · `MINI_LADDER_FINDINGS.md` |
+| gpt-4.1-mini 3-rep claim | [`RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md) · `GPT41MINI_CLAIM_FINDINGS.md` |
+| gemini-3.5-flash-lite 1-rep screen | [`RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md) · `exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md` |
+| Publish claim map | [`RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md) |
 
 ---
 
@@ -605,14 +607,14 @@ Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs;
 
 | Artifact | Path / note |
 |----------|-------------|
-| Locked claim + fences | `CLAIM.md` |
-| Analysis plan + protocol lock | `00_protocol/results-reading-plan-v1.md`, `protocol_lock_v1.md` |
-| Evaluation spec (gold / scoring) | `00_protocol/evaluation_spec_v1.md` |
-| Frozen 120-case exam bundle | `01_datasets/full_120_bundle_v1.json` (+ live copy under `benchmark_pack_v1/full_120/`) |
-| Prompt / schema / evaluator snapshots | `02_prompts_and_eval/` |
+| Locked claim + fences | [`CLAIM.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md) |
+| Analysis plan + protocol lock | [`00_protocol/results-reading-plan-v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/results-reading-plan-v1.md), [`protocol_lock_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md) |
+| Evaluation spec (gold / scoring) | [`00_protocol/evaluation_spec_v1.md`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md) |
+| Frozen 120-case exam bundle | [`01_datasets/full_120_bundle_v1.json`](https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/01_datasets/full_120_bundle_v1.json) (+ live copy under [`benchmark_pack_v1/full_120/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120)) |
+| Prompt / schema / evaluator snapshots | [`02_prompts_and_eval/`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/02_prompts_and_eval) |
 | Findings + analysis JSON | `04_analysis/main120_FINDINGS_*.md`, `main120_analysis_v1.json` |
-| Per-repeat run summaries | `03_main_runs/r1`–`r3/` |
-| Harness entry | `npm run smoke:eval` → `scripts/smoke-eval.js`; `npm run harness:self-test` |
+| Per-repeat run summaries | [`03_main_runs/r1`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1)–`r3/` |
+| Harness entry | `npm run smoke:eval` → [`scripts/smoke-eval.js`](https://github.com/ihorpar/skip-the-roleplay/blob/master/scripts/smoke-eval.js); `npm run harness:self-test` |
 
 **Often gated / local-only (ask owner if needed):**
 

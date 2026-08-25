@@ -59,6 +59,53 @@ const ORCID = '0009-0006-9411-8633';
 const ORCID_URL = `https://orcid.org/${ORCID}`;
 const DATE = 'August 2026';
 const VERSION = 'Preprint v1.1';
+const REPO = 'https://github.com/ihorpar/skip-the-roleplay';
+const REPO_BRANCH = 'master';
+
+const SHORT_REPO_PATHS = {
+  'CLAIM.md': 'RESEARCH/track1_role_study_package/CLAIM.md',
+  'evaluation_spec_v1.md': 'RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md',
+  'protocol_lock_v1.md': 'RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md',
+  'package.json': 'package.json',
+};
+
+function resolveRepoPath(raw) {
+  let p = String(raw || '').trim();
+  if (!p || /[*?{}<>…]|\.{3}|=/.test(p)) return null;
+  p = p.replace(/[.,;:]+$/, '');
+  if (SHORT_REPO_PATHS[p]) return SHORT_REPO_PATHS[p];
+  if (p.startsWith('RESEARCH/')) return p;
+  if (p.startsWith('track1_role_study_package/')) return `RESEARCH/${p}`;
+  if (p.startsWith('scripts/')) return p;
+  if (p.startsWith('benchmark_pack_v1/')) return `RESEARCH/${p}`;
+  if (/^(00_protocol|01_datasets|02_prompts_and_eval|03_main_runs|04_analysis|06_supporting)/.test(p)) {
+    return `RESEARCH/track1_role_study_package/${p}`;
+  }
+  if (p.startsWith('mini_ladder_screens')) return 'RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/';
+  if (p.startsWith('gpt41mini_extension')) return 'RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/';
+  if (p.startsWith('gemini35flashlite')) return 'RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/';
+  return null;
+}
+
+function githubHref(repoPath) {
+  const trimmed = repoPath.replace(/\/$/, '');
+  const looksLikeFile = /\.[A-Za-z0-9]{1,8}$/.test(trimmed);
+  const isDir = repoPath.endsWith('/') || !looksLikeFile;
+  return `${REPO}/${isDir ? 'tree' : 'blob'}/${REPO_BRANCH}/${trimmed}`;
+}
+
+// Turn local artifact paths into GitHub links in the public paper.
+// Leave fenced command blocks alone so shell snippets stay copyable.
+function linkRepoPathsInMarkdown(md) {
+  return md.split(/(```[\s\S]*?```)/).map((part, i) => {
+    if (i % 2 === 1) return part;
+    return part.replace(/(?<!\[)`([^`\n]+)`(?!\])/g, (all, inner) => {
+      const resolved = resolveRepoPath(inner);
+      if (!resolved) return all;
+      return `[\`${inner}\`](${githubHref(resolved)})`;
+    });
+  }).join('');
+}
 
 const mdParts = [
   '# Skip the Roleplay',
@@ -75,7 +122,7 @@ const mdParts = [
 for (const [title, body] of sections) {
   mdParts.push(`## ${title}`, '', body, '');
 }
-const paperMd = mdParts.join('\n');
+const paperMd = linkRepoPathsInMarkdown(mdParts.join('\n'));
 // paper_draft.md sits one level above part_b_paper, so figure paths need the prefix.
 fs.writeFileSync(
   path.join(here, 'paper_draft.md'),
@@ -201,6 +248,7 @@ const html = `<!doctype html>
   blockquote { border-left: 3px solid #ccc; margin: 0.8em 0; padding: 0.1em 1em; color: #444; }
   hr { border: 0; border-top: 1px solid #ccc; margin: 1.6em 0; }
   a { color: #17418a; text-decoration: none; overflow-wrap: anywhere; }
+  a code { color: #17418a; }
   pre { break-inside: avoid; page-break-inside: avoid; }
   thead { display: table-header-group; }
   tr { break-inside: avoid; page-break-inside: avoid; }
@@ -218,7 +266,11 @@ const html = `<!doctype html>
   }
   .figure { text-align: center; margin: 1.1em 0 0.3em; }
   .figure svg { max-width: 100%; height: auto; }
-  .keep p em, .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
+  .figure + p {
+    text-align: center;
+    font-size: 0.88em;
+    color: #444;
+  }
 </style>
 </head>
 <body>

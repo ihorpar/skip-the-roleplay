@@ -27,6 +27,7 @@
   blockquote { border-left: 3px solid #ccc; margin: 0.8em 0; padding: 0.1em 1em; color: #444; }
   hr { border: 0; border-top: 1px solid #ccc; margin: 1.6em 0; }
   a { color: #17418a; text-decoration: none; overflow-wrap: anywhere; }
+  a code { color: #17418a; }
   pre { break-inside: avoid; page-break-inside: avoid; }
   thead { display: table-header-group; }
   tr { break-inside: avoid; page-break-inside: avoid; }
@@ -44,7 +45,11 @@
   }
   .figure { text-align: center; margin: 1.1em 0 0.3em; }
   .figure svg { max-width: 100%; height: auto; }
-  .keep p em, .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
+  .figure + p {
+    text-align: center;
+    font-size: 0.88em;
+    color: #444;
+  }
 </style>
 </head>
 <body>
@@ -175,7 +180,7 @@
 <div class="keep"><h3>How we score tool use</h3>
 <p>Evaluation is <strong>rule-based and deterministic</strong> (no LLM judge). Mapping to tool-eval vocabulary (e.g., BFCL-style AST matching):</p>
 <ul>
-<li><strong>Required calls:</strong> tool name, position/order in the family rubric, and <strong>normalized</strong> arguments must match gold (ZIP → 5-digit; names/enums/datetimes normalized per <code>evaluation_spec_v1.md</code>).</li>
+<li><strong>Required calls:</strong> tool name, position/order in the family rubric, and <strong>normalized</strong> arguments must match gold (ZIP → 5-digit; names/enums/datetimes normalized per <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md"><code>evaluation_spec_v1.md</code></a>).</li>
 <li><strong>Forbidden / unexpected calls:</strong> fail the case (e.g., booking when gold says stop; calling <code>check_slots</code> when the family forbids it).</li>
 <li><strong>Abstention / no-call families:</strong> extraction-only and stop-early cases require <strong>not</strong> calling booking tools; correct abstention is part of gold.</li>
 <li><strong>Serial vs parallel:</strong> the exam expects <strong>serial</strong> tool sequences as specified per family; it is not a parallel-call stress test.</li>
@@ -184,7 +189,7 @@
 </ul></div>
 <p>Primary success is the full required tool trace (name, normalized arguments, order) plus final JSON match under the family rubric. &quot;Mostly right&quot; is still a fail.</p>
 <h3>Gold labels and deterministic evaluation</h3>
-<p>Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (<code>track1_role_study_package/00_protocol/evaluation_spec_v1.md</code>).</p>
+<p>Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (<a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md"><code>track1_role_study_package/00_protocol/evaluation_spec_v1.md</code></a>).</p>
 <p>Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trace) are counted as <strong>technical problems</strong>, not model exam fails. Main pass rates use only graded attempts. If a case lacks a graded result in any cell needed for a contrast after re-queue, that case is dropped from the contrast (no silent fail imputation; no unequal case sets).</p>
 <div class="keep"><h3>Model and harness settings</h3>
 <p><strong>Model (confirmatory study):</strong> OpenAI <code>gpt-5.6-luna</code> only. Other providers are out of the main study.</p>
@@ -344,7 +349,7 @@
 <p>Repeat-level overall pass rates were stable: r1 <strong>92.5%</strong>, r2 <strong>93.1%</strong>, r3 <strong>92.6%</strong> (720 graded attempts each).</p>
 <div class="keep"><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="720" height="330" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="720" height="330" fill="white"/>
-<line x1="62" y1="264" x2="700" y2="264" stroke="#ddd"/><text x="54" y="268" font-size="12" text-anchor="end" fill="#555">80</text><line x1="62" y1="204.5" x2="700" y2="204.5" stroke="#ddd"/><text x="54" y="208.5" font-size="12" text-anchor="end" fill="#555">85</text><line x1="62" y1="145" x2="700" y2="145" stroke="#ddd"/><text x="54" y="149" font-size="12" text-anchor="end" fill="#555">90</text><line x1="62" y1="85.5" x2="700" y2="85.5" stroke="#ddd"/><text x="54" y="89.5" font-size="12" text-anchor="end" fill="#555">95</text><line x1="62" y1="26" x2="700" y2="26" stroke="#ddd"/><text x="54" y="30" font-size="12" text-anchor="end" fill="#555">100</text><text x="18" y="16" font-size="12" fill="#555">Pass %</text><rect x="114.5" y="154.51999999999995" width="58" height="109.48000000000005" fill="#9aa5b1"/><text x="143.5" y="147.51999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">89.2</text><rect x="192.5" y="152.13999999999993" width="58" height="111.86000000000007" fill="#5b7ea6"/><text x="221.5" y="145.13999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">89.4</text><rect x="270.5" y="181.88999999999993" width="58" height="82.11000000000007" fill="#2f5d8a"/><text x="299.5" y="174.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">86.9</text><text x="221.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Instant (B1)</text><rect x="433.5" y="65.26999999999995" width="58" height="198.73000000000005" fill="#9aa5b1"/><text x="462.5" y="58.26999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">96.7</text><rect x="511.5" y="59.31999999999998" width="58" height="204.68" fill="#5b7ea6"/><text x="540.5" y="52.31999999999998" font-size="12" text-anchor="middle" fill="#1a1a1a">97.2</text><rect x="589.5" y="62.88999999999993" width="58" height="201.11000000000007" fill="#2f5d8a"/><text x="618.5" y="55.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">96.9</text><text x="540.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Thinking (B2)</text><line x1="62" y1="264" x2="700" y2="264" stroke="#555"/><rect x="92" y="303" width="13" height="13" fill="#9aa5b1"/><text x="111" y="314" font-size="12" fill="#1a1a1a">A1 task-only</text><rect x="292" y="303" width="13" height="13" fill="#5b7ea6"/><text x="311" y="314" font-size="12" fill="#1a1a1a">A2 + role</text><rect x="492" y="303" width="13" height="13" fill="#2f5d8a"/><text x="511" y="314" font-size="12" fill="#1a1a1a">A3 + competencies</text>
+<line x1="62" y1="264" x2="700" y2="264" stroke="#ddd"/><text x="54" y="268" font-size="12" text-anchor="end" fill="#555">80</text><line x1="62" y1="204.5" x2="700" y2="204.5" stroke="#ddd"/><text x="54" y="208.5" font-size="12" text-anchor="end" fill="#555">85</text><line x1="62" y1="145" x2="700" y2="145" stroke="#ddd"/><text x="54" y="149" font-size="12" text-anchor="end" fill="#555">90</text><line x1="62" y1="85.5" x2="700" y2="85.5" stroke="#ddd"/><text x="54" y="89.5" font-size="12" text-anchor="end" fill="#555">95</text><line x1="62" y1="26" x2="700" y2="26" stroke="#ddd"/><text x="54" y="30" font-size="12" text-anchor="end" fill="#555">100</text><text x="18" y="16" font-size="12" fill="#555">Pass %</text><rect x="114.5" y="154.51999999999995" width="58" height="109.48000000000005" fill="#9aa0a6"/><text x="143.5" y="147.51999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">89.2</text><rect x="192.5" y="152.13999999999993" width="58" height="111.86000000000007" fill="#3d6b9a"/><text x="221.5" y="145.13999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">89.4</text><rect x="270.5" y="181.88999999999993" width="58" height="82.11000000000007" fill="#6e5a86"/><text x="299.5" y="174.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">86.9</text><text x="221.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Instant (B1)</text><rect x="433.5" y="65.26999999999995" width="58" height="198.73000000000005" fill="#9aa0a6"/><text x="462.5" y="58.26999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">96.7</text><rect x="511.5" y="59.31999999999998" width="58" height="204.68" fill="#3d6b9a"/><text x="540.5" y="52.31999999999998" font-size="12" text-anchor="middle" fill="#1a1a1a">97.2</text><rect x="589.5" y="62.88999999999993" width="58" height="201.11000000000007" fill="#6e5a86"/><text x="618.5" y="55.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">96.9</text><text x="540.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Thinking (B2)</text><line x1="62" y1="264" x2="700" y2="264" stroke="#555"/><rect x="92" y="303" width="13" height="13" fill="#9aa0a6"/><text x="111" y="314" font-size="12" fill="#1a1a1a">A1 task-only</text><rect x="292" y="303" width="13" height="13" fill="#3d6b9a"/><text x="311" y="314" font-size="12" fill="#1a1a1a">A2 + role</text><rect x="492" y="303" width="13" height="13" fill="#6e5a86"/><text x="511" y="314" font-size="12" fill="#1a1a1a">A3 + competencies</text>
 </svg>
 </div><p><em>Figure 2. Case-averaged pass rates by prompt style inside each mode. The y-axis starts at 80%. Style differences sit within noise in both modes; the mode gap is the visible move.</em></p></div>
 <div class="keep"><h3>Prompt-style contrasts</h3>
@@ -451,7 +456,7 @@
 <p>The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) a longer pure persona <strong>hurt</strong> (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat <code>gemini-3.5-flash-lite</code> screen (~76–80% by style) is appendix-only and not claim-ready. Numbers and protocols are in Appendix A.</p>
 <h2>5. Discussion</h2>
 <h3>What the claim is</h3>
-<p>The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<code>CLAIM.md</code>).</p>
+<p>The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a>).</p>
 <p>If you run this kind of agent, do not treat the short persona line as a primary lever when &quot;success&quot; means the whole case matches gold. Follow-up work on longer personas and other model tiers (appendix) did not overturn that.</p>
 <hr>
 <div class="keep"><h3>Mapping to Principled Personas desiderata</h3>
@@ -517,13 +522,13 @@
 <h3>Implication for deployment</h3>
 <p>For practitioners running dense, correct task rules on a strong model in a similar exam: prioritize instructions, tools/schemas, and reasoning effort where available over short persona text. For researchers: a citeable confirmatory null under a locked reading plan, plus a clear secondary mode lift, with exploratory follow-ups fenced in the appendix.</p>
 <h2>Appendix A. Exploratory checks</h2>
-<p><strong>Label:</strong> Exploratory / directional / stopped where noted; <strong>not</strong> the primary claim.<br><strong>Does not change</strong> <code>RESEARCH/track1_role_study_package/CLAIM.md</code> (Luna confirmatory short-role null).<br><strong>Authority for main claim:</strong> locked analysis plan + Luna confirmatory matrix only.  </p>
+<p><strong>Label:</strong> Exploratory / directional / stopped where noted; <strong>not</strong> the primary claim.<br><strong>Does not change</strong> <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>RESEARCH/track1_role_study_package/CLAIM.md</code></a> (Luna confirmatory short-role null).<br><strong>Authority for main claim:</strong> locked analysis plan + Luna confirmatory matrix only.  </p>
 <hr>
 <h3>Purpose of this appendix</h3>
 <p>After the Luna short-role null, we ran cheaper pilots and checks to ask whether a <strong>longer pure persona</strong>, or a <strong>weaker / mid-band model</strong>, might show a different pattern. Those materials motivate follow-ups; they are <strong>not</strong> pooled into the primary prompt-style claim and must not appear in the abstract as confirmatory results.</p>
 <hr>
 <h3>Long pure persona pilots</h3>
-<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code>.<br>Longer pure persona arm = identity / experience / qualities only (<code>S_role_long_pure</code>); no exam cheat-sheet coaching in the persona block.</p>
+<p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></a>.<br>Longer pure persona arm = identity / experience / qualities only (<code>S_role_long_pure</code>); no exam cheat-sheet coaching in the persona block.</p>
 <h4>Stage 1: Luna, instant, 40-case rehearsal, 1 repeat</h4>
 <table>
 <thead>
@@ -591,13 +596,13 @@
 <td align="right"><strong>75%</strong></td>
 </tr>
 </tbody></table></div>
-<p>Findings: <code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md</code><br>Also: <code>06_supporting_nano_probe/</code> · <code>NANO_COMPARE_FINDINGS.md</code> under <code>benchmark_pack_v1/runs/</code>.</p>
+<p>Findings: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md"><code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md</code></a><br>Also: <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe"><code>06_supporting_nano_probe/</code></a> · <code>NANO_COMPARE_FINDINGS.md</code> under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs"><code>benchmark_pack_v1/runs/</code></a>.</p>
 <p><strong>Takeaway.</strong> The Luna role null is <em>not</em> “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; <code>gpt-4.1-mini</code> ~63% is a different protocol (120×3).</p>
 <p>Mid-band role checks on <code>gpt-5.4-nano</code> and related factorials live in the same supporting folder; keep them <strong>out of</strong> the abstract and main claim map unless upgraded later under the same analysis rule.</p>
 <hr>
 <h3>A separate claim on <code>gpt-4.1-mini</code></h3>
-<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code><br>Claim findings: <code>…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md</code><br>Analysis: <code>…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json</code><br>Claim card: <code>track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md</code>  </p>
-<p><strong>Does not rewrite</strong> Luna <code>CLAIM.md</code>.</p>
+<p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code></a><br>Claim findings: <code>…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md</code><br>Analysis: <code>…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json</code><br>Claim card: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md"><code>track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md</code></a>  </p>
+<p><strong>Does not rewrite</strong> Luna <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a>.</p>
 <p><strong>Design:</strong> <code>openai:gpt-4.1-mini</code> · 120 exam cases · A1 / A2 / A3 / longer pure persona (<code>S_role_long_pure</code>) · <strong>B1 only</strong> · <strong>3 repeats</strong> · <strong>1440</strong> graded attempts · 0 technical failures.</p>
 <div class="keep"><h4>Pooled pass rates</h4>
 <p>Each style pools 360 graded attempts.</p>
@@ -670,7 +675,7 @@
 <p><em>An earlier one-repeat check was directional only; numbers above are the pooled confirmatory matrix.</em></p>
 <hr>
 <h3>Exploratory screen on <code>gemini-3.5-flash-lite</code></h3>
-<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code><br>Findings: <code>…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code><br>Summary JSON: <code>…/exploratory_r1_glued/glued_summary.json</code></p>
+<p>Protocol: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code></a><br>Findings: <code>…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code><br>Summary JSON: <code>…/exploratory_r1_glued/glued_summary.json</code></p>
 <p><strong>Label:</strong> Exploratory only; <strong>not</strong> a claim. <strong>Does not rewrite</strong> Luna or <code>gpt-4.1-mini</code> claims. No paired-bootstrap claim bar applied (single repeat).</p>
 <p><strong>Design:</strong> <code>gemini:gemini-3.5-flash-lite</code> · <code>full_120</code> · A1 / A2 / A3 / <code>S_role_long_pure</code> · <strong>B1 only</strong> · <strong>1</strong> repeat · <strong>480</strong> graded · 0 infra in glued set. Family batches glued after free-tier gap-fills on the final Gemini structured-output harness.</p>
 <div class="keep"><h4>Pass rates</h4>
@@ -740,6 +745,7 @@
 </tr>
 </tbody></table></div>
 <h2>Appendix B. Reproducibility</h2>
+<p>Public repository: <a href="https://github.com/ihorpar/skip-the-roleplay">github.com/ihorpar/skip-the-roleplay</a>. Paths below are relative to that repo. Cite this preprint with the concept DOI <a href="https://doi.org/10.5281/zenodo.22089532">10.5281/zenodo.22089532</a> (always the latest version).</p>
 <div class="keep"><h3>Pinned models</h3>
 <table>
 <thead>
@@ -777,23 +783,23 @@
 <tr>
 <td>Floor / mid ladder</td>
 <td><code>gpt-5-nano</code>, <code>gpt-5-mini</code>, <code>gpt-5.4-nano</code>, <code>gpt-5.4-mini</code></td>
-<td>40-case A1×B1 screens; see <code>mini_ladder_screens/</code></td>
+<td>40-case A1×B1 screens; see <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens"><code>mini_ladder_screens/</code></a></td>
 </tr>
 <tr>
 <td>Mid-band (separate claim)</td>
 <td><code>gpt-4.1-mini</code> / <code>openai:gpt-4.1-mini</code></td>
-<td>B1 only; 3-rep claim pack under <code>gpt41mini_extension/</code></td>
+<td>B1 only; 3-rep claim pack under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension"><code>gpt41mini_extension/</code></a></td>
 </tr>
 <tr>
 <td>Mid-band (exploratory screen)</td>
 <td><code>gemini-3.5-flash-lite</code></td>
-<td>B1 only; 1-rep glued full_120 under <code>gemini35flashlite_free_tier_v2/exploratory_r1_glued/</code>; <strong>not</strong> a claim</td>
+<td>B1 only; 1-rep glued full_120 under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2"><code>gemini35flashlite_free_tier_v2/exploratory_r1_glued/</code></a>; <strong>not</strong> a claim</td>
 </tr>
 </tbody></table></div>
 <p><strong>API drift:</strong> Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit when sharing numbers.</p>
 <hr>
 <div class="keep"><h3>Claim pack</h3>
-<p>Root: <code>RESEARCH/track1_role_study_package/</code></p>
+<p>Root: <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package"><code>RESEARCH/track1_role_study_package/</code></a></p>
 <table>
 <thead>
 <tr>
@@ -802,51 +808,51 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><code>CLAIM.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a></td>
 <td>Locked plain-language claim + fences</td>
 </tr>
 <tr>
-<td><code>00_protocol/results-reading-plan-v1.md</code></td>
-<td>How contrasts are read (also mirrored at <code>RESEARCH/results-reading-plan-v1.md</code>)</td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/results-reading-plan-v1.md"><code>00_protocol/results-reading-plan-v1.md</code></a></td>
+<td>How contrasts are read (also mirrored at <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/results-reading-plan-v1.md"><code>RESEARCH/results-reading-plan-v1.md</code></a>)</td>
 </tr>
 <tr>
-<td><code>00_protocol/protocol_lock_v1.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md"><code>00_protocol/protocol_lock_v1.md</code></a></td>
 <td>Protocol lock</td>
 </tr>
 <tr>
-<td><code>00_protocol/evaluation_spec_v1.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md"><code>00_protocol/evaluation_spec_v1.md</code></a></td>
 <td>Pass definition</td>
 </tr>
 <tr>
-<td><code>00_protocol/track1_contract.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/track1_contract.md"><code>00_protocol/track1_contract.md</code></a></td>
 <td>Study contract</td>
 </tr>
 <tr>
-<td><code>01_datasets/full_120_bundle_v1.json</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/01_datasets/full_120_bundle_v1.json"><code>01_datasets/full_120_bundle_v1.json</code></a></td>
 <td>Frozen 120-case exam (pack copy)</td>
 </tr>
 <tr>
-<td><code>02_prompts_and_eval/</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/02_prompts_and_eval"><code>02_prompts_and_eval/</code></a></td>
 <td>Prompt / schema / evaluator snapshots</td>
 </tr>
 <tr>
-<td><code>03_main_runs/r1</code>–<code>r3/</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1"><code>03_main_runs/r1</code></a>–<code>r3/</code></td>
 <td>Summaries + <code>smoke_raw_runs_latest.json</code></td>
 </tr>
 <tr>
-<td><code>04_analysis/main120_FINDINGS_2026-07-21.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_FINDINGS_2026-07-21.md"><code>04_analysis/main120_FINDINGS_2026-07-21.md</code></a></td>
 <td>Tables + claim wording</td>
 </tr>
 <tr>
-<td><code>04_analysis/main120_analysis_v1.json</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json"><code>04_analysis/main120_analysis_v1.json</code></a></td>
 <td>Case-level analysis for recomputation</td>
 </tr>
 <tr>
-<td><code>06_supporting_nano_probe/</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/06_supporting_nano_probe"><code>06_supporting_nano_probe/</code></a></td>
 <td>Exploratory pointers only</td>
 </tr>
 </tbody></table></div>
-<p>Also: live bundle under <code>RESEARCH/benchmark_pack_v1/full_120/</code> (same exam family used by the harness).</p>
+<p>Also: live bundle under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120"><code>RESEARCH/benchmark_pack_v1/full_120/</code></a> (same exam family used by the harness).</p>
 <hr>
 <h3>Analysis plan</h3>
 <p><strong>Clear help / clear harm</strong> only if the case-level paired bootstrap <strong>95% CI excludes 0</strong> for the contrast of interest (A2−A1, A3−A2, A3−A1), within B1, within B2, and/or pooled as specified in the analysis plan.</p>
@@ -860,7 +866,7 @@
 <pre><code class="language-powershell">npm run smoke:eval -- --bundle &lt;bundle&gt; --limit 5
 npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </code></pre>
-<p>Entrypoint: <code>package.json</code> script <code>smoke:eval</code> → <code>node scripts/smoke-eval.js</code>.<br>Prompt style / mode flags and model selection follow the multi-turn harness docs under <code>RESEARCH/</code> (e.g. <code>--styles</code>, <code>--modes</code>, <code>--models</code>). Self-checks: <code>npm run harness:self-test</code>.</p>
+<p>Entrypoint: <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/package.json"><code>package.json</code></a> script <code>smoke:eval</code> → <code>node scripts/smoke-eval.js</code>.<br>Prompt style / mode flags and model selection follow the multi-turn harness docs under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH"><code>RESEARCH/</code></a> (e.g. <code>--styles</code>, <code>--modes</code>, <code>--models</code>). Self-checks: <code>npm run harness:self-test</code>.</p>
 <p><strong>Success metric:</strong> binary end-to-end pass vs deterministic gold (tools + fields + exact allowed customer phrase where required), not an LLM judge.</p>
 <hr>
 <div class="keep"><h3>Analysis JSON</h3>
@@ -873,7 +879,7 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </thead>
 <tbody><tr>
 <td>Confirmatory analysis</td>
-<td><code>RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json"><code>RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json</code></a></td>
 </tr>
 <tr>
 <td>Findings prose</td>
@@ -884,7 +890,7 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td><code>…/03_main_runs/r{1,2,3}/smoke_raw_runs_latest.json</code></td>
 </tr>
 </tbody></table></div>
-<p>Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating <code>CLAIM.md</code> and the analysis plan.</p>
+<p>Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a> and the analysis plan.</p>
 <hr>
 <div class="keep"><h3>Exploratory protocols</h3>
 <table>
@@ -896,23 +902,23 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </thead>
 <tbody><tr>
 <td>Long persona extension</td>
-<td><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></a></td>
 </tr>
 <tr>
 <td>Mini ladder screens</td>
-<td><code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md</code> · <code>MINI_LADDER_FINDINGS.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md</code></a> · <code>MINI_LADDER_FINDINGS.md</code></td>
 </tr>
 <tr>
 <td>gpt-4.1-mini 3-rep claim</td>
-<td><code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code> · <code>GPT41MINI_CLAIM_FINDINGS.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code></a> · <code>GPT41MINI_CLAIM_FINDINGS.md</code></td>
 </tr>
 <tr>
 <td>gemini-3.5-flash-lite 1-rep screen</td>
-<td><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code> · <code>exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md"><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code></a> · <code>exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code></td>
 </tr>
 <tr>
 <td>Publish claim map</td>
-<td><code>RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md"><code>RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md</code></a></td>
 </tr>
 </tbody></table></div>
 <hr>
@@ -927,23 +933,23 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </thead>
 <tbody><tr>
 <td>Locked claim + fences</td>
-<td><code>CLAIM.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/CLAIM.md"><code>CLAIM.md</code></a></td>
 </tr>
 <tr>
 <td>Analysis plan + protocol lock</td>
-<td><code>00_protocol/results-reading-plan-v1.md</code>, <code>protocol_lock_v1.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/results-reading-plan-v1.md"><code>00_protocol/results-reading-plan-v1.md</code></a>, <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/protocol_lock_v1.md"><code>protocol_lock_v1.md</code></a></td>
 </tr>
 <tr>
 <td>Evaluation spec (gold / scoring)</td>
-<td><code>00_protocol/evaluation_spec_v1.md</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/00_protocol/evaluation_spec_v1.md"><code>00_protocol/evaluation_spec_v1.md</code></a></td>
 </tr>
 <tr>
 <td>Frozen 120-case exam bundle</td>
-<td><code>01_datasets/full_120_bundle_v1.json</code> (+ live copy under <code>benchmark_pack_v1/full_120/</code>)</td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/RESEARCH/track1_role_study_package/01_datasets/full_120_bundle_v1.json"><code>01_datasets/full_120_bundle_v1.json</code></a> (+ live copy under <a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/benchmark_pack_v1/full_120"><code>benchmark_pack_v1/full_120/</code></a>)</td>
 </tr>
 <tr>
 <td>Prompt / schema / evaluator snapshots</td>
-<td><code>02_prompts_and_eval/</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/02_prompts_and_eval"><code>02_prompts_and_eval/</code></a></td>
 </tr>
 <tr>
 <td>Findings + analysis JSON</td>
@@ -951,11 +957,11 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 </tr>
 <tr>
 <td>Per-repeat run summaries</td>
-<td><code>03_main_runs/r1</code>–<code>r3/</code></td>
+<td><a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1"><code>03_main_runs/r1</code></a>–<code>r3/</code></td>
 </tr>
 <tr>
 <td>Harness entry</td>
-<td><code>npm run smoke:eval</code> → <code>scripts/smoke-eval.js</code>; <code>npm run harness:self-test</code></td>
+<td><code>npm run smoke:eval</code> → <a href="https://github.com/ihorpar/skip-the-roleplay/blob/master/scripts/smoke-eval.js"><code>scripts/smoke-eval.js</code></a>; <code>npm run harness:self-test</code></td>
 </tr>
 </tbody></table>
 <p><strong>Often gated / local-only (ask owner if needed):</strong></p>

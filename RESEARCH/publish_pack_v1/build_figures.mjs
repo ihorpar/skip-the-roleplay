@@ -77,7 +77,7 @@ function barsFig() {
     { label: 'Thinking (B2)', vals: [96.7, 97.2, 96.9] },
   ];
   const styles = ['A1 task-only', 'A2 + role', 'A3 + competencies'];
-  const colors = ['#9aa5b1', '#5b7ea6', '#2f5d8a'];
+  const colors = ['#9aa0a6', '#3d6b9a', '#6e5a86'];
   let b = '';
   for (let v = y0; v <= y1; v += 5) {
     b += `<line x1="${m.l}" y1="${y(v)}" x2="${w - m.r}" y2="${y(v)}" stroke="${GRID}"/>`;
