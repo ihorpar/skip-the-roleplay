@@ -27,11 +27,24 @@
   blockquote { border-left: 3px solid #ccc; margin: 0.8em 0; padding: 0.1em 1em; color: #444; }
   hr { border: 0; border-top: 1px solid #ccc; margin: 1.6em 0; }
   a { color: #17418a; text-decoration: none; overflow-wrap: anywhere; }
-  table, pre { break-inside: avoid; }
-  h2, h3, h4 { break-after: avoid; }
-  .figure { text-align: center; margin: 1.1em 0 0.3em; break-inside: avoid; }
+  pre { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  h2 + *, h3 + *, h4 + * {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .keep {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .figure { text-align: center; margin: 1.1em 0 0.3em; }
   .figure svg { max-width: 100%; height: auto; }
-  .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
+  .keep p em, .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
 </style>
 </head>
 <body>
@@ -82,15 +95,14 @@
 <h3>The exam</h3>
 <p>The exam is a deterministic <strong>appliance-repair scheduling agent</strong> benchmark. Each <strong>exam case</strong> supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families range from extraction-only items that must not book, through to full booking.</p>
 <p><strong>Interaction model.</strong> Each graded attempt is a multi-turn <strong>tool loop</strong> over <strong>one fixed user message</strong> plus fixture-backed tool results, ending in a structured final JSON answer. There is <strong>no</strong> simulated multi-turn customer who clarifies, argues, or changes goals mid-dialogue.</p>
-<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 962 168" width="962" height="168" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<div class="keep"><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 962 168" width="962" height="168" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="962" height="168" fill="white"/>
 <rect x="10" y="30" width="132" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="76" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Customer message</text><text x="76" y="69" font-size="11" text-anchor="middle" fill="#555">one fixed turn</text><line x1="147" y1="67" x2="167" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 167 63 L 174 67 L 167 71 Z" fill="#1a1a1a"/><rect x="176" y="30" width="158" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="255" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">System prompt</text><text x="255" y="69" font-size="11" text-anchor="middle" fill="#555">dense task rules</text><text x="255" y="84" font-size="11" text-anchor="middle" fill="#555">+ A1/A2/A3 block</text><line x1="339" y1="67" x2="359" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 359 63 L 366 67 L 359 71 Z" fill="#1a1a1a"/><rect x="368" y="30" width="208" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="472" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Tool loop vs fixtures</text><text x="472" y="69" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">service_check</text><text x="472" y="84" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">check_slots</text><text x="472" y="99" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">book_slot</text><line x1="581" y1="67" x2="601" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 601 63 L 608 67 L 601 71 Z" fill="#1a1a1a"/><rect x="610" y="30" width="150" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="685" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Final JSON answer</text><text x="685" y="69" font-size="11" text-anchor="middle" fill="#555">status, fields,</text><text x="685" y="84" font-size="11" text-anchor="middle" fill="#555">exact reply phrase</text><line x1="765" y1="67" x2="785" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 785 63 L 792 67 L 785 71 Z" fill="#1a1a1a"/><rect x="794" y="30" width="158" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="873" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Deterministic grader</text><text x="873" y="69" font-size="11" text-anchor="middle" fill="#555">compare to gold</text><text x="873" y="84" font-size="11" text-anchor="middle" fill="#555">pass / fail</text><text x="472" y="124" font-size="11" font-style="italic" text-anchor="middle" fill="#555">families stop at different depths</text>
 </svg>
-</div></p>
-<p><em>Figure 1. One graded attempt. The customer message is fixed; the system prompt carries the dense task rules plus the A1/A2/A3 block under test; the model runs a tool loop against fixtures and returns a structured answer; a deterministic grader compares everything to gold. Case families stop the loop at different depths.</em></p>
+</div><p><em>Figure 1. One graded attempt. The customer message is fixed; the system prompt carries the dense task rules plus the A1/A2/A3 block under test; the model runs a tool loop against fixtures and returns a structured answer; a deterministic grader compares everything to gold. Case families stop the loop at different depths.</em></p></div>
 <p>The model must call tools when the workflow requires them, and must <strong>not</strong> call them when gold says stop. A case <strong>passes</strong> only if the whole trace matches gold: required tools and arguments, extraction fields, <code>final_status</code>, and, where applicable, an exact allowed <code>customer_response</code> phrase. Near-misses and paraphrases fail. This is response/trace gold, not &quot;the final database equals the goal state.&quot;</p>
 <p>Primary outcome: binary pass/fail on <strong>graded</strong> attempts. Tool-sequence and argument diagnostics are secondary and not used for confirmatory prompt-style claims. Case-family and tag breakdowns are exploratory only.</p>
-<h3>Case families</h3>
+<div class="keep"><h3>Case families</h3>
 <p>The 120 cases split into six families, ordered by how deep the workflow must go:</p>
 <table>
 <thead>
@@ -123,12 +135,12 @@
 <td>F6 robustness</td>
 <td>The hardest mixes (name conflicts, &quot;just skip the checks,&quot; unsupported user assumptions), each with one deterministic correct answer. Some require <code>book_slot</code>; some require stopping without it.</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Cases also carry pressure modules, such as a stale zip mentioned before the real one, a busy tool result, or a booking-failure fixture. Module combinations are constrained by a binding exclusion list so every case keeps exactly one correct answer.</p>
 <h3>Two cases, end to end</h3>
 <p><strong>Extraction only (F1).</strong> The customer writes: “Hey, Mira here. Our building elevator was down all morning so I could not message earlier. Dishwasher in my apartment keeps stopping at rinse. We moved from 10021; current place is 10012.” Gold: extract <code>booking_name = Mira</code>, <code>intent = new_job</code>, <code>zip_code = 10012</code>, <code>unit_type = dishwasher</code>, <code>unit_class = residential</code>, and call no tools. The stale zip 10021 is the trap. Calling <code>service_check</code> here fails the case.</p>
 <p><strong>Full booking (F5).</strong> The customer writes: “Jonah here, 10001 apartment. Dishwasher will not start; groceries are coming later so earlier is better.” Local clock: 2026-04-19 08:00, America/New_York. Gold requires <code>service_check(10001, dishwasher, residential)</code>, then <code>check_slots</code> with the same arguments, then <code>book_slot(Jonah, slot_700, 2026-04-19T09:00)</code>, then a final JSON with <code>final_status = booking_confirmed</code>, <code>selected_slot_id = slot_700</code>, and the exact reply “your booking is confirmed.” Booking any other slot fails. So does a paraphrase of the confirmation phrase.</p>
-<h3>Relation to τ-bench</h3>
+<div class="keep"><h3>Relation to τ-bench</h3>
 <p>τ-bench [Yao et al., 2024] evaluates tool–agent–<strong>user</strong> dialogues under domain policies with <strong>database-state</strong> gold and reliability metrics such as <strong>pass^k</strong>. Our exam is a different object:</p>
 <table>
 <thead>
@@ -158,7 +170,7 @@
 <td>Confirmatory <strong>persona A/B</strong> under a fixed dense stack</td>
 <td>Capability / reliability leaderboard</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>We cite τ-bench as a cousin for business-ops agent evaluation. The contribution here is the locked short-role null under fixed tools/schemas, not a new interactive-agent leaderboard.</p>
 <h3>How we score tool use</h3>
 <p>Evaluation is <strong>rule-based and deterministic</strong> (no LLM judge). Mapping to tool-eval vocabulary (e.g., BFCL-style AST matching):</p>
@@ -174,7 +186,7 @@
 <h3>Gold labels and deterministic evaluation</h3>
 <p>Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (<code>track1_role_study_package/00_protocol/evaluation_spec_v1.md</code>).</p>
 <p>Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trace) are counted as <strong>technical problems</strong>, not model exam fails. Main pass rates use only graded attempts. If a case lacks a graded result in any cell needed for a contrast after re-queue, that case is dropped from the contrast (no silent fail imputation; no unequal case sets).</p>
-<h3>Model and harness settings</h3>
+<div class="keep"><h3>Model and harness settings</h3>
 <p><strong>Model (confirmatory study):</strong> OpenAI <code>gpt-5.6-luna</code> only. Other providers are out of the main study.</p>
 <p><strong>Run mode</strong> changes API settings only; system and user prompt text are identical for a given case and prompt style:</p>
 <table>
@@ -192,9 +204,9 @@
 <td><strong>B2</strong> (thinking)</td>
 <td><code>reasoning.effort = medium</code>, <code>temperature</code> omitted</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Shared runtime notes (locked protocol): <code>max_output_tokens = 3000</code>; final answers via Structured Outputs (<code>json_schema</code> + enums); tool arguments via strict schemas with the same unit enums; request timeout 45 000 ms; up to 2 retries on timeout/network/429/5xx. Tool results are injected from fixtures; the loop terminates when the model returns a final structured answer or hits harness stop/timeout rules.</p>
-<h3>Prompt-style conditions</h3>
+<div class="keep"><h3>Prompt-style conditions</h3>
 <p>Across A1/A2/A3, the shared task instructions, user prompt, tools, and schemas are fixed. Only the role/competencies block may differ. A3 is locked to <strong>generic</strong> soft competencies (no exam-specific or workflow coaching). This is the text practitioners actually paste as “competencies,” not competency engineering. Prompt length was <strong>not</strong> equalized with filler; if A3 differs from A2 under the analysis rule, attribution is to competency <strong>content</strong>, not length. Competencies without a role were not tested.</p>
 <p><strong>A priori design intent.</strong> A2 tests a <strong>thin domain-matched short role</strong> on top of dense task rules. A3 tests whether adding soft professional virtues (non-task-specific fluff) on top of that role changes end-to-end pass. That is closer to a robustness-style stress on identity text than to domain coaching. Neither arm was designed as a Kong-style strategic role-play / CoT trigger.</p>
 <p>Locked role/competency lines (short quotes; full task instructions are longer):</p>
@@ -221,8 +233,8 @@
 <td>+ role + generic competencies</td>
 <td><code>- You are a scheduling agent for an appliance repair company with strong professional competencies in careful listening, clear judgment, accurate follow-through, and disciplined adherence to procedures.</code></td>
 </tr>
-</tbody></table>
-<h3>Confirmatory matrix</h3>
+</tbody></table></div>
+<div class="keep"><h3>Confirmatory matrix</h3>
 <table>
 <thead>
 <tr>
@@ -254,7 +266,7 @@
 <td>Technical API failures (main matrix)</td>
 <td>0</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues; rehearsal numbers are provisional and do not support claim language. Only the frozen 120 under this analysis plan is claim-ready.</p>
 <h3>Analysis rule</h3>
 <p>Unit of analysis is the <strong>exam case</strong>, not the raw API call:</p>
@@ -274,7 +286,7 @@
 <p><strong>In this setup, which is often used in real-business agents, adding a short role/persona line, and then generic soft competencies, did not show a clear help or clear harm on full-case pass.</strong></p>
 <p>Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), <strong>none</strong> of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or in the pooled summary check. That is a null under the pre-set analysis rule, not a claim that the effect size is exactly zero. Pass rates are high (especially B2 ~97%), so the design rules out large prompt-style lifts under our threshold; tiny true effects remain compatible with these intervals.</p>
 <p>Setup: OpenAI <code>gpt-5.6-luna</code>; 120 exam cases × A1/A2/A3 × B1/B2 × 3 repeats = <strong>2160</strong> graded attempts; <strong>0</strong> technical API failures on the main matrix.</p>
-<h3>Pass rates</h3>
+<div class="keep"><h3>Pass rates</h3>
 <p>Overall by prompt style and by mode:</p>
 <table>
 <thead>
@@ -328,15 +340,14 @@
 <td align="right">86.9</td>
 <td align="right">96.9</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Repeat-level overall pass rates were stable: r1 <strong>92.5%</strong>, r2 <strong>93.1%</strong>, r3 <strong>92.6%</strong> (720 graded attempts each).</p>
-<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="720" height="330" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<div class="keep"><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="720" height="330" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="720" height="330" fill="white"/>
 <line x1="62" y1="264" x2="700" y2="264" stroke="#ddd"/><text x="54" y="268" font-size="12" text-anchor="end" fill="#555">80</text><line x1="62" y1="204.5" x2="700" y2="204.5" stroke="#ddd"/><text x="54" y="208.5" font-size="12" text-anchor="end" fill="#555">85</text><line x1="62" y1="145" x2="700" y2="145" stroke="#ddd"/><text x="54" y="149" font-size="12" text-anchor="end" fill="#555">90</text><line x1="62" y1="85.5" x2="700" y2="85.5" stroke="#ddd"/><text x="54" y="89.5" font-size="12" text-anchor="end" fill="#555">95</text><line x1="62" y1="26" x2="700" y2="26" stroke="#ddd"/><text x="54" y="30" font-size="12" text-anchor="end" fill="#555">100</text><text x="18" y="16" font-size="12" fill="#555">Pass %</text><rect x="114.5" y="154.51999999999995" width="58" height="109.48000000000005" fill="#9aa5b1"/><text x="143.5" y="147.51999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">89.2</text><rect x="192.5" y="152.13999999999993" width="58" height="111.86000000000007" fill="#5b7ea6"/><text x="221.5" y="145.13999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">89.4</text><rect x="270.5" y="181.88999999999993" width="58" height="82.11000000000007" fill="#2f5d8a"/><text x="299.5" y="174.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">86.9</text><text x="221.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Instant (B1)</text><rect x="433.5" y="65.26999999999995" width="58" height="198.73000000000005" fill="#9aa5b1"/><text x="462.5" y="58.26999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">96.7</text><rect x="511.5" y="59.31999999999998" width="58" height="204.68" fill="#5b7ea6"/><text x="540.5" y="52.31999999999998" font-size="12" text-anchor="middle" fill="#1a1a1a">97.2</text><rect x="589.5" y="62.88999999999993" width="58" height="201.11000000000007" fill="#2f5d8a"/><text x="618.5" y="55.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">96.9</text><text x="540.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Thinking (B2)</text><line x1="62" y1="264" x2="700" y2="264" stroke="#555"/><rect x="92" y="303" width="13" height="13" fill="#9aa5b1"/><text x="111" y="314" font-size="12" fill="#1a1a1a">A1 task-only</text><rect x="292" y="303" width="13" height="13" fill="#5b7ea6"/><text x="311" y="314" font-size="12" fill="#1a1a1a">A2 + role</text><rect x="492" y="303" width="13" height="13" fill="#2f5d8a"/><text x="511" y="314" font-size="12" fill="#1a1a1a">A3 + competencies</text>
 </svg>
-</div></p>
-<p><em>Figure 2. Case-averaged pass rates by prompt style inside each mode. The y-axis starts at 80%. Style differences sit within noise in both modes; the mode gap is the visible move.</em></p>
-<h3>Prompt-style contrasts</h3>
+</div><p><em>Figure 2. Case-averaged pass rates by prompt style inside each mode. The y-axis starts at 80%. Style differences sit within noise in both modes; the mode gap is the visible move.</em></p></div>
+<div class="keep"><h3>Prompt-style contrasts</h3>
 <p>Differences are in percentage points (pp). Positive means the second condition has higher case-averaged pass rate. A contrast is a “clear effect” only if the 95% CI excludes 0.</p>
 <h4>Inside instant (B1)</h4>
 <table>
@@ -366,8 +377,8 @@
 <td>−8.3 … +3.9</td>
 <td>No</td>
 </tr>
-</tbody></table>
-<h4>Inside thinking (B2)</h4>
+</tbody></table></div>
+<div class="keep"><h4>Inside thinking (B2)</h4>
 <table>
 <thead>
 <tr>
@@ -395,8 +406,8 @@
 <td>−2.2 … +2.5</td>
 <td>No</td>
 </tr>
-</tbody></table>
-<h4>Pooled across modes</h4>
+</tbody></table></div>
+<div class="keep"><h4>Pooled across modes</h4>
 <p>Same three contrasts, averaged across modes. Not a separate research question; part of the locked reading plan alongside the within-mode tables.</p>
 <table>
 <thead>
@@ -425,13 +436,12 @@
 <td>−4.6 … +2.8</td>
 <td>No</td>
 </tr>
-</tbody></table>
-<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" width="720" height="430" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+</tbody></table></div>
+<div class="keep"><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" width="720" height="430" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="720" height="430" fill="white"/>
 <line x1="443" y1="18" x2="443" y2="378" stroke="#b33b3b" stroke-dasharray="4 3"/><line x1="200" y1="378" x2="686" y2="378" stroke="#555"/><line x1="200" y1="378" x2="200" y2="383" stroke="#555"/><text x="200" y="398" font-size="12" text-anchor="middle" fill="#555">-10</text><line x1="321.5" y1="378" x2="321.5" y2="383" stroke="#555"/><text x="321.5" y="398" font-size="12" text-anchor="middle" fill="#555">-5</text><line x1="443" y1="378" x2="443" y2="383" stroke="#555"/><text x="443" y="398" font-size="12" text-anchor="middle" fill="#555">0</text><line x1="564.5" y1="378" x2="564.5" y2="383" stroke="#555"/><text x="564.5" y="398" font-size="12" text-anchor="middle" fill="#555">+5</text><line x1="686" y1="378" x2="686" y2="383" stroke="#555"/><text x="686" y="398" font-size="12" text-anchor="middle" fill="#555">+10</text><text x="443" y="422" font-size="12" text-anchor="middle" fill="#555">Difference in pass rate (pp), 95% CI</text><text x="10" y="37" font-size="13" font-weight="bold" fill="#1a1a1a">Instant (B1)</text><text x="188" y="67" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="348.23" y1="63" x2="557.21" y2="63" stroke="#2f5d8a" stroke-width="2"/><line x1="348.23" y1="58" x2="348.23" y2="68" stroke="#2f5d8a" stroke-width="2"/><line x1="557.21" y1="58" x2="557.21" y2="68" stroke="#2f5d8a" stroke-width="2"/><circle cx="450.29" cy="63" r="4.5" fill="#2f5d8a"/><text x="188" y="97" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="260.75" y1="93" x2="496.46" y2="93" stroke="#2f5d8a" stroke-width="2"/><line x1="260.75" y1="88" x2="260.75" y2="98" stroke="#2f5d8a" stroke-width="2"/><line x1="496.46" y1="88" x2="496.46" y2="98" stroke="#2f5d8a" stroke-width="2"/><circle cx="382.25" cy="93" r="4.5" fill="#2f5d8a"/><text x="188" y="127" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="241.30999999999997" y1="123" x2="537.77" y2="123" stroke="#2f5d8a" stroke-width="2"/><line x1="241.30999999999997" y1="118" x2="241.30999999999997" y2="128" stroke="#2f5d8a" stroke-width="2"/><line x1="537.77" y1="118" x2="537.77" y2="128" stroke="#2f5d8a" stroke-width="2"/><circle cx="389.54" cy="123" r="4.5" fill="#2f5d8a"/><text x="10" y="157" font-size="13" font-weight="bold" fill="#1a1a1a">Thinking (B2)</text><text x="188" y="187" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="389.54" y1="183" x2="523.19" y2="183" stroke="#2f5d8a" stroke-width="2"/><line x1="389.54" y1="178" x2="389.54" y2="188" stroke="#2f5d8a" stroke-width="2"/><line x1="523.19" y1="178" x2="523.19" y2="188" stroke="#2f5d8a" stroke-width="2"/><circle cx="457.58000000000004" cy="183" r="4.5" fill="#2f5d8a"/><text x="188" y="217" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="362.81" y1="213" x2="496.46" y2="213" stroke="#2f5d8a" stroke-width="2"/><line x1="362.81" y1="208" x2="362.81" y2="218" stroke="#2f5d8a" stroke-width="2"/><line x1="496.46" y1="208" x2="496.46" y2="218" stroke="#2f5d8a" stroke-width="2"/><circle cx="435.71" cy="213" r="4.5" fill="#2f5d8a"/><text x="188" y="247" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="389.54" y1="243" x2="503.75" y2="243" stroke="#2f5d8a" stroke-width="2"/><line x1="389.54" y1="238" x2="389.54" y2="248" stroke="#2f5d8a" stroke-width="2"/><line x1="503.75" y1="238" x2="503.75" y2="248" stroke="#2f5d8a" stroke-width="2"/><circle cx="450.29" cy="243" r="4.5" fill="#2f5d8a"/><text x="10" y="277" font-size="13" font-weight="bold" fill="#1a1a1a">Pooled</text><text x="188" y="307" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="384.68" y1="303" x2="520.76" y2="303" stroke="#2f5d8a" stroke-width="2"/><line x1="384.68" y1="298" x2="384.68" y2="308" stroke="#2f5d8a" stroke-width="2"/><line x1="520.76" y1="298" x2="520.76" y2="308" stroke="#2f5d8a" stroke-width="2"/><circle cx="452.72" cy="303" r="4.5" fill="#2f5d8a"/><text x="188" y="337" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="336.08" y1="333" x2="479.45" y2="333" stroke="#2f5d8a" stroke-width="2"/><line x1="336.08" y1="328" x2="336.08" y2="338" stroke="#2f5d8a" stroke-width="2"/><line x1="479.45" y1="328" x2="479.45" y2="338" stroke="#2f5d8a" stroke-width="2"/><circle cx="408.98" cy="333" r="4.5" fill="#2f5d8a"/><text x="188" y="367" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="331.22" y1="363" x2="511.04" y2="363" stroke="#2f5d8a" stroke-width="2"/><line x1="331.22" y1="358" x2="331.22" y2="368" stroke="#2f5d8a" stroke-width="2"/><line x1="511.04" y1="358" x2="511.04" y2="368" stroke="#2f5d8a" stroke-width="2"/><circle cx="418.70000000000005" cy="363" r="4.5" fill="#2f5d8a"/>
 </svg>
-</div></p>
-<p><em>Figure 3. All nine locked prompt-style contrasts. Every 95% interval crosses zero.</em></p>
+</div><p><em>Figure 3. All nine locked prompt-style contrasts. Every 95% interval crosses zero.</em></p></div>
 <p>Point estimates are small. Under the excludes-0 rule: <strong>no clear help or harm</strong> from short role / soft competencies.</p>
 <h3>Secondary result: thinking ≫ instant</h3>
 <p>Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: <strong>96.9%</strong> (B2) vs <strong>88.5%</strong> (B1), a <strong>+8.4 pp</strong> gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). Asking the model to think moves full-case pass here. The short identity line does not. The persona null still holds inside both modes.</p>
@@ -444,7 +454,7 @@
 <p>The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<code>CLAIM.md</code>).</p>
 <p>If you run this kind of agent, do not treat the short persona line as a primary lever when &quot;success&quot; means the whole case matches gold. Follow-up work on longer personas and other model tiers (appendix) did not overturn that.</p>
 <hr>
-<h3>Mapping to Principled Personas desiderata</h3>
+<div class="keep"><h3>Mapping to Principled Personas desiderata</h3>
 <p>Luz de Araujo et al. [2025] ask when personas <em>should</em> help via three desiderata. We map our contrasts explicitly (Fidelity is mostly out of scope):</p>
 <table>
 <thead>
@@ -474,7 +484,7 @@
 <td>Stronger careful-design / Robustness-style warning</td>
 <td>Met the <strong>hurt</strong> threshold on that mid-band stack; reported as a separate appendix claim.</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p><strong>Fidelity</strong> (ordinal expertise / specialization hierarchy) was <strong>not</strong> tested. Soft virtues in A3 are not a ranked expertise attribute. Expert text helps most when it adds information the instruction stack lacks. Here the stack is already dense, so thin identity text has nowhere to bite. That framing explains the null; it does not weaken it.</p>
 <hr>
 <h3>What this result is not</h3>
@@ -486,7 +496,7 @@
 </ul>
 <p>Thinking versus instant is a real secondary result in this matrix (+8.4 pp overall). The title stays on the role line.</p>
 <hr>
-<h3>Limits</h3>
+<div class="keep"><h3>Limits</h3>
 <h4>Ceiling / sensitivity</h4>
 <p>Pass rates on Luna are high; thinking mode is especially saturated. That strengthens ruling out <strong>large</strong> prompt-style lifts and weakens sensitivity to <strong>tiny</strong> ones. This study was not powered for a pre-specified MDES; near-ceiling B2 cells in particular cannot resolve modest role deltas. Locked language: no clear effect under our threshold, compatible with small true effects that the design was not built to pin to zero.</p>
 <h4>Thin A3</h4>
@@ -530,9 +540,9 @@
 <td>S_role_long_pure</td>
 <td>92.5% (37/40)</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Paired net <strong>0</strong>. <strong>Stop / pivot</strong>: no Stage 2 Luna B1 matrix.<br>Findings: <code>…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md</code></p>
-<h4>Stage 1b: <code>gpt-5.4-nano</code>, thinking, same 40 cases, 1 repeat</h4>
+<div class="keep"><h4>Stage 1b: <code>gpt-5.4-nano</code>, thinking, same 40 cases, 1 repeat</h4>
 <table>
 <thead>
 <tr>
@@ -548,10 +558,10 @@
 <td>S_role_long_pure</td>
 <td>52.5% (21/40)</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Δ <strong>+5.0 pp</strong>; paired net <strong>+2</strong>. <strong>Stop / do not expand</strong>: noisy, no clear coherent fail pattern for a larger nano matrix.<br>Earlier <strong>cross-batch</strong> nano longer-persona ~65% vs factorial A1 ~50% <strong>did not hold</strong> same-batch; treat that older story as cautionary only.<br>Findings: <code>…/nano54_b2_pure_long_pilot_20260722T153848/STAGE1B_PILOT_FINDINGS.md</code></p>
 <hr>
-<h3>Nano and mini floors</h3>
+<div class="keep"><h3>Nano and mini floors</h3>
 <p>Same exam can be near-impossible for weak models under A1×B1. Supporting probes on the <strong>40-case Task-only Instant</strong> screen:</p>
 <table>
 <thead>
@@ -580,7 +590,7 @@
 <td><code>gpt-5.4-mini</code></td>
 <td align="right"><strong>75%</strong></td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Findings: <code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md</code><br>Also: <code>06_supporting_nano_probe/</code> · <code>NANO_COMPARE_FINDINGS.md</code> under <code>benchmark_pack_v1/runs/</code>.</p>
 <p><strong>Takeaway.</strong> The Luna role null is <em>not</em> “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; <code>gpt-4.1-mini</code> ~63% is a different protocol (120×3).</p>
 <p>Mid-band role checks on <code>gpt-5.4-nano</code> and related factorials live in the same supporting folder; keep them <strong>out of</strong> the abstract and main claim map unless upgraded later under the same analysis rule.</p>
@@ -589,7 +599,7 @@
 <p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code><br>Claim findings: <code>…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md</code><br>Analysis: <code>…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json</code><br>Claim card: <code>track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md</code>  </p>
 <p><strong>Does not rewrite</strong> Luna <code>CLAIM.md</code>.</p>
 <p><strong>Design:</strong> <code>openai:gpt-4.1-mini</code> · 120 exam cases · A1 / A2 / A3 / longer pure persona (<code>S_role_long_pure</code>) · <strong>B1 only</strong> · <strong>3 repeats</strong> · <strong>1440</strong> graded attempts · 0 technical failures.</p>
-<h4>Pooled pass rates</h4>
+<div class="keep"><h4>Pooled pass rates</h4>
 <p>Each style pools 360 graded attempts.</p>
 <table>
 <thead>
@@ -614,8 +624,8 @@
 <td>S_role_long_pure (longer pure persona)</td>
 <td align="right"><strong>54.4%</strong></td>
 </tr>
-</tbody></table>
-<h4>Contrasts</h4>
+</tbody></table></div>
+<div class="keep"><h4>Contrasts</h4>
 <p>Case-level paired bootstrap, 10,000 resamples.</p>
 <table>
 <thead>
@@ -650,13 +660,12 @@
 <td>−14.7 … −2.8</td>
 <td align="center"><strong>yes (hurt)</strong></td>
 </tr>
-</tbody></table>
-<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="720" height="190" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+</tbody></table></div>
+<div class="keep"><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="720" height="190" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="720" height="190" fill="white"/>
 <line x1="477.7142857142857" y1="18" x2="477.7142857142857" y2="138" stroke="#b33b3b" stroke-dasharray="4 3"/><line x1="200" y1="138" x2="686" y2="138" stroke="#555"/><line x1="217.35714285714286" y1="138" x2="217.35714285714286" y2="143" stroke="#555"/><text x="217.35714285714286" y="158" font-size="12" text-anchor="middle" fill="#555">-15</text><line x1="304.1428571428571" y1="138" x2="304.1428571428571" y2="143" stroke="#555"/><text x="304.1428571428571" y="158" font-size="12" text-anchor="middle" fill="#555">-10</text><line x1="390.92857142857144" y1="138" x2="390.92857142857144" y2="143" stroke="#555"/><text x="390.92857142857144" y="158" font-size="12" text-anchor="middle" fill="#555">-5</text><line x1="477.7142857142857" y1="138" x2="477.7142857142857" y2="143" stroke="#555"/><text x="477.7142857142857" y="158" font-size="12" text-anchor="middle" fill="#555">0</text><line x1="564.5" y1="138" x2="564.5" y2="143" stroke="#555"/><text x="564.5" y="158" font-size="12" text-anchor="middle" fill="#555">+5</text><line x1="651.2857142857142" y1="138" x2="651.2857142857142" y2="143" stroke="#555"/><text x="651.2857142857142" y="158" font-size="12" text-anchor="middle" fill="#555">+10</text><text x="443" y="182" font-size="12" text-anchor="middle" fill="#555">Difference in pass rate (pp), 95% CI</text><text x="188" y="37" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="448.2071428571429" y1="33" x2="640.8714285714286" y2="33" stroke="#2f5d8a" stroke-width="2"/><line x1="448.2071428571429" y1="28" x2="448.2071428571429" y2="38" stroke="#2f5d8a" stroke-width="2"/><line x1="640.8714285714286" y1="28" x2="640.8714285714286" y2="38" stroke="#2f5d8a" stroke-width="2"/><circle cx="545.4071428571428" cy="33" r="4.5" fill="#2f5d8a"/><text x="188" y="67" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="314.5571428571428" y1="63" x2="491.59999999999997" y2="63" stroke="#2f5d8a" stroke-width="2"/><line x1="314.5571428571428" y1="58" x2="314.5571428571428" y2="68" stroke="#2f5d8a" stroke-width="2"/><line x1="491.59999999999997" y1="58" x2="491.59999999999997" y2="68" stroke="#2f5d8a" stroke-width="2"/><circle cx="404.8142857142857" cy="63" r="4.5" fill="#2f5d8a"/><text x="188" y="97" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="390.92857142857144" y1="93" x2="554.0857142857143" y2="93" stroke="#2f5d8a" stroke-width="2"/><line x1="390.92857142857144" y1="88" x2="390.92857142857144" y2="98" stroke="#2f5d8a" stroke-width="2"/><line x1="554.0857142857143" y1="88" x2="554.0857142857143" y2="98" stroke="#2f5d8a" stroke-width="2"/><circle cx="472.50714285714287" cy="93" r="4.5" fill="#2f5d8a"/><text x="188" y="127" font-size="12" text-anchor="end" fill="#1a1a1a">longer persona − A1</text><line x1="222.56428571428572" y1="123" x2="429.1142857142857" y2="123" stroke="#a33131" stroke-width="2"/><line x1="222.56428571428572" y1="118" x2="222.56428571428572" y2="128" stroke="#a33131" stroke-width="2"/><line x1="429.1142857142857" y1="118" x2="429.1142857142857" y2="128" stroke="#a33131" stroke-width="2"/><circle cx="328.4428571428572" cy="123" r="4.5" fill="#a33131"/>
 </svg>
-</div></p>
-<p><em>Figure 4. Contrasts on <code>gpt-4.1-mini</code>. Only the longer pure persona vs task-only interval stays fully below zero.</em></p>
+</div><p><em>Figure 4. Contrasts on <code>gpt-4.1-mini</code>. Only the longer pure persona vs task-only interval stays fully below zero.</em></p></div>
 <p><strong>Claim-ready finding:</strong> on this mid-band production stack, a longer pure persona <strong>clearly hurt</strong> end-to-end success vs task-only. Short role and soft competencies did <strong>not</strong> meet the threshold (same analysis rule as the Luna confirmatory study).</p>
 <p><em>An earlier one-repeat check was directional only; numbers above are the pooled confirmatory matrix.</em></p>
 <hr>
@@ -664,7 +673,7 @@
 <p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code><br>Findings: <code>…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code><br>Summary JSON: <code>…/exploratory_r1_glued/glued_summary.json</code></p>
 <p><strong>Label:</strong> Exploratory only; <strong>not</strong> a claim. <strong>Does not rewrite</strong> Luna or <code>gpt-4.1-mini</code> claims. No paired-bootstrap claim bar applied (single repeat).</p>
 <p><strong>Design:</strong> <code>gemini:gemini-3.5-flash-lite</code> · <code>full_120</code> · A1 / A2 / A3 / <code>S_role_long_pure</code> · <strong>B1 only</strong> · <strong>1</strong> repeat · <strong>480</strong> graded · 0 infra in glued set. Family batches glued after free-tier gap-fills on the final Gemini structured-output harness.</p>
-<h4>Pass rates</h4>
+<div class="keep"><h4>Pass rates</h4>
 <p>One repeat; 120 graded attempts per style.</p>
 <table>
 <thead>
@@ -689,11 +698,11 @@
 <td>S_role_long_pure</td>
 <td align="right"><strong>75.8%</strong></td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Point-estimate deltas vs A1: A2 <strong>−2.5</strong> pp · A3 <strong>−3.3</strong> pp · pureLong <strong>−4.2</strong> pp. Directionally flat-to-slightly-down; <strong>do not</strong> promote to a confirmatory null or “hurt” without r2/r3.</p>
 <p><strong>Takeaway.</strong> A mid-band capability screen (~76–80% overall). Short role does not look helpful here either; longer persona is not the clear hurt seen on <code>gpt-4.1-mini</code>’s 3-rep claim.</p>
 <hr>
-<h3>Placement reminder</h3>
+<div class="keep"><h3>Placement reminder</h3>
 <table>
 <thead>
 <tr>
@@ -729,9 +738,9 @@
 <td>Markdown × role factorials, rich-role screens</td>
 <td>Out of paper or footnote only</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <h2>Appendix B. Reproducibility</h2>
-<h3>Pinned models</h3>
+<div class="keep"><h3>Pinned models</h3>
 <table>
 <thead>
 <tr>
@@ -780,10 +789,10 @@
 <td><code>gemini-3.5-flash-lite</code></td>
 <td>B1 only; 1-rep glued full_120 under <code>gemini35flashlite_free_tier_v2/exploratory_r1_glued/</code>; <strong>not</strong> a claim</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p><strong>API drift:</strong> Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit when sharing numbers.</p>
 <hr>
-<h3>Claim pack</h3>
+<div class="keep"><h3>Claim pack</h3>
 <p>Root: <code>RESEARCH/track1_role_study_package/</code></p>
 <table>
 <thead>
@@ -836,7 +845,7 @@
 <td><code>06_supporting_nano_probe/</code></td>
 <td>Exploratory pointers only</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Also: live bundle under <code>RESEARCH/benchmark_pack_v1/full_120/</code> (same exam family used by the harness).</p>
 <hr>
 <h3>Analysis plan</h3>
@@ -854,7 +863,7 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <p>Entrypoint: <code>package.json</code> script <code>smoke:eval</code> → <code>node scripts/smoke-eval.js</code>.<br>Prompt style / mode flags and model selection follow the multi-turn harness docs under <code>RESEARCH/</code> (e.g. <code>--styles</code>, <code>--modes</code>, <code>--models</code>). Self-checks: <code>npm run harness:self-test</code>.</p>
 <p><strong>Success metric:</strong> binary end-to-end pass vs deterministic gold (tools + fields + exact allowed customer phrase where required), not an LLM judge.</p>
 <hr>
-<h3>Analysis JSON</h3>
+<div class="keep"><h3>Analysis JSON</h3>
 <table>
 <thead>
 <tr>
@@ -874,10 +883,10 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td>Raw repeats</td>
 <td><code>…/03_main_runs/r{1,2,3}/smoke_raw_runs_latest.json</code></td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating <code>CLAIM.md</code> and the analysis plan.</p>
 <hr>
-<h3>Exploratory protocols</h3>
+<div class="keep"><h3>Exploratory protocols</h3>
 <table>
 <thead>
 <tr>
@@ -905,9 +914,9 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td>Publish claim map</td>
 <td><code>RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md</code></td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <hr>
-<h3>Release checklist</h3>
+<div class="keep"><h3>Release checklist</h3>
 <p><strong>What ships with / via the claim pack (intended public artifacts):</strong></p>
 <table>
 <thead>
@@ -965,7 +974,7 @@ npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
 <td>Live API keys / <code>.env</code></td>
 <td><strong>Never</strong> ship</td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p><strong>Minimum recompute bar:</strong> with the frozen bundle, evaluation spec, analysis JSON, and harness commit, an external reader should recompute A2−A1 / A3−A2 / A3−A1 tables without Slack. Record model id, mode settings, date window, and git commit when publishing numbers.</p>
 <hr>
 <h3>Ethics and compute</h3>

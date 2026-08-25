@@ -98,6 +98,76 @@ bodyHtml = bodyHtml.replace(/<img src="figures\/([^"]+\.svg)"[^>]*>/g, (tag, fil
   return `<div class="figure">${fs.readFileSync(p, 'utf8')}</div>`;
 });
 
+// marked wraps the replaced <div> in <p>, which is invalid and makes print
+// page-breaks worse. Unwrap, then keep figure + caption together.
+bodyHtml = bodyHtml.replace(/<p>\s*(<div class="figure">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
+bodyHtml = bodyHtml.replace(
+  /(<div class="figure">[\s\S]*?<\/div>)\s*(<p><em>[\s\S]*?<\/em><\/p>)/g,
+  '<div class="keep">$1$2</div>'
+);
+
+// Keep a heading with the table that immediately follows it. Do not let the
+// lead-in <p> match across later sections (a greedy [\s\S]*?<\/p> will).
+function wrapHeadingTables(html) {
+  const headingRe = /<(h[34])(?:\s[^>]*)?>[\s\S]*?<\/\1>/gi;
+  let out = '';
+  let last = 0;
+  let m;
+  while ((m = headingRe.exec(html))) {
+    out += html.slice(last, m.index);
+    const heading = m[0];
+    let i = headingRe.lastIndex;
+    const tail = html.slice(i);
+
+    const leadRe = /^(?:\s*<p(?:\s[^>]*)?>(?:(?!<\/p>|<h[1-6]\b|<table\b|<ul\b|<ol\b|<div\b|<hr\b|<pre\b)[\s\S])*<\/p>){0,4}/i;
+    const lead = tail.match(leadRe)?.[0] ?? '';
+    const afterLead = tail.slice(lead.length);
+    const tableMatch = afterLead.match(/^\s*<table\b[\s\S]*?<\/table>/i);
+    const subTable = afterLead.match(
+      /^\s*<(h4)(?:\s[^>]*)?>[\s\S]*?<\/\1>\s*<table\b[\s\S]*?<\/table>/i
+    );
+
+    let extra = '';
+    if (tableMatch) extra = tableMatch[0];
+    else if (subTable) extra = subTable[0];
+
+    if (!extra) {
+      out += heading;
+      last = m.index + heading.length;
+      headingRe.lastIndex = last;
+      continue;
+    }
+
+    let block = heading + lead + extra;
+    let consumed = lead.length + extra.length;
+    if (tableMatch) {
+      const more = afterLead.slice(tableMatch[0].length).match(
+        /^\s*<p(?:\s[^>]*)?>(?:(?!<\/p>|<h[1-6]\b|<table\b)[\s\S])*<\/p>\s*<table\b[\s\S]*?<\/table>/i
+      );
+      if (more && more[0].length < 2500) {
+        block += more[0];
+        consumed += more[0].length;
+      }
+    }
+
+    const rows = (block.match(/<tr[\s>]/g) || []).length;
+    if (rows > 14) {
+      out += heading;
+      last = m.index + heading.length;
+      headingRe.lastIndex = last;
+      continue;
+    }
+
+    out += `<div class="keep">${block}</div>`;
+    last = i + consumed;
+    headingRe.lastIndex = last;
+  }
+  out += html.slice(last);
+  return out;
+}
+
+bodyHtml = wrapHeadingTables(bodyHtml);
+
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -127,11 +197,24 @@ const html = `<!doctype html>
   blockquote { border-left: 3px solid #ccc; margin: 0.8em 0; padding: 0.1em 1em; color: #444; }
   hr { border: 0; border-top: 1px solid #ccc; margin: 1.6em 0; }
   a { color: #17418a; text-decoration: none; overflow-wrap: anywhere; }
-  table, pre { break-inside: avoid; }
-  h2, h3, h4 { break-after: avoid; }
-  .figure { text-align: center; margin: 1.1em 0 0.3em; break-inside: avoid; }
+  pre { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  h2 + *, h3 + *, h4 + * {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .keep {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .figure { text-align: center; margin: 1.1em 0 0.3em; }
   .figure svg { max-width: 100%; height: auto; }
-  .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
+  .keep p em, .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
 </style>
 </head>
 <body>
