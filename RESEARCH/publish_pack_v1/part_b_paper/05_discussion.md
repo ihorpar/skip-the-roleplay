@@ -6,9 +6,9 @@
 
 ## What the claim is
 
-The setup is locked: dense task instructions, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI `gpt-5.6-luna`, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, **did not show a clear help or clear harm** on end-to-end success. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (`CLAIM.md`).
+The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI `gpt-5.6-luna`, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, **did not show a clear help or clear harm** on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (`CLAIM.md`).
 
-Implication for deployment: do not treat short persona / soft competency text as a primary lever on this kind of stack when “success” means full end-to-end pass of an exam case. Follow-up work on longer personas and other model tiers (appendix) did not overturn that story.
+If you run this kind of agent, do not treat the short persona line as a primary lever when "success" means the whole case matches gold. Follow-up work on longer personas and other model tiers (appendix) did not overturn that.
 
 ---
 
@@ -34,7 +34,7 @@ Luz de Araujo et al. [2025] ask when personas *should* help via three desiderata
 - A3 was **generic soft fluff**, not domain coaching or competency engineering.
 - Exploratory long-persona pilots and weaker-/mid-band checks (including the separate `gpt-4.1-mini` claim) do **not** rewrite the Luna confirmatory null; see appendix.
 
-Thinking ≫ instant is a real secondary result in this matrix (+8.4 pp overall). It is simply not the title claim.
+Thinking versus instant is a real secondary result in this matrix (+8.4 pp overall). The title stays on the role line.
 
 ---
 

@@ -38,27 +38,27 @@
   <div class="titleblock">
     <h1>Skip the Roleplay</h1>
     <p class="sub">Persona prompting did not improve a real-world AI agent</p>
-    <p class="meta">Ihor Parinov (TARK AI) &middot; <a href="https://orcid.org/0009-0006-9411-8633">ORCID 0009-0006-9411-8633</a> &middot; Draft v1.0 (preprint draft) &middot; August 2026</p>
+    <p class="meta">Ihor Parinov (TARK AI) &middot; <a href="https://orcid.org/0009-0006-9411-8633">ORCID 0009-0006-9411-8633</a> &middot; Preprint v1.1 &middot; August 2026</p>
   </div>
 <h2>Abstract</h2>
-<p>Teams that ship LLM agents still prepend short role lines (“you are a scheduling agent…”) and soft competency text to tool-using business agents. It is unclear whether those additions change <strong>end-to-end success</strong> when the task instructions, tools, and schemas are already dense and correct.</p>
-<p>We test that common paste, a short identity line plus soft generic virtues, on top of an already dense stack. This is not a test of strategically designed role-play as an implicit chain-of-thought method on sparse reasoning benchmarks, and not a test of rich auto-synthesized expert biographies.</p>
-<p>We run a confirmatory matrix on OpenAI <code>gpt-5.6-luna</code> over a frozen <strong>120-case</strong> appliance-repair scheduling exam with deterministic gold labels (required tools and fields, plus an exact allowed customer reply where applicable). Interaction is a multi-turn <strong>tool loop</strong> over one fixed user message and fixture-backed tools (not a simulated multi-turn user). Prompt styles are task-only (A1), +short role (A2), and +role + <strong>generic</strong> soft competencies only (A3). Run modes are instant (<code>reasoning.effort=none</code>, B1) and thinking (<code>reasoning.effort=medium</code>, B2), with three repeats: <strong>2160</strong> graded attempts and 0 technical API failures.</p>
-<p>Under the locked analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or in the pooled summary check: short role / soft competencies did not show a clear help or clear harm on end-to-end success <strong>in this setup</strong>. High pass rates, especially in thinking mode, limit sensitivity to tiny prompt-style effects, so the claim is no clear effect under the locked threshold, not an effect size of exactly zero. A secondary result: thinking mode beat instant by <strong>+8.4 pp</strong> overall (96.9% vs 88.5%). We report it; it is not the title finding.</p>
-<p><strong>Limits.</strong> A3 is soft generic fluff, not domain coaching; the metric is binary full pass; evidence is one confirmatory model and one domain. Scope fences and the desiderata mapping live in Discussion.</p>
+<p>Production agents that book jobs and call tools often start with a role line (&quot;you are a scheduling agent&quot;) and a sentence of generic professional virtues. The rest of the prompt is usually already a long, correct task policy plus strict tool and output schemas. We tested whether those extra identity lines change how often the agent fully completes the job.</p>
+<p>The exam is appliance-repair scheduling. Each case is one messy customer message, simulated tools, and a gold answer. The agent passes only if the required tool calls, arguments, extracted fields, and (when required) the exact customer reply all match gold. A paraphrase or a near-miss is a fail.</p>
+<p>We ran OpenAI <code>gpt-5.6-luna</code> on 120 frozen cases. Prompt styles: task instructions only (A1); the same plus a short role line (A2); the same plus that role line and one generic competency sentence (A3). API modes: instant (<code>reasoning.effort=none</code>) and thinking (<code>reasoning.effort=medium</code>). Three repeats. 2160 graded attempts, 0 technical API failures. This is the short line people paste onto an already specified agent, not Kong-style role-play on reasoning benchmarks and not ExpertPrompting-style expert biographies.</p>
+<p>Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 cleared that bar in instant, in thinking, or pooled. Short role and generic competencies did not show a clear help or clear harm <strong>in this setup</strong>. Pass rates are high, especially with thinking on, so a tiny true effect could still hide. Thinking beat instant by <strong>+8.4 pp</strong> (96.9% vs 88.5%). The title is about the role line, not that mode gap.</p>
+<p><strong>Limits.</strong> A3 is one generic sentence, not domain coaching. Pass/fail is all-or-nothing. One confirmatory model, one domain.</p>
 <h2>1. Introduction</h2>
 <h3>Motivation</h3>
-<p>A durable piece of prompting folklore tells teams that ship LLM agents to cast the model as an expert: “you are a helpful scheduling agent,” sometimes followed by a short list of professional virtues. In chat-only settings that advice is familiar; in <strong>tool-using business agents</strong> it is still common. Product prompts often already contain dense task rules, tool schemas, and output contracts. Whether a short role line, or soft generic competencies on top, changes end-to-end success is less clear than the folklore implies.</p>
-<p>That question matters operationally. If short persona text rarely meets a serious statistical threshold once the instruction stack is locked, people who deploy these agents can stop treating it as a primary lever and spend attention on task rules, evaluation, and (where available) reasoning effort. If it <em>does</em> help or hurt in a confirmatory design, that is also worth knowing before the next round of prompt lore.</p>
-<p>We study this in a realistic but scoped setup: an appliance-repair scheduling agent exam with simulated tools, Structured Outputs, and a deterministic gold evaluator (no LLM-as-judge for pass/fail). The confirmatory model is OpenAI <code>gpt-5.6-luna</code>. The primary factor is short role / soft competencies vs task-only; thinking vs instant is reported as secondary. The intervention under test is short identity paste on a dense agent stack. It is not strategically designed role-play as a chain-of-thought trigger on sparse reasoning benchmarks, and not rich ExpertPrompting-style biographies.</p>
+<p>A common piece of prompting advice is to cast the model as an expert: &quot;you are a helpful scheduling agent,&quot; sometimes followed by a short list of professional virtues. That advice is familiar in chat. It is also still common in agents that call tools to book real jobs. Those product prompts already contain a long task policy, tool schemas, and an output contract. Whether a short role line, or a generic competency sentence on top, then changes how often the agent fully completes the job is less clear than the advice implies.</p>
+<p>That is worth measuring. If the extra identity text rarely clears a pre-set statistical bar once the task rules are locked, people who ship these agents can stop treating it as a primary lever and spend time on the rules, the evaluation, and (where the API offers it) reasoning effort. If it does help or hurt under a locked design, that is worth knowing too.</p>
+<p>We test this on an appliance-repair scheduling exam: simulated tools, Structured Outputs, and a deterministic grader. No LLM-as-judge for pass/fail. The confirmatory model is OpenAI <code>gpt-5.6-luna</code>. The primary contrast is short role / generic competencies versus task-only. Instant versus thinking is secondary. Related work on Kong-style role-play and ExpertPrompting biographies is a different intervention; we return to that in Discussion.</p>
 <hr>
 <h3>Contributions</h3>
 <ol>
-<li><p><strong>A confirmatory, protocol-locked null on short role / soft competency text</strong> in a dense tool-using business-agent exam on <code>gpt-5.6-luna</code> (<em>N</em> = 2160 graded attempts): under a pre-set case-level paired bootstrap rule, none of the primary prompt-style contrasts meet the threshold for clear help or clear harm on end-to-end success <strong>in this setup</strong>. This does not refute Kong-style role-play as an implicit CoT trigger on reasoning benchmarks without that stack.</p>
+<li><p><strong>A confirmatory, protocol-locked null on short role / generic competency text</strong> in this tool-using scheduling exam on <code>gpt-5.6-luna</code> (<em>N</em> = 2160 graded attempts). Under a pre-set case-level paired bootstrap rule, none of the primary prompt-style contrasts meet the threshold for clear help or clear harm on full-case pass <strong>in this setup</strong>.</p>
 </li>
-<li><p><strong>A clear secondary mode result.</strong> Medium reasoning effort lifts full-pass rates substantially vs instant (+8.4 pp overall). Eliciting deliberation changes outcomes here; shallow identity text does not. We report this separately from the prompt-style claim.</p>
+<li><p><strong>A secondary mode result.</strong> Medium reasoning effort lifts full-pass rates versus instant (+8.4 pp overall). Asking the model to think changes outcomes here. The short identity line does not.</p>
 </li>
-<li><p><strong>Fenced follow-ups:</strong> A3 is soft generic fluff (not domain coaching); longer-persona and other-model checks stay in the appendix and do not rewrite the Luna claim.</p>
+<li><p><strong>Appendix follow-ups.</strong> A3 is one generic sentence, not domain coaching. Longer-persona and other-model checks stay in the appendix and do not rewrite the Luna claim.</p>
 </li>
 </ol>
 <h2>2. Related work</h2>
@@ -77,10 +77,10 @@
 <p>Across these strands, positive persona effects appear mainly on reasoning or judged writing (often with rich expert bios [Xu et al., 2023], not short role pastes); systematic nulls and non-effects appear on factual QA and broader task suites [Zheng et al., 2024; Luz de Araujo et al., 2025]; agent benchmarks emphasize capability ceilings rather than confirmatory nulls on prompt <em>identity</em> under fixed tools. <strong>Few published studies report confirmatory nulls for short role / soft competency prompting on dense-instruction, tool-using business agents with deterministic gold.</strong> Our confirmatory study targets that gap: a locked analysis plan, a frozen scheduling exam, programmatically scored end-to-end success, and small prompt-style deltas, without claiming a general theory of personas.</p>
 <h2>3. Methods</h2>
 <h3>Research question</h3>
-<p>We ask whether, in a common tool-using business-agent setup, adding a short role/persona line, and then generic soft competencies, changes how often a frontier model fully completes scheduling <strong>exam cases</strong> correctly, and whether that pattern differs when API-level reasoning (“thinking”) is off versus on.</p>
-<p>We interpret “clear help / clear harm” only under the pre-set statistical rule below. Outcomes appear in Results (and the Abstract), not here.</p>
+<p>We ask whether, in a common tool-using business-agent setup, adding a short role/persona line, and then generic soft competencies, changes how often a frontier model fully completes scheduling <strong>exam cases</strong> correctly, and whether that pattern differs when API-level reasoning (&quot;thinking&quot;) is off versus on.</p>
+<p>We interpret &quot;clear help / clear harm&quot; only under the pre-set statistical rule below.</p>
 <h3>The exam</h3>
-<p>The exam is a deterministic <strong>appliance-repair scheduling agent</strong> benchmark. Each <strong>exam case</strong> supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families cover extraction-only / abstain-from-booking items through multi-step booking (gates, service checks, slot fetch, selection, and book/fail outcomes).</p>
+<p>The exam is a deterministic <strong>appliance-repair scheduling agent</strong> benchmark. Each <strong>exam case</strong> supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families range from extraction-only items that must not book, through to full booking.</p>
 <p><strong>Interaction model.</strong> Each graded attempt is a multi-turn <strong>tool loop</strong> over <strong>one fixed user message</strong> plus fixture-backed tool results, ending in a structured final JSON answer. There is <strong>no</strong> simulated multi-turn customer who clarifies, argues, or changes goals mid-dialogue.</p>
 <p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 962 168" width="962" height="168" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
 <rect x="0" y="0" width="962" height="168" fill="white"/>
@@ -88,7 +88,7 @@
 </svg>
 </div></p>
 <p><em>Figure 1. One graded attempt. The customer message is fixed; the system prompt carries the dense task rules plus the A1/A2/A3 block under test; the model runs a tool loop against fixtures and returns a structured answer; a deterministic grader compares everything to gold. Case families stop the loop at different depths.</em></p>
-<p>The model must call tools when the workflow requires them (and must <strong>not</strong> call forbidden tools when the gold says abstain). Success is <strong>end-to-end match to gold</strong>: required tools and arguments, extraction fields, <code>final_status</code>, and, where applicable, an exact allowed <code>customer_response</code> phrase. Near-misses and paraphrases do not count as pass. Full exam pass is therefore <strong>response/trace gold</strong>, not “final database equals goal state.”</p>
+<p>The model must call tools when the workflow requires them, and must <strong>not</strong> call them when gold says stop. A case <strong>passes</strong> only if the whole trace matches gold: required tools and arguments, extraction fields, <code>final_status</code>, and, where applicable, an exact allowed <code>customer_response</code> phrase. Near-misses and paraphrases fail. This is response/trace gold, not &quot;the final database equals the goal state.&quot;</p>
 <p>Primary outcome: binary pass/fail on <strong>graded</strong> attempts. Tool-sequence and argument diagnostics are secondary and not used for confirmatory prompt-style claims. Case-family and tag breakdowns are exploratory only.</p>
 <h3>Case families</h3>
 <p>The 120 cases split into six families, ordered by how deep the workflow must go:</p>
@@ -101,27 +101,27 @@
 </thead>
 <tbody><tr>
 <td>F1 extract</td>
-<td>Normalize messy text into structured fields; call no tools.</td>
+<td>Normalize messy text into structured fields. Call no tools.</td>
 </tr>
 <tr>
 <td>F2 partial flow A</td>
-<td>Decide whether <code>service_check</code> is warranted (intent gate, missing zip or unit questions, unsupported units) and stop at the serviceability answer.</td>
+<td>Decide whether <code>service_check</code> is warranted (intent gate, missing zip or unit, unsupported units) and stop there. Do not call <code>check_slots</code> or <code>book_slot</code>.</td>
 </tr>
 <tr>
 <td>F3 partial flow B</td>
-<td>Reach the correct slot-fetch endpoint: <code>service_check</code>, then <code>check_slots</code>; never book.</td>
+<td>Call <code>service_check</code>, then <code>check_slots</code>. Do not call <code>book_slot</code>.</td>
 </tr>
 <tr>
 <td>F4 select</td>
-<td>Fetch slots and pick the right one under pressure (unsorted lists, near-identical slot ids, temporal boundaries); still no booking.</td>
+<td>Call <code>service_check</code> and <code>check_slots</code>, then choose the correct slot (lists may be unsorted, slot ids may look alike, some starts may be in the past). Do not call <code>book_slot</code>.</td>
 </tr>
 <tr>
 <td>F5 full flow</td>
-<td>Run the whole booking: gate, check, fetch, select, <code>book_slot</code>, and report the outcome.</td>
+<td>Run the whole booking: gate, <code>service_check</code>, <code>check_slots</code>, select, <code>book_slot</code>, and report the outcome.</td>
 </tr>
 <tr>
 <td>F6 robustness</td>
-<td>The hardest mixes (name conflicts, “just skip the checks,” unsupported user assumptions), each with one deterministic correct answer.</td>
+<td>The hardest mixes (name conflicts, &quot;just skip the checks,&quot; unsupported user assumptions), each with one deterministic correct answer. Some require <code>book_slot</code>; some require stopping without it.</td>
 </tr>
 </tbody></table>
 <p>Cases also carry pressure modules, such as a stale zip mentioned before the real one, a busy tool result, or a booking-failure fixture. Module combinations are constrained by a binding exclusion list so every case keeps exactly one correct answer.</p>
@@ -170,7 +170,7 @@
 <li><strong>Final JSON:</strong> Structured Outputs fields (<code>final_status</code>, extraction, <code>customer_response</code> where required) must match after normalization; exact phrase gates are intentional operational contracts.</li>
 <li><strong>Secondary diagnostics</strong> (tool-sequence / arg exact-match rates) exist in the harness but are <strong>not</strong> confirmatory for prompt-style claims.</li>
 </ul>
-<p>Primary success ≈ full AST-equivalent required tool trace (name + normalized args + order constraints) <strong>plus</strong> final JSON match under family rubrics, not a softer “mostly right booking” grade.</p>
+<p>Primary success is the full required tool trace (name, normalized arguments, order) plus final JSON match under the family rubric. &quot;Mostly right&quot; is still a fail.</p>
 <h3>Gold labels and deterministic evaluation</h3>
 <p>Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (<code>track1_role_study_package/00_protocol/evaluation_spec_v1.md</code>).</p>
 <p>Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trace) are counted as <strong>technical problems</strong>, not model exam fails. Main pass rates use only graded attempts. If a case lacks a graded result in any cell needed for a contrast after re-queue, that case is dropped from the contrast (no silent fail imputation; no unequal case sets).</p>
@@ -264,14 +264,14 @@
 <li>Uncertainty: case-level paired <strong>bootstrap</strong> 95% intervals (resample cases, not individual calls).</li>
 </ol>
 <p><strong>Analysis rule (locked):</strong> a contrast shows a “clear effect” (helped or hurt) only if that interval <strong>excludes 0</strong>. If the interval includes 0, we report <strong>no clear effect under this rule</strong>.</p>
-<p>Primary confirmatory contrasts are the three prompt-style differences above (B1, B2, and the pooled summary check). B2 vs B1 is a secondary mode result (reasoning effort), not the title claim. We do <strong>not</strong> treat pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric; three repeats feed case means and a stability check on overall rates.</p>
+<p>Primary confirmatory contrasts are the three prompt-style differences above (B1, B2, and the pooled summary check). B2 vs B1 is a secondary mode result (reasoning effort). We do <strong>not</strong> treat pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric; three repeats feed case means and a stability check on overall rates.</p>
 <h3>Protocol lock vs public pre-registration</h3>
 <p>Before the confirmatory 120-case matrix, we froze an internal <strong>protocol lock</strong> and an <strong>analysis plan</strong> (comparisons, claim rule, what is exploratory). That discipline is best described as an <strong>internal protocol lock</strong>, not as formal public pre-registration (e.g., OSF or AsPredicted). We do not claim OSF-style pre-registration unless a public registry entry exists.</p>
 <h3>Scope</h3>
-<p>Confirmatory matrix: short role / soft generic competencies on <code>gpt-5.6-luna</code>, one domain exam, binary end-to-end pass under dense task instructions. Competencies without a role were not tested. Broader product limits sit in Discussion.</p>
+<p>Confirmatory matrix: short role / generic competencies on <code>gpt-5.6-luna</code>, one domain exam, binary full-case pass, task instructions already long and correct. Competencies without a role were not tested.</p>
 <h2>4. Results</h2>
 <h3>Primary result</h3>
-<p><strong>In this setup, which is often used in real-business agents, adding a short role/persona line, and then generic soft competencies, did not show a clear help or clear harm on end-to-end success.</strong></p>
+<p><strong>In this setup, which is often used in real-business agents, adding a short role/persona line, and then generic soft competencies, did not show a clear help or clear harm on full-case pass.</strong></p>
 <p>Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), <strong>none</strong> of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or in the pooled summary check. That is a null under the pre-set analysis rule, not a claim that the effect size is exactly zero. Pass rates are high (especially B2 ~97%), so the design rules out large prompt-style lifts under our threshold; tiny true effects remain compatible with these intervals.</p>
 <p>Setup: OpenAI <code>gpt-5.6-luna</code>; 120 exam cases × A1/A2/A3 × B1/B2 × 3 repeats = <strong>2160</strong> graded attempts; <strong>0</strong> technical API failures on the main matrix.</p>
 <h3>Pass rates</h3>
@@ -434,15 +434,15 @@
 <p><em>Figure 3. All nine locked prompt-style contrasts. Every 95% interval crosses zero.</em></p>
 <p>Point estimates are small. Under the excludes-0 rule: <strong>no clear help or harm</strong> from short role / soft competencies.</p>
 <h3>Secondary result: thinking ≫ instant</h3>
-<p>Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: <strong>96.9%</strong> (B2) vs <strong>88.5%</strong> (B1), a <strong>+8.4 pp</strong> gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). This is a reasoning-effort result: eliciting deliberation moves end-to-end success here; short identity text does not. It is not the title claim, and it does not undermine the prompt-style null, which holds inside both modes.</p>
+<p>Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: <strong>96.9%</strong> (B2) vs <strong>88.5%</strong> (B1), a <strong>+8.4 pp</strong> gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). Asking the model to think moves full-case pass here. The short identity line does not. The persona null still holds inside both modes.</p>
 <p><strong>Reliability.</strong> Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric. Fail-reason splits (tool vs field vs phrase) by prompt style are out of the locked claim tables; secondary harness diagnostics exist but were not used for confirmatory prompt-style language.</p>
 <p><strong>What failures look like.</strong> Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.</p>
 <h3>Exploratory work</h3>
 <p>Supporting checks on weaker models (nano) and longer pure personas are <strong>exploratory</strong>. A separate confirmatory matrix on <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) is reported in <code>06_appendix_exploratory.md</code> and does <strong>not</strong> rewrite the Luna prompt-style claim; under the same analysis rule, only longer-persona vs task-only met the threshold there (hurt). A one-repeat <code>gemini-3.5-flash-lite</code> full_120 screen (~76–80% by style) is also appendix-only and is <strong>not</strong> claim-ready.</p>
 <h2>5. Discussion</h2>
 <h3>What the claim is</h3>
-<p>The setup is locked: dense task instructions, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on end-to-end success. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<code>CLAIM.md</code>).</p>
-<p>Implication for deployment: do not treat short persona / soft competency text as a primary lever on this kind of stack when “success” means full end-to-end pass of an exam case. Follow-up work on longer personas and other model tiers (appendix) did not overturn that story.</p>
+<p>The setup is locked: a long correct task policy, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on full-case pass. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<code>CLAIM.md</code>).</p>
+<p>If you run this kind of agent, do not treat the short persona line as a primary lever when &quot;success&quot; means the whole case matches gold. Follow-up work on longer personas and other model tiers (appendix) did not overturn that.</p>
 <hr>
 <h3>Mapping to Principled Personas desiderata</h3>
 <p>Luz de Araujo et al. [2025] ask when personas <em>should</em> help via three desiderata. We map our contrasts explicitly (Fidelity is mostly out of scope):</p>
@@ -484,7 +484,7 @@
 <li>A3 was <strong>generic soft fluff</strong>, not domain coaching or competency engineering.</li>
 <li>Exploratory long-persona pilots and weaker-/mid-band checks (including the separate <code>gpt-4.1-mini</code> claim) do <strong>not</strong> rewrite the Luna confirmatory null; see appendix.</li>
 </ul>
-<p>Thinking ≫ instant is a real secondary result in this matrix (+8.4 pp overall). It is simply not the title claim.</p>
+<p>Thinking versus instant is a real secondary result in this matrix (+8.4 pp overall). The title stays on the role line.</p>
 <hr>
 <h3>Limits</h3>
 <h4>Ceiling / sensitivity</h4>

@@ -4,13 +4,13 @@
 
 ## Research question
 
-We ask whether, in a common tool-using business-agent setup, adding a short role/persona line, and then generic soft competencies, changes how often a frontier model fully completes scheduling **exam cases** correctly, and whether that pattern differs when API-level reasoning (“thinking”) is off versus on.
+We ask whether, in a common tool-using business-agent setup, adding a short role/persona line, and then generic soft competencies, changes how often a frontier model fully completes scheduling **exam cases** correctly, and whether that pattern differs when API-level reasoning ("thinking") is off versus on.
 
-We interpret “clear help / clear harm” only under the pre-set statistical rule below. Outcomes appear in Results (and the Abstract), not here.
+We interpret "clear help / clear harm" only under the pre-set statistical rule below.
 
 ## The exam
 
-The exam is a deterministic **appliance-repair scheduling agent** benchmark. Each **exam case** supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families cover extraction-only / abstain-from-booking items through multi-step booking (gates, service checks, slot fetch, selection, and book/fail outcomes).
+The exam is a deterministic **appliance-repair scheduling agent** benchmark. Each **exam case** supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families range from extraction-only items that must not book, through to full booking.
 
 **Interaction model.** Each graded attempt is a multi-turn **tool loop** over **one fixed user message** plus fixture-backed tool results, ending in a structured final JSON answer. There is **no** simulated multi-turn customer who clarifies, argues, or changes goals mid-dialogue.
 
@@ -18,7 +18,7 @@ The exam is a deterministic **appliance-repair scheduling agent** benchmark. Eac
 
 *Figure 1. One graded attempt. The customer message is fixed; the system prompt carries the dense task rules plus the A1/A2/A3 block under test; the model runs a tool loop against fixtures and returns a structured answer; a deterministic grader compares everything to gold. Case families stop the loop at different depths.*
 
-The model must call tools when the workflow requires them (and must **not** call forbidden tools when the gold says abstain). Success is **end-to-end match to gold**: required tools and arguments, extraction fields, `final_status`, and, where applicable, an exact allowed `customer_response` phrase. Near-misses and paraphrases do not count as pass. Full exam pass is therefore **response/trace gold**, not “final database equals goal state.”
+The model must call tools when the workflow requires them, and must **not** call them when gold says stop. A case **passes** only if the whole trace matches gold: required tools and arguments, extraction fields, `final_status`, and, where applicable, an exact allowed `customer_response` phrase. Near-misses and paraphrases fail. This is response/trace gold, not "the final database equals the goal state."
 
 Primary outcome: binary pass/fail on **graded** attempts. Tool-sequence and argument diagnostics are secondary and not used for confirmatory prompt-style claims. Case-family and tag breakdowns are exploratory only.
 
@@ -28,12 +28,12 @@ The 120 cases split into six families, ordered by how deep the workflow must go:
 
 | Family | What the model must do |
 |--------|------------------------|
-| F1 extract | Normalize messy text into structured fields; call no tools. |
-| F2 partial flow A | Decide whether `service_check` is warranted (intent gate, missing zip or unit questions, unsupported units) and stop at the serviceability answer. |
-| F3 partial flow B | Reach the correct slot-fetch endpoint: `service_check`, then `check_slots`; never book. |
-| F4 select | Fetch slots and pick the right one under pressure (unsorted lists, near-identical slot ids, temporal boundaries); still no booking. |
-| F5 full flow | Run the whole booking: gate, check, fetch, select, `book_slot`, and report the outcome. |
-| F6 robustness | The hardest mixes (name conflicts, “just skip the checks,” unsupported user assumptions), each with one deterministic correct answer. |
+| F1 extract | Normalize messy text into structured fields. Call no tools. |
+| F2 partial flow A | Decide whether `service_check` is warranted (intent gate, missing zip or unit, unsupported units) and stop there. Do not call `check_slots` or `book_slot`. |
+| F3 partial flow B | Call `service_check`, then `check_slots`. Do not call `book_slot`. |
+| F4 select | Call `service_check` and `check_slots`, then choose the correct slot (lists may be unsorted, slot ids may look alike, some starts may be in the past). Do not call `book_slot`. |
+| F5 full flow | Run the whole booking: gate, `service_check`, `check_slots`, select, `book_slot`, and report the outcome. |
+| F6 robustness | The hardest mixes (name conflicts, "just skip the checks," unsupported user assumptions), each with one deterministic correct answer. Some require `book_slot`; some require stopping without it. |
 
 Cases also carry pressure modules, such as a stale zip mentioned before the real one, a busy tool result, or a booking-failure fixture. Module combinations are constrained by a binding exclusion list so every case keeps exactly one correct answer.
 
@@ -67,7 +67,7 @@ Evaluation is **rule-based and deterministic** (no LLM judge). Mapping to tool-e
 - **Final JSON:** Structured Outputs fields (`final_status`, extraction, `customer_response` where required) must match after normalization; exact phrase gates are intentional operational contracts.
 - **Secondary diagnostics** (tool-sequence / arg exact-match rates) exist in the harness but are **not** confirmatory for prompt-style claims.
 
-Primary success ≈ full AST-equivalent required tool trace (name + normalized args + order constraints) **plus** final JSON match under family rubrics, not a softer “mostly right booking” grade.
+Primary success is the full required tool trace (name, normalized arguments, order) plus final JSON match under the family rubric. "Mostly right" is still a fail.
 
 ## Gold labels and deterministic evaluation
 
@@ -125,7 +125,7 @@ Unit of analysis is the **exam case**, not the raw API call:
 
 **Analysis rule (locked):** a contrast shows a “clear effect” (helped or hurt) only if that interval **excludes 0**. If the interval includes 0, we report **no clear effect under this rule**.
 
-Primary confirmatory contrasts are the three prompt-style differences above (B1, B2, and the pooled summary check). B2 vs B1 is a secondary mode result (reasoning effort), not the title claim. We do **not** treat pass^k-style “pass on all *k* repeats” as a confirmatory metric; three repeats feed case means and a stability check on overall rates.
+Primary confirmatory contrasts are the three prompt-style differences above (B1, B2, and the pooled summary check). B2 vs B1 is a secondary mode result (reasoning effort). We do **not** treat pass^k-style “pass on all *k* repeats” as a confirmatory metric; three repeats feed case means and a stability check on overall rates.
 
 ## Protocol lock vs public pre-registration
 
@@ -133,4 +133,4 @@ Before the confirmatory 120-case matrix, we froze an internal **protocol lock** 
 
 ## Scope
 
-Confirmatory matrix: short role / soft generic competencies on `gpt-5.6-luna`, one domain exam, binary end-to-end pass under dense task instructions. Competencies without a role were not tested. Broader product limits sit in Discussion.
+Confirmatory matrix: short role / generic competencies on `gpt-5.6-luna`, one domain exam, binary full-case pass, task instructions already long and correct. Competencies without a role were not tested.

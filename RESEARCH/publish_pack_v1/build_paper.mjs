@@ -58,7 +58,7 @@ const AUTHOR = 'Ihor Parinov (TARK AI)';
 const ORCID = '0009-0006-9411-8633';
 const ORCID_URL = `https://orcid.org/${ORCID}`;
 const DATE = 'August 2026';
-const VERSION = 'Draft v1.0 (preprint draft)';
+const VERSION = 'Preprint v1.1';
 
 const mdParts = [
   '# Skip the Roleplay',
