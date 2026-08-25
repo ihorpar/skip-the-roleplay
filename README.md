@@ -1,17 +1,23 @@
 ﻿# Skip the Roleplay
 
-## Persona prompting did not improve a real-world AI agent
+Persona prompting did not improve a real-world AI agent.
 
-**Author:** Ihor Parinov (TARK AI). ORCID: https://orcid.org/0009-0006-9411-8633
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22089532.svg)](https://doi.org/10.5281/zenodo.22089532)
 
-We ran a confirmatory study on OpenAI `gpt-5.6-luna` over a frozen 120-case appliance-repair scheduling exam with deterministic gold labels. Prompt styles were task-only (A1), plus a short role line (A2), and plus role plus generic soft competencies (A3). Run modes were instant and thinking, with three repeats (2160 graded attempts). Under the locked analysis rule (case-level paired bootstrap 95% CI must exclude 0), short role / soft competencies did not show clear help or clear harm on end-to-end success in this setup. Thinking mode beat instant by +8.4 percentage points overall; that mode contrast is secondary to the persona claim.
+**Ihor Parinov (TARK AI)** · [ORCID](https://orcid.org/0009-0006-9411-8633)
 
-## Paper and readout
+We ran a confirmatory study on OpenAI `gpt-5.6-luna`, with 120 frozen appliance-repair scheduling cases, simulated tools, Structured Outputs, and a deterministic grader. Prompt styles were task instructions only, the same plus a short role line, and the same plus that role line and one generic competency sentence. Instant and thinking modes. Three repeats. 2160 graded attempts.
 
-- PDF: `RESEARCH/publish_pack_v1/paper_draft.pdf`
-- Human readout (Part A): `RESEARCH/publish_pack_v1/part_a_public/index-v2.html` (`index.html` is not in this repo; use `index-v2.html`.)
+Under the locked analysis rule (case-level paired bootstrap 95% CI must exclude 0), the short role line did not show a clear help or a clear harm on full-case pass. Thinking beat instant by 8.4 points (96.9% vs 88.5%). That mode gap is secondary. The title is about the role line.
 
-## Re-run evaluation (PowerShell)
+## Read it
+
+- Story: [ihorparinov.com/research/skip-roleplay-part-a](https://ihorparinov.com/research/skip-roleplay-part-a/)
+- Paper DOI, always the latest version: [doi.org/10.5281/zenodo.22089532](https://doi.org/10.5281/zenodo.22089532)
+- This version: [zenodo.org/records/22090051](https://zenodo.org/records/22090051)
+- PDF in this repo: [`RESEARCH/publish_pack_v1/paper_draft.pdf`](RESEARCH/publish_pack_v1/paper_draft.pdf)
+
+## Re-run the eval
 
 ```powershell
 Copy-Item .env.example .env
@@ -23,7 +29,9 @@ npm run smoke:eval -- --bundle RESEARCH/benchmark_pack_v1/full_120/full_120_bund
 
 ## Claim fences
 
-One model (`gpt-5.6-luna`), one domain (appliance-repair scheduling), dense task instructions and fixed tools/schemas. This is not a universal theorem that personas never work in any setting.
+One model (`gpt-5.6-luna`), one domain (appliance-repair scheduling), dense task instructions, and fixed tools and schemas. This is not a proof that personas never work anywhere.
+
+A longer persona on `gpt-4.1-mini` hurt in a follow-up. That is a separate appendix claim, not the title result.
 
 ## License
 
