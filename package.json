@@ -1,0 +1,16 @@
+﻿{
+    "version":  "1.0.0",
+    "name":  "skip-the-roleplay",
+    "description":  "Skip the Roleplay: confirmatory study materials and eval harness",
+    "scripts":  {
+                    "build:figures":  "node RESEARCH/publish_pack_v1/build_figures.mjs",
+                    "build:paper":  "node RESEARCH/publish_pack_v1/build_paper.mjs",
+                    "harness:self-test":  "node scripts/harness-self-test.js",
+                    "smoke:eval":  "node scripts/smoke-eval.js"
+                },
+    "type":  "module",
+    "devDependencies":  {
+                            "marked":  "^17.0.1"
+                        },
+    "license":  "MIT"
+}

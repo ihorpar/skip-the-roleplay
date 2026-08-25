@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Does “you are an expert” still help? — Track 1 results</title>
+  <meta name="description" content="Plain-language results from TARK AI’s scheduling-agent exam: 2,160 runs on role prompts vs thinking mode." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a2332;
+      --ink-soft: #3d4a5c;
+      --paper: #e8ecef;
+      --panel: #f4f6f8;
+      --line: #b8c0cc;
+      --signal: #c2410c;
+      --ok: #0f766e;
+      --muted: #4a5568;
+      --max: 40rem;
+      --wide: 58rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #dde5ec 0%, transparent 55%),
+        var(--paper);
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      font-size: 1.08rem;
+      line-height: 1.6;
+    }
+    .wrap { width: min(100% - 2rem, var(--wide)); margin-inline: auto; }
+    .narrow { width: min(100%, var(--max)); margin-inline: auto; }
+    h1, h2, h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5em;
+    }
+    h1 { font-size: clamp(2rem, 4.5vw, 3rem); }
+    h2 { font-size: clamp(1.45rem, 3vw, 1.95rem); }
+    h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-top: 1.75rem; }
+    p { margin: 0 0 1rem; color: var(--ink-soft); }
+    strong { color: var(--ink); font-weight: 600; }
+    code {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.84em;
+      background: #e2e8ef;
+      padding: 0.05em 0.3em;
+    }
+
+    .mast { padding: clamp(2rem, 6vw, 3.75rem) 0 1.75rem; border-bottom: 1px solid var(--line); }
+    .kicker {
+      display: flex; flex-wrap: wrap; gap: 0.45rem 1rem; margin-bottom: 1rem;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
+    }
+    .kicker span:not(:last-child)::after { content: "·"; margin-left: 1rem; color: var(--line); }
+
+    .answer {
+      margin: 1.35rem 0 0; padding: 1.2rem 1.25rem; background: var(--ink); color: #eef2f6;
+    }
+    .answer p { color: #c5ced9; margin: 0.45rem 0 0; }
+    .answer strong { color: #fff; }
+    .answer .also { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid #3d4a5c; }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: var(--line); border: 1px solid var(--line); margin-top: 1.75rem;
+    }
+    .stat { background: var(--panel); padding: 1rem; }
+    .stat b {
+      display: block; font-family: Fraunces, Georgia, serif;
+      font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1;
+    }
+    .stat span { display: block; margin-top: 0.3rem; font-size: 0.82rem; color: var(--muted); }
+
+    .toc {
+      display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem;
+      margin: 1.35rem 0 0; padding: 0; list-style: none;
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .toc a { color: var(--ok); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    section { padding: clamp(2.1rem, 5vw, 3.25rem) 0; border-bottom: 1px solid var(--line); }
+    .close {
+      background: var(--ink); color: #e8eef4; padding: clamp(2.1rem, 5vw, 3.25rem) 0; border: 0;
+    }
+    .close p { color: #b8c4d1; }
+    .close strong, .close h2 { color: #fff; }
+
+    .gloss {
+      margin: 1.25rem 0; padding: 1rem 1.1rem; background: var(--panel); border: 1px solid var(--line);
+    }
+    .gloss h3 { margin-top: 0; font-size: 1rem; color: var(--ink-soft); font-family: "IBM Plex Sans", sans-serif; font-weight: 600; letter-spacing: 0; }
+    .gloss dl { margin: 0; display: grid; gap: 0.65rem; }
+    .gloss dt { font-weight: 600; color: var(--ink); margin: 0; }
+    .gloss dd { margin: 0.15rem 0 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+    .story {
+      margin: 1.35rem 0; padding: 1.1rem 1.15rem;
+      border-left: 3px solid var(--signal); background: var(--panel);
+    }
+    .story.good { border-left-color: var(--ok); }
+    .story h3 { margin-top: 0; font-size: 1.2rem; }
+    .story .so { margin: 0.75rem 0 0; padding-top: 0.75rem; border-top: 1px solid var(--line); color: var(--ink); font-weight: 600; }
+
+    .quote {
+      margin: 0.75rem 0; padding: 0.75rem 0.9rem; background: #fff; border: 1px solid var(--line);
+      font-style: italic; color: var(--ink);
+    }
+    .vs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0;
+      font-size: 0.92rem;
+    }
+    .vs > div { padding: 0.7rem 0.8rem; background: #fff; border: 1px solid var(--line); }
+    .vs .label { display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.35rem; font-style: normal; }
+    .vs.wrong > div:last-child { border-color: #fdba74; background: #fff7ed; }
+    .vs.right > div:last-child { border-color: #99f6e4; background: #ecfdf5; }
+
+    .chart-block { margin: 1.35rem 0; background: var(--panel); padding: 1.15rem; border: 1px solid var(--line); }
+    .chart-note { font-size: 0.88rem; color: var(--muted); margin: 0 0 0.85rem; }
+    .bars { display: grid; gap: 0.7rem; }
+    .bar-row {
+      display: grid; grid-template-columns: 9.5rem 1fr 3.5rem; gap: 0.6rem; align-items: center;
+    }
+    .bar-row .label { font-weight: 600; font-size: 0.9rem; }
+    .track { height: 1.2rem; background: #cfd6de; }
+    .fill {
+      height: 100%; background: var(--ink); width: 0;
+      transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fill.think { background: var(--signal); }
+    .fill.instant { background: #64748b; }
+    .bar-row .pct { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+
+    table.plain {
+      width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem;
+    }
+    table.plain th, table.plain td {
+      border: 1px solid var(--line); padding: 0.6rem 0.7rem; text-align: left; vertical-align: top;
+    }
+    table.plain thead th { background: #dce3ea; font-size: 0.82rem; }
+    table.plain td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    table.plain .hi { color: var(--signal); font-weight: 700; }
+    table.plain .lo { color: var(--ok); font-weight: 600; }
+
+    .prompt-box {
+      margin: 0.75rem 0; padding: 0.75rem 0.9rem; background: #1a2332; color: #dce4ee;
+      font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.8rem; line-height: 1.45;
+      white-space: pre-wrap;
+    }
+    .prompt-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); margin: 1rem 0 0.35rem; }
+
+    .note {
+      font-size: 0.9rem; color: var(--muted); margin: 0.5rem 0 1rem;
+      padding: 0.65rem 0.8rem; background: #fff7ed; border: 1px solid #fed7aa;
+    }
+
+    ul.clean { margin: 0 0 1rem; padding-left: 1.15rem; color: var(--ink-soft); }
+    ul.clean li { margin-bottom: 0.45rem; }
+
+    footer { padding: 1.35rem 0 2.25rem; font-size: 0.84rem; color: var(--muted); }
+
+    @media (max-width: 820px) {
+      .stats, .vs { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 1fr; gap: 0.25rem; }
+      .bar-row .pct { text-align: left; }
+    }
+    @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="mast">
+    <div class="wrap">
+      <div class="kicker">
+        <span>TARK AI research</span>
+        <span>July 21, 2026</span>
+        <span>OpenAI model gpt-5.6-luna</span>
+      </div>
+      <div class="narrow" style="margin-inline:0; width:min(100%, var(--max));">
+        <h1>Does telling the model “you are an expert” still help?</h1>
+        <p>
+          We built a tough practice exam for an AI that books appliance-repair appointments —
+          the same kind of tool-using job many service businesses want — and checked what actually
+          improves full success.
+        </p>
+        <div class="answer">
+          <strong>Short answer</strong>
+          <p>
+            Adding a job title (“you are a scheduling agent”) or a list of soft skills
+            (“careful listening, clear judgment…”) <strong>did not clearly help or hurt</strong>
+            on this exam.
+          </p>
+          <div class="also">
+            <strong>What did help</strong>
+            <p>
+              Turning on the model’s <strong>thinking mode</strong> helped a lot.
+              Without it, the model failed much more often — especially when it had to pick
+              the right time slot under messy conditions.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="stats" aria-label="Study scale">
+        <div class="stat"><b>2,160</b><span>graded attempts</span></div>
+        <div class="stat"><b>120</b><span>customer tickets</span></div>
+        <div class="stat"><b>157</b><span>failures we studied</span></div>
+        <div class="stat"><b>0</b><span>API crashes</span></div>
+      </div>
+      <ul class="toc">
+        <li><a href="#setup">What we tested</a></li>
+        <li><a href="#prompts">What we wrote in the prompt</a></li>
+        <li><a href="#found">What we found</a></li>
+        <li><a href="#mistakes">How it failed</a></li>
+        <li><a href="#role">The role result</a></li>
+        <li><a href="#do">What to do with this</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section id="setup">
+      <div class="wrap narrow">
+        <h2>What we tested (in plain English)</h2>
+        <p>
+          Imagine a customer texts something messy about a broken dishwasher.
+          The AI may look up whether you serve that ZIP, list open times, and book a tech.
+          We scored each attempt as a simple <strong>pass or fail</strong>: did the whole job
+          match the answer key? Tools, fields, and the exact customer reply we allow —
+          almost-right still fails.
+        </p>
+
+        <div class="gloss">
+          <h3>Three prompt versions (the only thing that changed for “role”)</h3>
+          <dl>
+            <div>
+              <dt>Task only</dt>
+              <dd>Detailed instructions for the job. No “you are an agent” line.</dd>
+            </div>
+            <div>
+              <dt>Task + role</dt>
+              <dd>Same instructions, plus: “You are a scheduling agent for an appliance repair company.”</dd>
+            </div>
+            <div>
+              <dt>Task + role + soft skills</dt>
+              <dd>
+                Same as above, plus generic skills like careful listening and following procedures.
+                No extra coaching for this specific exam.
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="gloss">
+          <h3>Two ways the model ran (the only thing that changed for “thinking”)</h3>
+          <dl>
+            <div>
+              <dt>Instant</dt>
+              <dd>Answer quickly — thinking effort set to off.</dd>
+            </div>
+            <div>
+              <dt>Thinking on</dt>
+              <dd>Same words in the prompt; the API is allowed a medium amount of internal reasoning first.</dd>
+            </div>
+          </dl>
+        </div>
+
+        <p>
+          Every ticket was tried in all six combinations (three prompt versions × two modes),
+          three times each. That is how we got to 2,160 graded attempts.
+        </p>
+
+        <h3>What kinds of tickets were on the exam?</h3>
+        <p>We mixed easy and hard jobs so the AI could not coast on simple bookings:</p>
+        <ul class="clean">
+          <li><strong>Read the message only</strong> — pull out name, ZIP, appliance (no tools).</li>
+          <li><strong>Stop early</strong> — e.g. ask for ZIP, or refuse a non-booking request.</li>
+          <li><strong>Show available times</strong> — but do not book yet.</li>
+          <li><strong>Pick the best time</strong> — usually the earliest future slot.</li>
+          <li><strong>Full booking</strong> — check service area → times → book (or stop for a good reason).</li>
+          <li><strong>Hard cases</strong> — same full job, but with traps (wrong ZIP then correction, caller booking for someone else, look-alike slot IDs, slots that are already in the past, and so on).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="prompts">
+      <div class="wrap narrow">
+        <h2>What we actually wrote in the prompt</h2>
+        <p>
+          This matters: the “task only” version was already long and strict.
+          Role and soft skills were just a small add-on at the end — not a different playbook.
+        </p>
+
+        <p class="prompt-label">Task only — no role line</p>
+        <div class="prompt-box">(ends after the shared instructions — nothing about “you are a scheduling agent”)</div>
+
+        <p class="prompt-label">Task + role — one extra sentence</p>
+        <div class="prompt-box">- You are a scheduling agent for an appliance repair company.</div>
+
+        <p class="prompt-label">Task + role + soft skills — one longer sentence</p>
+        <div class="prompt-box">- You are a scheduling agent for an appliance repair company with strong professional competencies in careful listening, clear judgment, accurate follow-through, and disciplined adherence to procedures.</div>
+
+        <p style="margin-top:1.25rem;">
+          Underneath all three, the shared instructions already said things like:
+          use the tools when needed; return one JSON answer; use our exact field names;
+          if Alex calls for Sam, book <strong>Sam</strong>; never book a time that is not in the future;
+          when several times work, take the <strong>earliest</strong>; and the customer reply must
+          match one of a short list of allowed phrases word-for-word.
+        </p>
+      </div>
+    </section>
+
+    <section id="found">
+      <div class="wrap narrow">
+        <h2>What we found (the useful parts)</h2>
+        <p>
+          Overall success was high — about 9 in 10 attempts passed.
+          The useful story is <strong>where the 157 failures happened</strong>, and what fixed them.
+        </p>
+
+        <div class="story">
+          <h3>1. Most failures were “thinking off”</h3>
+          <p>
+            Out of 157 failures, <strong>about 4 out of 5</strong> happened when the model ran in instant mode.
+            Thinking mode did not just nudge the score — it removed a large pile of mistakes.
+          </p>
+          <p class="so">So: if you only tune the personality line and leave thinking off, you are optimizing the wrong knob.</p>
+        </div>
+
+        <div class="story">
+          <h3>2. Picking the right time slot is where thinking mattered most</h3>
+          <p>
+            On tickets whose whole job was “choose the correct appointment time”
+            (without booking yet), instant mode passed about <strong>84%</strong> of the time.
+            With thinking on, that jumped to about <strong>99%</strong>.
+          </p>
+          <p>
+            That is the biggest jump we saw by ticket type. Full booking jobs and hard trap tickets
+            also got clearly better with thinking — but slot-picking was the clearest example.
+          </p>
+          <p class="so">So: “earliest future slot among look-alike IDs” is a reasoning problem, not a job-title problem.</p>
+        </div>
+
+        <div class="story good">
+          <h3>3. A clear rule beat soft skills — we watched one trap disappear</h3>
+          <p>
+            Early practice runs failed when someone called <em>for</em> another person
+            (“Liam calling for Nora…”). The model booked the caller instead of the customer.
+          </p>
+          <p>
+            We added one plain rule: book the person the appointment is <em>for</em>, not the person on the phone.
+            On the main exam, every attempt with that trap <strong>passed</strong> (zero failures on that pattern).
+          </p>
+          <p class="so">So: specific operating rules beat “be a careful listener.”</p>
+        </div>
+
+        <div class="story">
+          <h3>4. Some traps still hurt — and thinking helps unevenly</h3>
+          <p>These patterns still caused a noticeable share of failures:</p>
+          <ul class="clean">
+            <li><strong>Look-alike time-slot IDs</strong> (like <code>slot_017</code> vs <code>slot_071</code>) — the model picks the wrong one by “looks first,” not by earliest clock time.</li>
+            <li><strong>Times that are already “now” or in the past</strong> — instant mode still tries to book them sometimes.</li>
+            <li><strong>Odd appliances</strong> (ice maker, wine cooler) — it must mark them as “other / unsupported,” not pretend they are a fridge.</li>
+            <li><strong>Empty availability that must be worded a certain way</strong> — one ticket failed every single time (see below).</li>
+          </ul>
+          <p class="so">So: thinking mode cleans up a lot of slot/time mistakes; it does not fix every wording fork in the rulebook.</p>
+        </div>
+
+        <div class="chart-block">
+          <h3 style="margin-top:0;">Success with thinking off vs on</h3>
+          <p class="chart-note">Averaged across tickets · all three prompt versions</p>
+          <div class="bars">
+            <div class="bar-row">
+              <span class="label">Thinking off</span>
+              <div class="track"><div class="fill instant" data-pct="88.5"></div></div>
+              <span class="pct">88.5%</span>
+            </div>
+            <div class="bar-row">
+              <span class="label">Thinking on</span>
+              <div class="track"><div class="fill think" data-pct="96.9"></div></div>
+              <span class="pct">96.9%</span>
+            </div>
+          </div>
+          <p class="chart-note" style="margin-top:0.85rem;margin-bottom:0;">
+            Thinking cost a bit more wait time (about 3.4s → 4.2s median) and made the model
+            much less likely to call the wrong tools or skip required ones.
+          </p>
+        </div>
+
+        <h3>By job type — where thinking helped</h3>
+        <table class="plain">
+          <thead>
+            <tr>
+              <th>Kind of ticket</th>
+              <th class="num">Thinking off</th>
+              <th class="num">Thinking on</th>
+              <th>In one sentence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Read the message only</th>
+              <td class="num lo">100%</td><td class="num lo">100%</td>
+              <td>Already solved either way</td>
+            </tr>
+            <tr>
+              <th>Stop early / ask a question</th>
+              <td class="num">89%</td><td class="num">99%</td>
+              <td>Instant mode still charges ahead sometimes</td>
+            </tr>
+            <tr>
+              <th>List times (don’t book)</th>
+              <td class="num">86%</td><td class="num">90%</td>
+              <td>Includes one ticket nothing could fix</td>
+            </tr>
+            <tr>
+              <th>Pick the right time</th>
+              <td class="num hi">84%</td><td class="num lo">99%</td>
+              <td><strong>Biggest jump</strong> — this is the thinking story</td>
+            </tr>
+            <tr>
+              <th>Full book (or stop correctly)</th>
+              <td class="num">86%</td><td class="num">95%</td>
+              <td>Fewer bad books and bad stops with thinking</td>
+            </tr>
+            <tr>
+              <th>Hard cases with traps</th>
+              <td class="num">91%</td><td class="num">99%</td>
+              <td>Traps bite harder when thinking is off</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          These breakdowns by ticket type are for understanding. The official “did role help?”
+          answer uses a stricter rule (see next sections) and does not hang on any one ticket type.
+        </p>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="wrap narrow">
+        <h2>How it failed — real examples</h2>
+        <p>These are easier to understand than codes. Each one is a real miss from the exam.</p>
+
+        <div class="story">
+          <h3>Wrong time picked among look-alikes</h3>
+          <div class="quote">“Quinn at my house in 10012. Dishwasher stops mid-cycle; neighbors keep asking about the water noise.”</div>
+          <p>
+            The tool returned three times. The earliest was <code>slot_071</code> at 8:45.
+            Two others looked similar (<code>slot_017</code>, <code>slot_017A</code>) but were later.
+          </p>
+          <div class="vs wrong">
+            <div>
+              <span class="label">We required</span>
+              Book the earliest time (<code>slot_071</code>), even if booking later fails on purpose.
+            </div>
+            <div>
+              <span class="label">Model did</span>
+              Booked <code>slot_017</code> — the ID that “looks” like it comes first, not the earliest clock time.
+            </div>
+          </div>
+          <p class="so">A soft-skills sentence did not fix this. Thinking mode usually did.</p>
+        </div>
+
+        <div class="story">
+          <h3>Said “we’re busy” when the answer key wanted a different empty-times phrase</h3>
+          <div class="quote">“Rita from the office break room at 10003. Refrigerator is warm…”</div>
+          <p>
+            The times tool returned an empty list. Our answer key wanted a specific status and sentence
+            about “no valid future times.” The model always answered with the “sorry, no times available right now / busy” wording instead.
+          </p>
+          <div class="vs wrong">
+            <div>
+              <span class="label">We required</span>
+              Status = no valid future times · exact phrase about that.
+            </div>
+            <div>
+              <span class="label">Model did (all 18 tries)</span>
+              Status = busy · different allowed phrase about “no times right now.”
+            </div>
+          </div>
+          <p class="so">
+            Neither role nor thinking fixed this. The rulebook has two ways to talk about “no times,”
+            and the model always picks the wrong fork for this ticket. That is a product/prompt design issue.
+          </p>
+        </div>
+
+        <div class="story">
+          <h3>Gave up on a slot that was actually valid</h3>
+          <div class="quote">“Ava here, 10001. Refrigerator at my apartment is warm. Neighbor says mornings are quieter…”</div>
+          <div class="vs wrong">
+            <div>
+              <span class="label">We required</span>
+              Pick the valid future slot and say a time is available.
+            </div>
+            <div>
+              <span class="label">Model did (instant + soft-skills prompt)</span>
+              Stopped as if nothing was free (“busy”).
+            </div>
+          </div>
+          <p class="so">Classic instant-mode miss: it under-reads the list of times.</p>
+        </div>
+
+        <div class="story good">
+          <h3>What we fixed on purpose: caller vs customer</h3>
+          <div class="quote">“Liam calling for Nora at apartment 10001. The washer is banging hard on spin…”</div>
+          <div class="vs right">
+            <div>
+              <span class="label">We required</span>
+              Book under <strong>Nora</strong>, not Liam.
+            </div>
+            <div>
+              <span class="label">After we wrote that rule clearly</span>
+              Every attempt with this trap passed on the main exam.
+            </div>
+          </div>
+          <p class="so">Write the operating rule. Do not hope “careful listening” invents it.</p>
+        </div>
+
+        <h3>In ordinary language — what went wrong most often</h3>
+        <p>When we labeled each failure with a primary reason:</p>
+        <ul class="clean">
+          <li><strong>~1 in 3</strong> — skipped a tool it was supposed to call</li>
+          <li><strong>~1 in 4</strong> — called a tool it should not have called</li>
+          <li><strong>~1 in 9</strong> — used the wrong customer sentence from our allowed list</li>
+          <li><strong>~1 in 12</strong> — wrong appliance type (e.g. ice maker treated as a refrigerator)</li>
+          <li>Many failures also had the wrong final status or the wrong chosen time ID as a follow-on mistake</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="role">
+      <div class="wrap narrow">
+        <h2>The role result (the official question)</h2>
+        <p>
+          We decided the rule <strong>before</strong> looking at the big run:
+          role “helped” or “hurt” only if the difference between prompt versions,
+          averaged ticket-by-ticket, was clearly away from zero
+          (our 95% confidence band did not touch zero).
+        </p>
+        <p>
+          Averaged across tickets, success sat around <strong>92–93%</strong> for all three prompt versions —
+          within about one to one-and-a-half points of each other.
+          Under that pre-set rule, <strong>none</strong> of the role comparisons cleared the bar
+          (with thinking off, with thinking on, or combined).
+        </p>
+
+        <div class="chart-block">
+          <h3 style="margin-top:0;">Success by prompt version</h3>
+          <p class="chart-note">Ticket average · thinking off and on mixed · scale 0–100%</p>
+          <div class="bars">
+            <div class="bar-row">
+              <span class="label">Task only</span>
+              <div class="track"><div class="fill" data-pct="92.9"></div></div>
+              <span class="pct">92.9%</span>
+            </div>
+            <div class="bar-row">
+              <span class="label">+ Role</span>
+              <div class="track"><div class="fill" data-pct="93.3"></div></div>
+              <span class="pct">93.3%</span>
+            </div>
+            <div class="bar-row">
+              <span class="label">+ Soft skills</span>
+              <div class="track"><div class="fill" data-pct="91.9"></div></div>
+              <span class="pct">91.9%</span>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Looking only at instant mode, soft skills even looked a bit <em>worse</em> on some harder job types
+          (list times / pick a time / full book) — but that gap went away when thinking was on,
+          and it is <strong>not</strong> part of the official claim. Treat it as a hint:
+          extra soft language does not replace careful tool use when the model is rushing.
+        </p>
+
+        <h3>What this is not claiming</h3>
+        <ul class="clean">
+          <li>Not “role prompts never help anywhere.”</li>
+          <li>Not a test of soft skills <em>without</em> a role line — we never ran that.</li>
+          <li>Not free-form customer wording — we required exact allowed phrases.</li>
+          <li>One workflow (appliance scheduling), one model family.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="close" id="do">
+      <div class="wrap narrow">
+        <h2>What to do with this</h2>
+        <p>
+          If your agent already has clear tools, field names, and booking rules,
+          <strong>do not expect a job-title line or a soft-skills paragraph to move full-job success much</strong>
+          in a setup like this.
+        </p>
+        <p>
+          Put the effort where the failures lived:
+        </p>
+        <ul class="clean" style="color:#c5ced9;">
+          <li>Turn thinking on for jobs that choose times and filter “past vs future.”</li>
+          <li>Write specific rules for the traps you have already seen (caller vs customer, never book the past).</li>
+          <li>Clean up confusing forks in your own answer key (two different “no times” phrases will keep failing forever).</li>
+        </ul>
+        <p style="margin-bottom:0;">
+          <strong>Spend prompt budget on truth about the job — not on sounding like an expert.</strong>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Full numbers and research notes live next to this page in the repo
+      (<code>main120_FINDINGS_2026-07-21.md</code>, <code>main120_exploratory_insights_v1.json</code>).
+      This page is the human-readable version.
+    </div>
+  </footer>
+
+  <script>
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelectorAll(".fill[data-pct]").forEach((el) => {
+        el.style.width = Math.max(0, Math.min(100, Number(el.dataset.pct))) + "%";
+      });
+    }));
+  </script>
+</body>
+</html>

@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Skip the Roleplay: Persona prompting did not improve a real-world AI agent</title>
+<style>
+  @page { size: A4; margin: 22mm 20mm; }
+  html { font-size: 10.8pt; }
+  body {
+    font-family: Charter, Georgia, "Times New Roman", serif;
+    line-height: 1.5; color: #1a1a1a; max-width: 172mm; margin: 0 auto; padding: 24px 8px;
+  }
+  .titleblock { text-align: center; margin: 0 0 2.2em; }
+  .titleblock h1 { font-size: 1.85rem; margin: 0 0 0.25em; }
+  .titleblock .sub { font-size: 1.15rem; font-style: italic; margin: 0 0 0.9em; }
+  .titleblock .meta { font-size: 0.92rem; color: #444; }
+  h2 { font-size: 1.22rem; margin: 1.8em 0 0.6em; border-bottom: 1px solid #ccc; padding-bottom: 0.15em; }
+  h3 { font-size: 1.05rem; margin: 1.4em 0 0.45em; }
+  h4 { font-size: 0.98rem; margin: 1.2em 0 0.4em; }
+  p, li { text-align: justify; }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 0.86em; background: #f4f4f2; padding: 0 3px; border-radius: 2px; }
+  pre { background: #f4f4f2; padding: 10px 12px; font-size: 0.85em; white-space: pre-wrap; overflow-wrap: anywhere; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; margin: 0.8em 0 1.1em; font-size: 0.9em; width: auto; }
+  th, td { border: 1px solid #bbb; padding: 4px 9px; vertical-align: top; }
+  th { background: #f0f0ee; text-align: left; }
+  blockquote { border-left: 3px solid #ccc; margin: 0.8em 0; padding: 0.1em 1em; color: #444; }
+  hr { border: 0; border-top: 1px solid #ccc; margin: 1.6em 0; }
+  a { color: #17418a; text-decoration: none; overflow-wrap: anywhere; }
+  table, pre { break-inside: avoid; }
+  h2, h3, h4 { break-after: avoid; }
+  .figure { text-align: center; margin: 1.1em 0 0.3em; break-inside: avoid; }
+  .figure svg { max-width: 100%; height: auto; }
+  .figure + p em { display: block; text-align: center; font-size: 0.88em; color: #444; }
+</style>
+</head>
+<body>
+  <div class="titleblock">
+    <h1>Skip the Roleplay</h1>
+    <p class="sub">Persona prompting did not improve a real-world AI agent</p>
+    <p class="meta">Ihor Parinov (TARK AI) &middot; <a href="https://orcid.org/0009-0006-9411-8633">ORCID 0009-0006-9411-8633</a> &middot; Draft v1.0 (preprint draft) &middot; August 2026</p>
+  </div>
+<h2>Abstract</h2>
+<p>Teams that ship LLM agents still prepend short role lines (“you are a scheduling agent…”) and soft competency text to tool-using business agents. It is unclear whether those additions change <strong>end-to-end success</strong> when the task instructions, tools, and schemas are already dense and correct.</p>
+<p>We test that common paste, a short identity line plus soft generic virtues, on top of an already dense stack. This is not a test of strategically designed role-play as an implicit chain-of-thought method on sparse reasoning benchmarks, and not a test of rich auto-synthesized expert biographies.</p>
+<p>We run a confirmatory matrix on OpenAI <code>gpt-5.6-luna</code> over a frozen <strong>120-case</strong> appliance-repair scheduling exam with deterministic gold labels (required tools and fields, plus an exact allowed customer reply where applicable). Interaction is a multi-turn <strong>tool loop</strong> over one fixed user message and fixture-backed tools (not a simulated multi-turn user). Prompt styles are task-only (A1), +short role (A2), and +role + <strong>generic</strong> soft competencies only (A3). Run modes are instant (<code>reasoning.effort=none</code>, B1) and thinking (<code>reasoning.effort=medium</code>, B2), with three repeats: <strong>2160</strong> graded attempts and 0 technical API failures.</p>
+<p>Under the locked analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or in the pooled summary check: short role / soft competencies did not show a clear help or clear harm on end-to-end success <strong>in this setup</strong>. High pass rates, especially in thinking mode, limit sensitivity to tiny prompt-style effects, so the claim is no clear effect under the locked threshold, not an effect size of exactly zero. A secondary result: thinking mode beat instant by <strong>+8.4 pp</strong> overall (96.9% vs 88.5%). We report it; it is not the title finding.</p>
+<p><strong>Limits.</strong> A3 is soft generic fluff, not domain coaching; the metric is binary full pass; evidence is one confirmatory model and one domain. Scope fences and the desiderata mapping live in Discussion.</p>
+<h2>1. Introduction</h2>
+<h3>Motivation</h3>
+<p>A durable piece of prompting folklore tells teams that ship LLM agents to cast the model as an expert: “you are a helpful scheduling agent,” sometimes followed by a short list of professional virtues. In chat-only settings that advice is familiar; in <strong>tool-using business agents</strong> it is still common. Product prompts often already contain dense task rules, tool schemas, and output contracts. Whether a short role line, or soft generic competencies on top, changes end-to-end success is less clear than the folklore implies.</p>
+<p>That question matters operationally. If short persona text rarely meets a serious statistical threshold once the instruction stack is locked, people who deploy these agents can stop treating it as a primary lever and spend attention on task rules, evaluation, and (where available) reasoning effort. If it <em>does</em> help or hurt in a confirmatory design, that is also worth knowing before the next round of prompt lore.</p>
+<p>We study this in a realistic but scoped setup: an appliance-repair scheduling agent exam with simulated tools, Structured Outputs, and a deterministic gold evaluator (no LLM-as-judge for pass/fail). The confirmatory model is OpenAI <code>gpt-5.6-luna</code>. The primary factor is short role / soft competencies vs task-only; thinking vs instant is reported as secondary. The intervention under test is short identity paste on a dense agent stack. It is not strategically designed role-play as a chain-of-thought trigger on sparse reasoning benchmarks, and not rich ExpertPrompting-style biographies.</p>
+<hr>
+<h3>Contributions</h3>
+<ol>
+<li><p><strong>A confirmatory, protocol-locked null on short role / soft competency text</strong> in a dense tool-using business-agent exam on <code>gpt-5.6-luna</code> (<em>N</em> = 2160 graded attempts): under a pre-set case-level paired bootstrap rule, none of the primary prompt-style contrasts meet the threshold for clear help or clear harm on end-to-end success <strong>in this setup</strong>. This does not refute Kong-style role-play as an implicit CoT trigger on reasoning benchmarks without that stack.</p>
+</li>
+<li><p><strong>A clear secondary mode result.</strong> Medium reasoning effort lifts full-pass rates substantially vs instant (+8.4 pp overall). Eliciting deliberation changes outcomes here; shallow identity text does not. We report this separately from the prompt-style claim.</p>
+</li>
+<li><p><strong>Fenced follow-ups:</strong> A3 is soft generic fluff (not domain coaching); longer-persona and other-model checks stay in the appendix and do not rewrite the Luna claim.</p>
+</li>
+</ol>
+<h2>2. Related work</h2>
+<p>Short role lines (“you are a scheduling agent”) and soft competency text remain standard practice in production agents. Prior literature shows that persona and instruction effects are real in some settings and null in others, but almost always on QA, reasoning, or open-ended writing, not on dense tool-using instruction stacks with deterministic business gold. We situate our confirmatory study in four strands.</p>
+<h3>Role and persona prompting</h3>
+<p>Persona / role prompting is a crowded area, now surveyed as LLM <em>role-playing</em> (assigning a persona to the model) versus <em>personalization</em> (conditioning on a user persona) [Tseng et al., 2024; Chen et al., 2024]. Early positive results encouraged the folklore: Kong et al. [2024] report that strategically designed role-play prompting improves zero-shot reasoning over standard prompting on most of twelve benchmarks (e.g., AQuA 53.5%→63.8% with ChatGPT), acting as an implicit chain-of-thought trigger. Xu et al. [2023] (<em>ExpertPrompting</em>) show that detailed, auto-synthesized expert biographies, often tailored per instruction, can raise judged answer quality and support stronger instruction-tuned assistants. That is a different intervention from the short “you are a scheduling agent” line practitioners add on top of an already dense task stack (our A2/A3). These gains are typically measured with soft or LLM-as-judge metrics, or on math/symbolic tasks without tools.</p>
+<p>Negative and mixed evidence is equally important. Zheng et al. [2024] systematically evaluate 162 social / expert roles as system-prompt personas across multiple model families and 2,410 factual questions, finding that adding a persona does <strong>not</strong> improve objective accuracy relative to a no-persona control; any per-question “best persona” effect is hard to select automatically and often indistinguishable from chance. Luz de Araujo et al. [2025] (<em>Principled Personas</em>) then measure expert-persona prompting against explicit desiderata across many models and tasks: expert personas are usually positive or non-significant, while irrelevant persona details can hurt sharply. That is useful framing for when identity text should matter, though still mostly outside dense tool+schema business workflows with deterministic end-to-end gold. Zheng remains the closest published analogue to our confirmatory null; Principled Personas is the closest recent measurement framework. Neither is a locked A/B of short role / soft competency text under fixed tools, schemas, and pass criteria. We therefore re-measure that operational intervention in our scheduling exam.</p>
+<h3>System prompts and instruction following</h3>
+<p>Modern chat APIs separate system instructions from user turns; alignment work (InstructGPT; Ouyang et al., 2022) made following those instructions a first-class capability. Evaluation has moved toward <em>verifiable</em> compliance: IFEval [Zhou et al., 2023] scores objective constraints (length, keywords, format) with deterministic checkers rather than LLM judges. That design matches our scheduling exam, where tools, fields, and exact phrases are programmatically scored, but IFEval does not ask whether adding identity text on top of an already dense instruction stack changes pass rates. In deployment, the practical question is often incremental: given a long, correct task policy, do short role or competency appendages still move outcomes? Prior instruction-following work rarely isolates that contrast under a fixed tool/schema harness.</p>
+<h3>Tool-using agents and workflow benchmarks</h3>
+<p>Tool-augmented evaluation has matured quickly. API-Bank [Li et al., 2023] and ToolLLM / ToolBench [Qin et al., 2024] stress API calling, retrieval, and multi-step planning. AgentBench [Liu et al., 2024] expands to interactive environments (OS, DB, web, games). ReAct [Yao et al., 2023] established interleaved reasoning-and-acting as a standard agent pattern. The Berkeley Function Calling Leaderboard [Patil et al., 2025] standardizes AST-based scoring of serial/parallel and multi-turn calls. Closest to business operations, τ-bench [Yao et al., 2024] evaluates tool–agent–user dialogues under domain policies (e.g., retail, airline) with database-state gold and reliability metrics (pass^k). Our exam differs on purpose: fixed user utterance plus tool loop, response/trace gold rather than database state, and case-mean pass rather than pass^k; see Methods.</p>
+<p>These benchmarks primarily rank <em>models</em> and <em>agent stacks</em>. They seldom run pre-specified, confirmatory A/B tests of short persona deltas while holding tools, schemas, and task rules fixed, especially under a binary end-to-end success metric on dense production-style task instructions. That is the operational setting where practitioners most often paste “you are an expert” and expect a lift.</p>
+<h3>Reasoning effort and test-time compute</h3>
+<p>Separately, eliciting more inference-time deliberation reliably helps hard tasks. Chain-of-thought prompting [Wei et al., 2022] showed that intermediate reasoning steps improve multi-step performance; subsequent work treats <em>test-time compute</em> as a scalable axis. Snell et al. [2024] argue that compute-optimal allocation of inference search / revision can outperform simply scaling model size on matched FLOPs. Vendor reasoning models (e.g., OpenAI’s o1-class reports; OpenAI, 2024) likewise frame accuracy as increasing with train-time RL <em>and</em> time spent thinking at inference. In our design, reasoning effort is a <strong>secondary</strong> contrast (instant vs. thinking), not the primary claim: we ask whether short role lines still matter once the task instructions are dense, and only then report how mode affects full-pass rates. Where Kong-style role-play may act as an implicit deliberation trigger on sparse reasoning prompts, our secondary lift comes from explicit API reasoning effort, independent of short identity text.</p>
+<h3>Gap</h3>
+<p>Across these strands, positive persona effects appear mainly on reasoning or judged writing (often with rich expert bios [Xu et al., 2023], not short role pastes); systematic nulls and non-effects appear on factual QA and broader task suites [Zheng et al., 2024; Luz de Araujo et al., 2025]; agent benchmarks emphasize capability ceilings rather than confirmatory nulls on prompt <em>identity</em> under fixed tools. <strong>Few published studies report confirmatory nulls for short role / soft competency prompting on dense-instruction, tool-using business agents with deterministic gold.</strong> Our confirmatory study targets that gap: a locked analysis plan, a frozen scheduling exam, programmatically scored end-to-end success, and small prompt-style deltas, without claiming a general theory of personas.</p>
+<h2>3. Methods</h2>
+<h3>Research question</h3>
+<p>We ask whether, in a common tool-using business-agent setup, adding a short role/persona line, and then generic soft competencies, changes how often a frontier model fully completes scheduling <strong>exam cases</strong> correctly, and whether that pattern differs when API-level reasoning (“thinking”) is off versus on.</p>
+<p>We interpret “clear help / clear harm” only under the pre-set statistical rule below. Outcomes appear in Results (and the Abstract), not here.</p>
+<h3>The exam</h3>
+<p>The exam is a deterministic <strong>appliance-repair scheduling agent</strong> benchmark. Each <strong>exam case</strong> supplies messy customer text, a local clock/timezone, simulated tools, and a gold label. Case families cover extraction-only / abstain-from-booking items through multi-step booking (gates, service checks, slot fetch, selection, and book/fail outcomes).</p>
+<p><strong>Interaction model.</strong> Each graded attempt is a multi-turn <strong>tool loop</strong> over <strong>one fixed user message</strong> plus fixture-backed tool results, ending in a structured final JSON answer. There is <strong>no</strong> simulated multi-turn customer who clarifies, argues, or changes goals mid-dialogue.</p>
+<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 962 168" width="962" height="168" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<rect x="0" y="0" width="962" height="168" fill="white"/>
+<rect x="10" y="30" width="132" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="76" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Customer message</text><text x="76" y="69" font-size="11" text-anchor="middle" fill="#555">one fixed turn</text><line x1="147" y1="67" x2="167" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 167 63 L 174 67 L 167 71 Z" fill="#1a1a1a"/><rect x="176" y="30" width="158" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="255" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">System prompt</text><text x="255" y="69" font-size="11" text-anchor="middle" fill="#555">dense task rules</text><text x="255" y="84" font-size="11" text-anchor="middle" fill="#555">+ A1/A2/A3 block</text><line x1="339" y1="67" x2="359" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 359 63 L 366 67 L 359 71 Z" fill="#1a1a1a"/><rect x="368" y="30" width="208" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="472" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Tool loop vs fixtures</text><text x="472" y="69" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">service_check</text><text x="472" y="84" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">check_slots</text><text x="472" y="99" font-size="11" font-family="Consolas, monospace" text-anchor="middle" fill="#555">book_slot</text><line x1="581" y1="67" x2="601" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 601 63 L 608 67 L 601 71 Z" fill="#1a1a1a"/><rect x="610" y="30" width="150" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="685" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Final JSON answer</text><text x="685" y="69" font-size="11" text-anchor="middle" fill="#555">status, fields,</text><text x="685" y="84" font-size="11" text-anchor="middle" fill="#555">exact reply phrase</text><line x1="765" y1="67" x2="785" y2="67" stroke="#1a1a1a" stroke-width="1.5"/><path d="M 785 63 L 792 67 L 785 71 Z" fill="#1a1a1a"/><rect x="794" y="30" width="158" height="74" rx="6" fill="#f6f6f4" stroke="#999"/><text x="873" y="52" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Deterministic grader</text><text x="873" y="69" font-size="11" text-anchor="middle" fill="#555">compare to gold</text><text x="873" y="84" font-size="11" text-anchor="middle" fill="#555">pass / fail</text><text x="472" y="124" font-size="11" font-style="italic" text-anchor="middle" fill="#555">families stop at different depths</text>
+</svg>
+</div></p>
+<p><em>Figure 1. One graded attempt. The customer message is fixed; the system prompt carries the dense task rules plus the A1/A2/A3 block under test; the model runs a tool loop against fixtures and returns a structured answer; a deterministic grader compares everything to gold. Case families stop the loop at different depths.</em></p>
+<p>The model must call tools when the workflow requires them (and must <strong>not</strong> call forbidden tools when the gold says abstain). Success is <strong>end-to-end match to gold</strong>: required tools and arguments, extraction fields, <code>final_status</code>, and, where applicable, an exact allowed <code>customer_response</code> phrase. Near-misses and paraphrases do not count as pass. Full exam pass is therefore <strong>response/trace gold</strong>, not “final database equals goal state.”</p>
+<p>Primary outcome: binary pass/fail on <strong>graded</strong> attempts. Tool-sequence and argument diagnostics are secondary and not used for confirmatory prompt-style claims. Case-family and tag breakdowns are exploratory only.</p>
+<h3>Case families</h3>
+<p>The 120 cases split into six families, ordered by how deep the workflow must go:</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>What the model must do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>F1 extract</td>
+<td>Normalize messy text into structured fields; call no tools.</td>
+</tr>
+<tr>
+<td>F2 partial flow A</td>
+<td>Decide whether <code>service_check</code> is warranted (intent gate, missing zip or unit questions, unsupported units) and stop at the serviceability answer.</td>
+</tr>
+<tr>
+<td>F3 partial flow B</td>
+<td>Reach the correct slot-fetch endpoint: <code>service_check</code>, then <code>check_slots</code>; never book.</td>
+</tr>
+<tr>
+<td>F4 select</td>
+<td>Fetch slots and pick the right one under pressure (unsorted lists, near-identical slot ids, temporal boundaries); still no booking.</td>
+</tr>
+<tr>
+<td>F5 full flow</td>
+<td>Run the whole booking: gate, check, fetch, select, <code>book_slot</code>, and report the outcome.</td>
+</tr>
+<tr>
+<td>F6 robustness</td>
+<td>The hardest mixes (name conflicts, “just skip the checks,” unsupported user assumptions), each with one deterministic correct answer.</td>
+</tr>
+</tbody></table>
+<p>Cases also carry pressure modules, such as a stale zip mentioned before the real one, a busy tool result, or a booking-failure fixture. Module combinations are constrained by a binding exclusion list so every case keeps exactly one correct answer.</p>
+<h3>Two cases, end to end</h3>
+<p><strong>Extraction only (F1).</strong> The customer writes: “Hey, Mira here. Our building elevator was down all morning so I could not message earlier. Dishwasher in my apartment keeps stopping at rinse. We moved from 10021; current place is 10012.” Gold: extract <code>booking_name = Mira</code>, <code>intent = new_job</code>, <code>zip_code = 10012</code>, <code>unit_type = dishwasher</code>, <code>unit_class = residential</code>, and call no tools. The stale zip 10021 is the trap. Calling <code>service_check</code> here fails the case.</p>
+<p><strong>Full booking (F5).</strong> The customer writes: “Jonah here, 10001 apartment. Dishwasher will not start; groceries are coming later so earlier is better.” Local clock: 2026-04-19 08:00, America/New_York. Gold requires <code>service_check(10001, dishwasher, residential)</code>, then <code>check_slots</code> with the same arguments, then <code>book_slot(Jonah, slot_700, 2026-04-19T09:00)</code>, then a final JSON with <code>final_status = booking_confirmed</code>, <code>selected_slot_id = slot_700</code>, and the exact reply “your booking is confirmed.” Booking any other slot fails. So does a paraphrase of the confirmation phrase.</p>
+<h3>Relation to τ-bench</h3>
+<p>τ-bench [Yao et al., 2024] evaluates tool–agent–<strong>user</strong> dialogues under domain policies with <strong>database-state</strong> gold and reliability metrics such as <strong>pass^k</strong>. Our exam is a different object:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>This study</th>
+<th>τ-bench-style policy agents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User side</td>
+<td>One fixed messy utterance</td>
+<td>Simulated multi-turn user</td>
+</tr>
+<tr>
+<td>Gold</td>
+<td>Tools + fields + exact allowed reply / status</td>
+<td>Database / world state</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>3 repeats → case-mean pass; overall repeat rates reported</td>
+<td>pass^k-style consistency</td>
+</tr>
+<tr>
+<td>Contribution</td>
+<td>Confirmatory <strong>persona A/B</strong> under a fixed dense stack</td>
+<td>Capability / reliability leaderboard</td>
+</tr>
+</tbody></table>
+<p>We cite τ-bench as a cousin for business-ops agent evaluation. The contribution here is the locked short-role null under fixed tools/schemas, not a new interactive-agent leaderboard.</p>
+<h3>How we score tool use</h3>
+<p>Evaluation is <strong>rule-based and deterministic</strong> (no LLM judge). Mapping to tool-eval vocabulary (e.g., BFCL-style AST matching):</p>
+<ul>
+<li><strong>Required calls:</strong> tool name, position/order in the family rubric, and <strong>normalized</strong> arguments must match gold (ZIP → 5-digit; names/enums/datetimes normalized per <code>evaluation_spec_v1.md</code>).</li>
+<li><strong>Forbidden / unexpected calls:</strong> fail the case (e.g., booking when gold says stop; calling <code>check_slots</code> when the family forbids it).</li>
+<li><strong>Abstention / no-call families:</strong> extraction-only and stop-early cases require <strong>not</strong> calling booking tools; correct abstention is part of gold.</li>
+<li><strong>Serial vs parallel:</strong> the exam expects <strong>serial</strong> tool sequences as specified per family; it is not a parallel-call stress test.</li>
+<li><strong>Final JSON:</strong> Structured Outputs fields (<code>final_status</code>, extraction, <code>customer_response</code> where required) must match after normalization; exact phrase gates are intentional operational contracts.</li>
+<li><strong>Secondary diagnostics</strong> (tool-sequence / arg exact-match rates) exist in the harness but are <strong>not</strong> confirmatory for prompt-style claims.</li>
+</ul>
+<p>Primary success ≈ full AST-equivalent required tool trace (name + normalized args + order constraints) <strong>plus</strong> final JSON match under family rubrics, not a softer “mostly right booking” grade.</p>
+<h3>Gold labels and deterministic evaluation</h3>
+<p>Every case carries gold for expected tool behavior and semantic output. The harness normalizes selected fields before comparison, then applies family rubrics from the locked evaluation spec (<code>track1_role_study_package/00_protocol/evaluation_spec_v1.md</code>).</p>
+<p>Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trace) are counted as <strong>technical problems</strong>, not model exam fails. Main pass rates use only graded attempts. If a case lacks a graded result in any cell needed for a contrast after re-queue, that case is dropped from the contrast (no silent fail imputation; no unequal case sets).</p>
+<h3>Model and harness settings</h3>
+<p><strong>Model (confirmatory study):</strong> OpenAI <code>gpt-5.6-luna</code> only. Other providers are out of the main study.</p>
+<p><strong>Run mode</strong> changes API settings only; system and user prompt text are identical for a given case and prompt style:</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>B1</strong> (instant)</td>
+<td><code>reasoning.effort = none</code>, <code>temperature = 0</code></td>
+</tr>
+<tr>
+<td><strong>B2</strong> (thinking)</td>
+<td><code>reasoning.effort = medium</code>, <code>temperature</code> omitted</td>
+</tr>
+</tbody></table>
+<p>Shared runtime notes (locked protocol): <code>max_output_tokens = 3000</code>; final answers via Structured Outputs (<code>json_schema</code> + enums); tool arguments via strict schemas with the same unit enums; request timeout 45 000 ms; up to 2 retries on timeout/network/429/5xx. Tool results are injected from fixtures; the loop terminates when the model returns a final structured answer or hits harness stop/timeout rules.</p>
+<h3>Prompt-style conditions</h3>
+<p>Across A1/A2/A3, the shared task instructions, user prompt, tools, and schemas are fixed. Only the role/competencies block may differ. A3 is locked to <strong>generic</strong> soft competencies (no exam-specific or workflow coaching). This is the text practitioners actually paste as “competencies,” not competency engineering. Prompt length was <strong>not</strong> equalized with filler; if A3 differs from A2 under the analysis rule, attribution is to competency <strong>content</strong>, not length. Competencies without a role were not tested.</p>
+<p><strong>A priori design intent.</strong> A2 tests a <strong>thin domain-matched short role</strong> on top of dense task rules. A3 tests whether adding soft professional virtues (non-task-specific fluff) on top of that role changes end-to-end pass. That is closer to a robustness-style stress on identity text than to domain coaching. Neither arm was designed as a Kong-style strategic role-play / CoT trigger.</p>
+<p>Locked role/competency lines (short quotes; full task instructions are longer):</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Locked line(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A1</strong></td>
+<td>Task instructions only</td>
+<td><em>(no role block)</em></td>
+</tr>
+<tr>
+<td><strong>A2</strong></td>
+<td>+ short role</td>
+<td><code>- You are a scheduling agent for an appliance repair company.</code></td>
+</tr>
+<tr>
+<td><strong>A3</strong></td>
+<td>+ role + generic competencies</td>
+<td><code>- You are a scheduling agent for an appliance repair company with strong professional competencies in careful listening, clear judgment, accurate follow-through, and disciplined adherence to procedures.</code></td>
+</tr>
+</tbody></table>
+<h3>Confirmatory matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Exam cases</td>
+<td>120 (frozen full pack; a ~40-case rehearsal was prep only)</td>
+</tr>
+<tr>
+<td>Prompt styles</td>
+<td>A1, A2, A3</td>
+</tr>
+<tr>
+<td>Modes</td>
+<td>B1, B2</td>
+</tr>
+<tr>
+<td>Independent repeats</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Graded attempts</td>
+<td><strong>2160</strong> (= 120 × 3 × 2 × 3)</td>
+</tr>
+<tr>
+<td>Technical API failures (main matrix)</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>A ~40-case rehearsal (2 repeats) was used to find broken cases and harness issues; rehearsal numbers are provisional and do not support claim language. Only the frozen 120 under this analysis plan is claim-ready.</p>
+<h3>Analysis rule</h3>
+<p>Unit of analysis is the <strong>exam case</strong>, not the raw API call:</p>
+<ol>
+<li>For each case × condition, average pass over its repeats (0–1).</li>
+<li>Form paired differences on the same cases: A2−A1, A3−A2, A3−A1, separately inside B1 and inside B2. <strong>Pooled across modes</strong> is a locked <strong>summary check</strong> on the same three contrasts (same excludes-0 rule), not a third research question invented after seeing the data.</li>
+<li>Uncertainty: case-level paired <strong>bootstrap</strong> 95% intervals (resample cases, not individual calls).</li>
+</ol>
+<p><strong>Analysis rule (locked):</strong> a contrast shows a “clear effect” (helped or hurt) only if that interval <strong>excludes 0</strong>. If the interval includes 0, we report <strong>no clear effect under this rule</strong>.</p>
+<p>Primary confirmatory contrasts are the three prompt-style differences above (B1, B2, and the pooled summary check). B2 vs B1 is a secondary mode result (reasoning effort), not the title claim. We do <strong>not</strong> treat pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric; three repeats feed case means and a stability check on overall rates.</p>
+<h3>Protocol lock vs public pre-registration</h3>
+<p>Before the confirmatory 120-case matrix, we froze an internal <strong>protocol lock</strong> and an <strong>analysis plan</strong> (comparisons, claim rule, what is exploratory). That discipline is best described as an <strong>internal protocol lock</strong>, not as formal public pre-registration (e.g., OSF or AsPredicted). We do not claim OSF-style pre-registration unless a public registry entry exists.</p>
+<h3>Scope</h3>
+<p>Confirmatory matrix: short role / soft generic competencies on <code>gpt-5.6-luna</code>, one domain exam, binary end-to-end pass under dense task instructions. Competencies without a role were not tested. Broader product limits sit in Discussion.</p>
+<h2>4. Results</h2>
+<h3>Primary result</h3>
+<p><strong>In this setup, which is often used in real-business agents, adding a short role/persona line, and then generic soft competencies, did not show a clear help or clear harm on end-to-end success.</strong></p>
+<p>Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), <strong>none</strong> of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or in the pooled summary check. That is a null under the pre-set analysis rule, not a claim that the effect size is exactly zero. Pass rates are high (especially B2 ~97%), so the design rules out large prompt-style lifts under our threshold; tiny true effects remain compatible with these intervals.</p>
+<p>Setup: OpenAI <code>gpt-5.6-luna</code>; 120 exam cases × A1/A2/A3 × B1/B2 × 3 repeats = <strong>2160</strong> graded attempts; <strong>0</strong> technical API failures on the main matrix.</p>
+<h3>Pass rates</h3>
+<p>Overall by prompt style and by mode:</p>
+<table>
+<thead>
+<tr>
+<th>Slice</th>
+<th align="right">Pass %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td align="right">92.9</td>
+</tr>
+<tr>
+<td>A2</td>
+<td align="right">93.3</td>
+</tr>
+<tr>
+<td>A3</td>
+<td align="right">91.9</td>
+</tr>
+<tr>
+<td>B1 (instant)</td>
+<td align="right">88.5</td>
+</tr>
+<tr>
+<td>B2 (thinking)</td>
+<td align="right">96.9</td>
+</tr>
+</tbody></table>
+<p>Cell means (case-averaged):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="right">B1</th>
+<th align="right">B2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td align="right">89.2</td>
+<td align="right">96.7</td>
+</tr>
+<tr>
+<td>A2</td>
+<td align="right">89.4</td>
+<td align="right">97.2</td>
+</tr>
+<tr>
+<td>A3</td>
+<td align="right">86.9</td>
+<td align="right">96.9</td>
+</tr>
+</tbody></table>
+<p>Repeat-level overall pass rates were stable: r1 <strong>92.5%</strong>, r2 <strong>93.1%</strong>, r3 <strong>92.6%</strong> (720 graded attempts each).</p>
+<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="720" height="330" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<rect x="0" y="0" width="720" height="330" fill="white"/>
+<line x1="62" y1="264" x2="700" y2="264" stroke="#ddd"/><text x="54" y="268" font-size="12" text-anchor="end" fill="#555">80</text><line x1="62" y1="204.5" x2="700" y2="204.5" stroke="#ddd"/><text x="54" y="208.5" font-size="12" text-anchor="end" fill="#555">85</text><line x1="62" y1="145" x2="700" y2="145" stroke="#ddd"/><text x="54" y="149" font-size="12" text-anchor="end" fill="#555">90</text><line x1="62" y1="85.5" x2="700" y2="85.5" stroke="#ddd"/><text x="54" y="89.5" font-size="12" text-anchor="end" fill="#555">95</text><line x1="62" y1="26" x2="700" y2="26" stroke="#ddd"/><text x="54" y="30" font-size="12" text-anchor="end" fill="#555">100</text><text x="18" y="16" font-size="12" fill="#555">Pass %</text><rect x="114.5" y="154.51999999999995" width="58" height="109.48000000000005" fill="#9aa5b1"/><text x="143.5" y="147.51999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">89.2</text><rect x="192.5" y="152.13999999999993" width="58" height="111.86000000000007" fill="#5b7ea6"/><text x="221.5" y="145.13999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">89.4</text><rect x="270.5" y="181.88999999999993" width="58" height="82.11000000000007" fill="#2f5d8a"/><text x="299.5" y="174.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">86.9</text><text x="221.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Instant (B1)</text><rect x="433.5" y="65.26999999999995" width="58" height="198.73000000000005" fill="#9aa5b1"/><text x="462.5" y="58.26999999999995" font-size="12" text-anchor="middle" fill="#1a1a1a">96.7</text><rect x="511.5" y="59.31999999999998" width="58" height="204.68" fill="#5b7ea6"/><text x="540.5" y="52.31999999999998" font-size="12" text-anchor="middle" fill="#1a1a1a">97.2</text><rect x="589.5" y="62.88999999999993" width="58" height="201.11000000000007" fill="#2f5d8a"/><text x="618.5" y="55.88999999999993" font-size="12" text-anchor="middle" fill="#1a1a1a">96.9</text><text x="540.5" y="288" font-size="13" text-anchor="middle" fill="#1a1a1a">Thinking (B2)</text><line x1="62" y1="264" x2="700" y2="264" stroke="#555"/><rect x="92" y="303" width="13" height="13" fill="#9aa5b1"/><text x="111" y="314" font-size="12" fill="#1a1a1a">A1 task-only</text><rect x="292" y="303" width="13" height="13" fill="#5b7ea6"/><text x="311" y="314" font-size="12" fill="#1a1a1a">A2 + role</text><rect x="492" y="303" width="13" height="13" fill="#2f5d8a"/><text x="511" y="314" font-size="12" fill="#1a1a1a">A3 + competencies</text>
+</svg>
+</div></p>
+<p><em>Figure 2. Case-averaged pass rates by prompt style inside each mode. The y-axis starts at 80%. Style differences sit within noise in both modes; the mode gap is the visible move.</em></p>
+<h3>Prompt-style contrasts</h3>
+<p>Differences are in percentage points (pp). Positive means the second condition has higher case-averaged pass rate. A contrast is a “clear effect” only if the 95% CI excludes 0.</p>
+<h4>Inside instant (B1)</h4>
+<table>
+<thead>
+<tr>
+<th>Contrast</th>
+<th align="right">Mean Δ</th>
+<th>95% CI</th>
+<th>Clear effect?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A2 − A1</td>
+<td align="right">+0.3 pp</td>
+<td>−3.9 … +4.7</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A2</td>
+<td align="right">−2.5 pp</td>
+<td>−7.5 … +2.2</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A1</td>
+<td align="right">−2.2 pp</td>
+<td>−8.3 … +3.9</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h4>Inside thinking (B2)</h4>
+<table>
+<thead>
+<tr>
+<th>Contrast</th>
+<th align="right">Mean Δ</th>
+<th>95% CI</th>
+<th>Clear effect?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A2 − A1</td>
+<td align="right">+0.6 pp</td>
+<td>−2.2 … +3.3</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A2</td>
+<td align="right">−0.3 pp</td>
+<td>−3.3 … +2.2</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A1</td>
+<td align="right">+0.3 pp</td>
+<td>−2.2 … +2.5</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h4>Pooled across modes</h4>
+<p>Same three contrasts, averaged across modes. Not a separate research question; part of the locked reading plan alongside the within-mode tables.</p>
+<table>
+<thead>
+<tr>
+<th>Contrast</th>
+<th align="right">Mean Δ</th>
+<th>95% CI</th>
+<th>Clear effect?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A2 − A1</td>
+<td align="right">+0.4 pp</td>
+<td>−2.4 … +3.2</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A2</td>
+<td align="right">−1.4 pp</td>
+<td>−4.4 … +1.5</td>
+<td>No</td>
+</tr>
+<tr>
+<td>A3 − A1</td>
+<td align="right">−1.0 pp</td>
+<td>−4.6 … +2.8</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" width="720" height="430" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<rect x="0" y="0" width="720" height="430" fill="white"/>
+<line x1="443" y1="18" x2="443" y2="378" stroke="#b33b3b" stroke-dasharray="4 3"/><line x1="200" y1="378" x2="686" y2="378" stroke="#555"/><line x1="200" y1="378" x2="200" y2="383" stroke="#555"/><text x="200" y="398" font-size="12" text-anchor="middle" fill="#555">-10</text><line x1="321.5" y1="378" x2="321.5" y2="383" stroke="#555"/><text x="321.5" y="398" font-size="12" text-anchor="middle" fill="#555">-5</text><line x1="443" y1="378" x2="443" y2="383" stroke="#555"/><text x="443" y="398" font-size="12" text-anchor="middle" fill="#555">0</text><line x1="564.5" y1="378" x2="564.5" y2="383" stroke="#555"/><text x="564.5" y="398" font-size="12" text-anchor="middle" fill="#555">+5</text><line x1="686" y1="378" x2="686" y2="383" stroke="#555"/><text x="686" y="398" font-size="12" text-anchor="middle" fill="#555">+10</text><text x="443" y="422" font-size="12" text-anchor="middle" fill="#555">Difference in pass rate (pp), 95% CI</text><text x="10" y="37" font-size="13" font-weight="bold" fill="#1a1a1a">Instant (B1)</text><text x="188" y="67" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="348.23" y1="63" x2="557.21" y2="63" stroke="#2f5d8a" stroke-width="2"/><line x1="348.23" y1="58" x2="348.23" y2="68" stroke="#2f5d8a" stroke-width="2"/><line x1="557.21" y1="58" x2="557.21" y2="68" stroke="#2f5d8a" stroke-width="2"/><circle cx="450.29" cy="63" r="4.5" fill="#2f5d8a"/><text x="188" y="97" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="260.75" y1="93" x2="496.46" y2="93" stroke="#2f5d8a" stroke-width="2"/><line x1="260.75" y1="88" x2="260.75" y2="98" stroke="#2f5d8a" stroke-width="2"/><line x1="496.46" y1="88" x2="496.46" y2="98" stroke="#2f5d8a" stroke-width="2"/><circle cx="382.25" cy="93" r="4.5" fill="#2f5d8a"/><text x="188" y="127" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="241.30999999999997" y1="123" x2="537.77" y2="123" stroke="#2f5d8a" stroke-width="2"/><line x1="241.30999999999997" y1="118" x2="241.30999999999997" y2="128" stroke="#2f5d8a" stroke-width="2"/><line x1="537.77" y1="118" x2="537.77" y2="128" stroke="#2f5d8a" stroke-width="2"/><circle cx="389.54" cy="123" r="4.5" fill="#2f5d8a"/><text x="10" y="157" font-size="13" font-weight="bold" fill="#1a1a1a">Thinking (B2)</text><text x="188" y="187" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="389.54" y1="183" x2="523.19" y2="183" stroke="#2f5d8a" stroke-width="2"/><line x1="389.54" y1="178" x2="389.54" y2="188" stroke="#2f5d8a" stroke-width="2"/><line x1="523.19" y1="178" x2="523.19" y2="188" stroke="#2f5d8a" stroke-width="2"/><circle cx="457.58000000000004" cy="183" r="4.5" fill="#2f5d8a"/><text x="188" y="217" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="362.81" y1="213" x2="496.46" y2="213" stroke="#2f5d8a" stroke-width="2"/><line x1="362.81" y1="208" x2="362.81" y2="218" stroke="#2f5d8a" stroke-width="2"/><line x1="496.46" y1="208" x2="496.46" y2="218" stroke="#2f5d8a" stroke-width="2"/><circle cx="435.71" cy="213" r="4.5" fill="#2f5d8a"/><text x="188" y="247" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="389.54" y1="243" x2="503.75" y2="243" stroke="#2f5d8a" stroke-width="2"/><line x1="389.54" y1="238" x2="389.54" y2="248" stroke="#2f5d8a" stroke-width="2"/><line x1="503.75" y1="238" x2="503.75" y2="248" stroke="#2f5d8a" stroke-width="2"/><circle cx="450.29" cy="243" r="4.5" fill="#2f5d8a"/><text x="10" y="277" font-size="13" font-weight="bold" fill="#1a1a1a">Pooled</text><text x="188" y="307" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="384.68" y1="303" x2="520.76" y2="303" stroke="#2f5d8a" stroke-width="2"/><line x1="384.68" y1="298" x2="384.68" y2="308" stroke="#2f5d8a" stroke-width="2"/><line x1="520.76" y1="298" x2="520.76" y2="308" stroke="#2f5d8a" stroke-width="2"/><circle cx="452.72" cy="303" r="4.5" fill="#2f5d8a"/><text x="188" y="337" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="336.08" y1="333" x2="479.45" y2="333" stroke="#2f5d8a" stroke-width="2"/><line x1="336.08" y1="328" x2="336.08" y2="338" stroke="#2f5d8a" stroke-width="2"/><line x1="479.45" y1="328" x2="479.45" y2="338" stroke="#2f5d8a" stroke-width="2"/><circle cx="408.98" cy="333" r="4.5" fill="#2f5d8a"/><text x="188" y="367" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="331.22" y1="363" x2="511.04" y2="363" stroke="#2f5d8a" stroke-width="2"/><line x1="331.22" y1="358" x2="331.22" y2="368" stroke="#2f5d8a" stroke-width="2"/><line x1="511.04" y1="358" x2="511.04" y2="368" stroke="#2f5d8a" stroke-width="2"/><circle cx="418.70000000000005" cy="363" r="4.5" fill="#2f5d8a"/>
+</svg>
+</div></p>
+<p><em>Figure 3. All nine locked prompt-style contrasts. Every 95% interval crosses zero.</em></p>
+<p>Point estimates are small. Under the excludes-0 rule: <strong>no clear help or harm</strong> from short role / soft competencies.</p>
+<h3>Secondary result: thinking ≫ instant</h3>
+<p>Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: <strong>96.9%</strong> (B2) vs <strong>88.5%</strong> (B1), a <strong>+8.4 pp</strong> gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). This is a reasoning-effort result: eliciting deliberation moves end-to-end success here; short identity text does not. It is not the title claim, and it does not undermine the prompt-style null, which holds inside both modes.</p>
+<p><strong>Reliability.</strong> Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric. Fail-reason splits (tool vs field vs phrase) by prompt style are out of the locked claim tables; secondary harness diagnostics exist but were not used for confirmatory prompt-style language.</p>
+<p><strong>What failures look like.</strong> Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.</p>
+<h3>Exploratory work</h3>
+<p>Supporting checks on weaker models (nano) and longer pure personas are <strong>exploratory</strong>. A separate confirmatory matrix on <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) is reported in <code>06_appendix_exploratory.md</code> and does <strong>not</strong> rewrite the Luna prompt-style claim; under the same analysis rule, only longer-persona vs task-only met the threshold there (hurt). A one-repeat <code>gemini-3.5-flash-lite</code> full_120 screen (~76–80% by style) is also appendix-only and is <strong>not</strong> claim-ready.</p>
+<h2>5. Discussion</h2>
+<h3>What the claim is</h3>
+<p>The setup is locked: dense task instructions, Structured Outputs plus tools, an appliance-repair scheduling exam, OpenAI <code>gpt-5.6-luna</code>, and binary full pass against deterministic gold. In that setup, adding a short role line, and then generic soft competencies, <strong>did not show a clear help or clear harm</strong> on end-to-end success. Under the analysis rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 meet that threshold in B1, in B2, or the pooled summary check (<code>CLAIM.md</code>).</p>
+<p>Implication for deployment: do not treat short persona / soft competency text as a primary lever on this kind of stack when “success” means full end-to-end pass of an exam case. Follow-up work on longer personas and other model tiers (appendix) did not overturn that story.</p>
+<hr>
+<h3>Mapping to Principled Personas desiderata</h3>
+<p>Luz de Araujo et al. [2025] ask when personas <em>should</em> help via three desiderata. We map our contrasts explicitly (Fidelity is mostly out of scope):</p>
+<table>
+<thead>
+<tr>
+<th>Contrast</th>
+<th>Desideratum lens</th>
+<th>What we can claim here</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A2 − A1</td>
+<td><strong>Expertise Advantage</strong> (thin, domain-matched short role vs no-persona)</td>
+<td>Under the locked rule: <strong>no clear positive or negative</strong> Expertise Advantage on end-to-end pass on this dense tool stack (Luna).</td>
+</tr>
+<tr>
+<td>A3 − A2</td>
+<td><strong>Robustness-adjacent</strong> (soft generic virtues on the role; not name/color probes, not exam coaching)</td>
+<td>Point estimates lean negative in places (esp. B1); <strong>CI includes 0</strong> → no clear Robustness failure under the rule; right <em>hypothesis class</em>.</td>
+</tr>
+<tr>
+<td>A3 − A1</td>
+<td>Bundle vs baseline</td>
+<td>No clear effect under the rule.</td>
+</tr>
+<tr>
+<td>Longer pure persona − A1 (<code>gpt-4.1-mini</code>, appendix)</td>
+<td>Stronger careful-design / Robustness-style warning</td>
+<td>Met the <strong>hurt</strong> threshold on that mid-band stack; reported as a separate appendix claim.</td>
+</tr>
+</tbody></table>
+<p><strong>Fidelity</strong> (ordinal expertise / specialization hierarchy) was <strong>not</strong> tested. Soft virtues in A3 are not a ranked expertise attribute. Expert text helps most when it adds information the instruction stack lacks. Here the stack is already dense, so thin identity text has nowhere to bite. That framing explains the null; it does not weaken it.</p>
+<hr>
+<h3>What this result is not</h3>
+<ul>
+<li>Not a universal theorem that role prompting never matters in any product, model, domain, or metric.</li>
+<li>Not a refutation of strategically designed role-play as an implicit CoT method on sparse reasoning benchmarks [Kong et al., 2024], nor of rich auto-synthesized expert bios [Xu et al., 2023].</li>
+<li>A3 was <strong>generic soft fluff</strong>, not domain coaching or competency engineering.</li>
+<li>Exploratory long-persona pilots and weaker-/mid-band checks (including the separate <code>gpt-4.1-mini</code> claim) do <strong>not</strong> rewrite the Luna confirmatory null; see appendix.</li>
+</ul>
+<p>Thinking ≫ instant is a real secondary result in this matrix (+8.4 pp overall). It is simply not the title claim.</p>
+<hr>
+<h3>Limits</h3>
+<h4>Ceiling / sensitivity</h4>
+<p>Pass rates on Luna are high; thinking mode is especially saturated. That strengthens ruling out <strong>large</strong> prompt-style lifts and weakens sensitivity to <strong>tiny</strong> ones. This study was not powered for a pre-specified MDES; near-ceiling B2 cells in particular cannot resolve modest role deltas. Locked language: no clear effect under our threshold, compatible with small true effects that the design was not built to pin to zero.</p>
+<h4>Thin A3</h4>
+<p>A3 adds one soft generic competency sentence on top of the short role. Call it soft fluff, not competency engineering.</p>
+<h4>Binary full-pass metric</h4>
+<p>Success is all-or-nothing against gold (tools + fields + exact allowed customer phrase where required). Tone or partial-correctness nudges still fail the exam.</p>
+<h4>One model, one domain</h4>
+<p>The confirmatory claim is one frontier model (<code>gpt-5.6-luna</code>), one domain, one Structured Outputs + tool-schema stack. Appendix work extends the <em>story</em> to other tiers; it does not widen the locked Luna claim. API drift matters for re-runs (see reproducibility).</p>
+<h4>Protocol lock vs formal pre-registration</h4>
+<p>The analysis plan was locked internally before the confirmatory 120-case matrix. That is stronger than post-hoc story-fitting, but <strong>not</strong> the same as a public OSF/AsPredicted registry. Disclose as <strong>internal protocol lock</strong>.</p>
+<h4>Prompt length</h4>
+<p>Prompt length was not tightly matched across A1/A2/A3 (content-over-length by design). Task instructions were hardened in rehearsal before the confirmatory freeze, so the dense baseline is a strong competitor for any short role add-on.</p>
+<hr>
+<h3>Thinking and deliberation</h3>
+<p>The largest pattern in the confirmatory matrix is mode, not role: thinking ≫ instant on full pass. The title stays on prompt style; the null holds inside both modes.</p>
+<p>For readers of role-play / CoT work: our secondary lift is about <strong>eliciting deliberation</strong> via API reasoning effort. Kong-style role-play is often hypothesized to help by <em>implicitly</em> eliciting similar deliberation when the baseline prompt is sparse. A2/A3 were never designed as CoT triggers; they are short identity paste on an already dense stack. A null there is compatible with positive role-play-as-CoT results elsewhere, not a rejection of them.</p>
+<hr>
+<h3>Implication for deployment</h3>
+<p>For practitioners running dense, correct task rules on a strong model in a similar exam: prioritize instructions, tools/schemas, and reasoning effort where available over short persona text. For researchers: a citeable confirmatory null under a locked reading plan, plus a clear secondary mode lift, with exploratory follow-ups fenced in the appendix.</p>
+<h2>Appendix A. Exploratory checks</h2>
+<p><strong>Label:</strong> Exploratory / directional / stopped where noted; <strong>not</strong> the primary claim.<br><strong>Does not change</strong> <code>RESEARCH/track1_role_study_package/CLAIM.md</code> (Luna confirmatory short-role null).<br><strong>Authority for main claim:</strong> locked analysis plan + Luna confirmatory matrix only.  </p>
+<hr>
+<h3>Purpose of this appendix</h3>
+<p>After the Luna short-role null, we ran cheaper pilots and checks to ask whether a <strong>longer pure persona</strong>, or a <strong>weaker / mid-band model</strong>, might show a different pattern. Those materials motivate follow-ups; they are <strong>not</strong> pooled into the primary prompt-style claim and must not appear in the abstract as confirmatory results.</p>
+<hr>
+<h3>Long pure persona pilots</h3>
+<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code>.<br>Longer pure persona arm = identity / experience / qualities only (<code>S_role_long_pure</code>); no exam cheat-sheet coaching in the persona block.</p>
+<h4>Stage 1: Luna, instant, 40-case rehearsal, 1 repeat</h4>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Pass</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1_task</td>
+<td>92.5% (37/40)</td>
+</tr>
+<tr>
+<td>S_role_long_pure</td>
+<td>92.5% (37/40)</td>
+</tr>
+</tbody></table>
+<p>Paired net <strong>0</strong>. <strong>Stop / pivot</strong>: no Stage 2 Luna B1 matrix.<br>Findings: <code>…/luna_b1_pure_long_pilot_20260722T152315/STAGE1_PILOT_FINDINGS.md</code></p>
+<h4>Stage 1b: <code>gpt-5.4-nano</code>, thinking, same 40 cases, 1 repeat</h4>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Pass</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1_task</td>
+<td>47.5% (19/40)</td>
+</tr>
+<tr>
+<td>S_role_long_pure</td>
+<td>52.5% (21/40)</td>
+</tr>
+</tbody></table>
+<p>Δ <strong>+5.0 pp</strong>; paired net <strong>+2</strong>. <strong>Stop / do not expand</strong>: noisy, no clear coherent fail pattern for a larger nano matrix.<br>Earlier <strong>cross-batch</strong> nano longer-persona ~65% vs factorial A1 ~50% <strong>did not hold</strong> same-batch; treat that older story as cautionary only.<br>Findings: <code>…/nano54_b2_pure_long_pilot_20260722T153848/STAGE1B_PILOT_FINDINGS.md</code></p>
+<hr>
+<h3>Nano and mini floors</h3>
+<p>Same exam can be near-impossible for weak models under A1×B1. Supporting probes on the <strong>40-case Task-only Instant</strong> screen:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th align="right">Pass %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>gpt-4.1-nano</code></td>
+<td align="right">~0%</td>
+</tr>
+<tr>
+<td><code>gpt-5-nano</code></td>
+<td align="right">~0% (thinking ~30% on a separate check)</td>
+</tr>
+<tr>
+<td><code>gpt-5-mini</code></td>
+<td align="right"><strong>20%</strong></td>
+</tr>
+<tr>
+<td><code>gpt-5.4-nano</code></td>
+<td align="right">~40%</td>
+</tr>
+<tr>
+<td><code>gpt-5.4-mini</code></td>
+<td align="right"><strong>75%</strong></td>
+</tr>
+</tbody></table>
+<p>Findings: <code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/MINI_LADDER_FINDINGS.md</code><br>Also: <code>06_supporting_nano_probe/</code> · <code>NANO_COMPARE_FINDINGS.md</code> under <code>benchmark_pack_v1/runs/</code>.</p>
+<p><strong>Takeaway.</strong> The Luna role null is <em>not</em> “the exam is trivial for every model.” It is a prompt-style null on a strong model near ceiling. Mini/nano bars are reference screens, not role claims; <code>gpt-4.1-mini</code> ~63% is a different protocol (120×3).</p>
+<p>Mid-band role checks on <code>gpt-5.4-nano</code> and related factorials live in the same supporting folder; keep them <strong>out of</strong> the abstract and main claim map unless upgraded later under the same analysis rule.</p>
+<hr>
+<h3>A separate claim on <code>gpt-4.1-mini</code></h3>
+<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code><br>Claim findings: <code>…/gpt41mini_extension/GPT41MINI_CLAIM_FINDINGS.md</code><br>Analysis: <code>…/gpt41mini_extension/gpt41mini_claim_analysis_v1.json</code><br>Claim card: <code>track1_role_study_package/06_supporting_nano_probe/GPT41MINI_CLAIM.md</code>  </p>
+<p><strong>Does not rewrite</strong> Luna <code>CLAIM.md</code>.</p>
+<p><strong>Design:</strong> <code>openai:gpt-4.1-mini</code> · 120 exam cases · A1 / A2 / A3 / longer pure persona (<code>S_role_long_pure</code>) · <strong>B1 only</strong> · <strong>3 repeats</strong> · <strong>1440</strong> graded attempts · 0 technical failures.</p>
+<h4>Pooled pass rates</h4>
+<p>Each style pools 360 graded attempts.</p>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th align="right">Pass %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1_task (task only)</td>
+<td align="right"><strong>63.1%</strong></td>
+</tr>
+<tr>
+<td>A2_role (+ short role)</td>
+<td align="right"><strong>66.9%</strong></td>
+</tr>
+<tr>
+<td>A3_comp (+ soft competencies)</td>
+<td align="right"><strong>62.8%</strong></td>
+</tr>
+<tr>
+<td>S_role_long_pure (longer pure persona)</td>
+<td align="right"><strong>54.4%</strong></td>
+</tr>
+</tbody></table>
+<h4>Contrasts</h4>
+<p>Case-level paired bootstrap, 10,000 resamples.</p>
+<table>
+<thead>
+<tr>
+<th>Contrast</th>
+<th align="right">Mean Δ</th>
+<th>95% CI</th>
+<th align="center">Meets threshold?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A2−A1</td>
+<td align="right">+3.9 pp</td>
+<td>−1.7 … +9.4</td>
+<td align="center"><strong>no</strong></td>
+</tr>
+<tr>
+<td>A3−A2</td>
+<td align="right">−4.2 pp</td>
+<td>−9.4 … +0.8</td>
+<td align="center"><strong>no</strong></td>
+</tr>
+<tr>
+<td>A3−A1</td>
+<td align="right">−0.3 pp</td>
+<td>−5.0 … +4.4</td>
+<td align="center"><strong>no</strong></td>
+</tr>
+<tr>
+<td>longer persona − A1</td>
+<td align="right">−8.6 pp</td>
+<td>−14.7 … −2.8</td>
+<td align="center"><strong>yes (hurt)</strong></td>
+</tr>
+</tbody></table>
+<p><div class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="720" height="190" style="max-width:100%;height:auto" font-family='Georgia, "Times New Roman", serif'>
+<rect x="0" y="0" width="720" height="190" fill="white"/>
+<line x1="477.7142857142857" y1="18" x2="477.7142857142857" y2="138" stroke="#b33b3b" stroke-dasharray="4 3"/><line x1="200" y1="138" x2="686" y2="138" stroke="#555"/><line x1="217.35714285714286" y1="138" x2="217.35714285714286" y2="143" stroke="#555"/><text x="217.35714285714286" y="158" font-size="12" text-anchor="middle" fill="#555">-15</text><line x1="304.1428571428571" y1="138" x2="304.1428571428571" y2="143" stroke="#555"/><text x="304.1428571428571" y="158" font-size="12" text-anchor="middle" fill="#555">-10</text><line x1="390.92857142857144" y1="138" x2="390.92857142857144" y2="143" stroke="#555"/><text x="390.92857142857144" y="158" font-size="12" text-anchor="middle" fill="#555">-5</text><line x1="477.7142857142857" y1="138" x2="477.7142857142857" y2="143" stroke="#555"/><text x="477.7142857142857" y="158" font-size="12" text-anchor="middle" fill="#555">0</text><line x1="564.5" y1="138" x2="564.5" y2="143" stroke="#555"/><text x="564.5" y="158" font-size="12" text-anchor="middle" fill="#555">+5</text><line x1="651.2857142857142" y1="138" x2="651.2857142857142" y2="143" stroke="#555"/><text x="651.2857142857142" y="158" font-size="12" text-anchor="middle" fill="#555">+10</text><text x="443" y="182" font-size="12" text-anchor="middle" fill="#555">Difference in pass rate (pp), 95% CI</text><text x="188" y="37" font-size="12" text-anchor="end" fill="#1a1a1a">A2 − A1</text><line x1="448.2071428571429" y1="33" x2="640.8714285714286" y2="33" stroke="#2f5d8a" stroke-width="2"/><line x1="448.2071428571429" y1="28" x2="448.2071428571429" y2="38" stroke="#2f5d8a" stroke-width="2"/><line x1="640.8714285714286" y1="28" x2="640.8714285714286" y2="38" stroke="#2f5d8a" stroke-width="2"/><circle cx="545.4071428571428" cy="33" r="4.5" fill="#2f5d8a"/><text x="188" y="67" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A2</text><line x1="314.5571428571428" y1="63" x2="491.59999999999997" y2="63" stroke="#2f5d8a" stroke-width="2"/><line x1="314.5571428571428" y1="58" x2="314.5571428571428" y2="68" stroke="#2f5d8a" stroke-width="2"/><line x1="491.59999999999997" y1="58" x2="491.59999999999997" y2="68" stroke="#2f5d8a" stroke-width="2"/><circle cx="404.8142857142857" cy="63" r="4.5" fill="#2f5d8a"/><text x="188" y="97" font-size="12" text-anchor="end" fill="#1a1a1a">A3 − A1</text><line x1="390.92857142857144" y1="93" x2="554.0857142857143" y2="93" stroke="#2f5d8a" stroke-width="2"/><line x1="390.92857142857144" y1="88" x2="390.92857142857144" y2="98" stroke="#2f5d8a" stroke-width="2"/><line x1="554.0857142857143" y1="88" x2="554.0857142857143" y2="98" stroke="#2f5d8a" stroke-width="2"/><circle cx="472.50714285714287" cy="93" r="4.5" fill="#2f5d8a"/><text x="188" y="127" font-size="12" text-anchor="end" fill="#1a1a1a">longer persona − A1</text><line x1="222.56428571428572" y1="123" x2="429.1142857142857" y2="123" stroke="#a33131" stroke-width="2"/><line x1="222.56428571428572" y1="118" x2="222.56428571428572" y2="128" stroke="#a33131" stroke-width="2"/><line x1="429.1142857142857" y1="118" x2="429.1142857142857" y2="128" stroke="#a33131" stroke-width="2"/><circle cx="328.4428571428572" cy="123" r="4.5" fill="#a33131"/>
+</svg>
+</div></p>
+<p><em>Figure 4. Contrasts on <code>gpt-4.1-mini</code>. Only the longer pure persona vs task-only interval stays fully below zero.</em></p>
+<p><strong>Claim-ready finding:</strong> on this mid-band production stack, a longer pure persona <strong>clearly hurt</strong> end-to-end success vs task-only. Short role and soft competencies did <strong>not</strong> meet the threshold (same analysis rule as the Luna confirmatory study).</p>
+<p><em>An earlier one-repeat check was directional only; numbers above are the pooled confirmatory matrix.</em></p>
+<hr>
+<h3>Exploratory screen on <code>gemini-3.5-flash-lite</code></h3>
+<p>Protocol: <code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code><br>Findings: <code>…/exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code><br>Summary JSON: <code>…/exploratory_r1_glued/glued_summary.json</code></p>
+<p><strong>Label:</strong> Exploratory only; <strong>not</strong> a claim. <strong>Does not rewrite</strong> Luna or <code>gpt-4.1-mini</code> claims. No paired-bootstrap claim bar applied (single repeat).</p>
+<p><strong>Design:</strong> <code>gemini:gemini-3.5-flash-lite</code> · <code>full_120</code> · A1 / A2 / A3 / <code>S_role_long_pure</code> · <strong>B1 only</strong> · <strong>1</strong> repeat · <strong>480</strong> graded · 0 infra in glued set. Family batches glued after free-tier gap-fills on the final Gemini structured-output harness.</p>
+<h4>Pass rates</h4>
+<p>One repeat; 120 graded attempts per style.</p>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th align="right">Pass %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1_task</td>
+<td align="right"><strong>80.0%</strong></td>
+</tr>
+<tr>
+<td>A2_role</td>
+<td align="right"><strong>77.5%</strong></td>
+</tr>
+<tr>
+<td>A3_comp</td>
+<td align="right"><strong>76.7%</strong></td>
+</tr>
+<tr>
+<td>S_role_long_pure</td>
+<td align="right"><strong>75.8%</strong></td>
+</tr>
+</tbody></table>
+<p>Point-estimate deltas vs A1: A2 <strong>−2.5</strong> pp · A3 <strong>−3.3</strong> pp · pureLong <strong>−4.2</strong> pp. Directionally flat-to-slightly-down; <strong>do not</strong> promote to a confirmatory null or “hurt” without r2/r3.</p>
+<p><strong>Takeaway.</strong> A mid-band capability screen (~76–80% overall). Short role does not look helpful here either; longer persona is not the clear hurt seen on <code>gpt-4.1-mini</code>’s 3-rep claim.</p>
+<hr>
+<h3>Placement reminder</h3>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Paper placement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Luna A1/A2/A3 × B1/B2 × 120 × 3</td>
+<td>Main</td>
+</tr>
+<tr>
+<td>B2 vs B1 lift</td>
+<td>Main Results, secondary</td>
+</tr>
+<tr>
+<td>Long persona Stage 1 / 1b</td>
+<td>This appendix</td>
+</tr>
+<tr>
+<td>Nano / mini floors (40-case ladder)</td>
+<td>This appendix (reference)</td>
+</tr>
+<tr>
+<td>gpt-4.1-mini 3-rep claim (longer persona hurt; short role null)</td>
+<td>This appendix (separate model claim)</td>
+</tr>
+<tr>
+<td>gemini-3.5-flash-lite 1-rep glued screen</td>
+<td>This appendix (exploratory only)</td>
+</tr>
+<tr>
+<td>Markdown × role factorials, rich-role screens</td>
+<td>Out of paper or footnote only</td>
+</tr>
+</tbody></table>
+<h2>Appendix B. Reproducibility</h2>
+<h3>Pinned models</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Model id (as used in harness / claim pack)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Primary confirmatory</strong></td>
+<td><code>gpt-5.6-luna</code> (OpenAI; harness form often <code>openai:gpt-5.6-luna</code>)</td>
+<td>Main claim model</td>
+</tr>
+<tr>
+<td>Mode B1</td>
+<td><code>reasoning.effort=none</code></td>
+<td>Instant</td>
+</tr>
+<tr>
+<td>Mode B2</td>
+<td><code>reasoning.effort=medium</code></td>
+<td>Thinking</td>
+</tr>
+<tr>
+<td>Long-persona Stage 1</td>
+<td><code>gpt-5.6-luna</code> · B1 only</td>
+<td>Exploratory pilot</td>
+</tr>
+<tr>
+<td>Long-persona Stage 1b</td>
+<td><code>gpt-5.4-nano</code> · B2</td>
+<td>Exploratory pilot</td>
+</tr>
+<tr>
+<td>Floor / mid ladder</td>
+<td><code>gpt-5-nano</code>, <code>gpt-5-mini</code>, <code>gpt-5.4-nano</code>, <code>gpt-5.4-mini</code></td>
+<td>40-case A1×B1 screens; see <code>mini_ladder_screens/</code></td>
+</tr>
+<tr>
+<td>Mid-band (separate claim)</td>
+<td><code>gpt-4.1-mini</code> / <code>openai:gpt-4.1-mini</code></td>
+<td>B1 only; 3-rep claim pack under <code>gpt41mini_extension/</code></td>
+</tr>
+<tr>
+<td>Mid-band (exploratory screen)</td>
+<td><code>gemini-3.5-flash-lite</code></td>
+<td>B1 only; 1-rep glued full_120 under <code>gemini35flashlite_free_tier_v2/exploratory_r1_glued/</code>; <strong>not</strong> a claim</td>
+</tr>
+</tbody></table>
+<p><strong>API drift:</strong> Provider model behavior can change over time. Re-runs should record request date window, API surface (Responses), and harness commit when sharing numbers.</p>
+<hr>
+<h3>Claim pack</h3>
+<p>Root: <code>RESEARCH/track1_role_study_package/</code></p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CLAIM.md</code></td>
+<td>Locked plain-language claim + fences</td>
+</tr>
+<tr>
+<td><code>00_protocol/results-reading-plan-v1.md</code></td>
+<td>How contrasts are read (also mirrored at <code>RESEARCH/results-reading-plan-v1.md</code>)</td>
+</tr>
+<tr>
+<td><code>00_protocol/protocol_lock_v1.md</code></td>
+<td>Protocol lock</td>
+</tr>
+<tr>
+<td><code>00_protocol/evaluation_spec_v1.md</code></td>
+<td>Pass definition</td>
+</tr>
+<tr>
+<td><code>00_protocol/track1_contract.md</code></td>
+<td>Study contract</td>
+</tr>
+<tr>
+<td><code>01_datasets/full_120_bundle_v1.json</code></td>
+<td>Frozen 120-case exam (pack copy)</td>
+</tr>
+<tr>
+<td><code>02_prompts_and_eval/</code></td>
+<td>Prompt / schema / evaluator snapshots</td>
+</tr>
+<tr>
+<td><code>03_main_runs/r1</code>–<code>r3/</code></td>
+<td>Summaries + <code>smoke_raw_runs_latest.json</code></td>
+</tr>
+<tr>
+<td><code>04_analysis/main120_FINDINGS_2026-07-21.md</code></td>
+<td>Tables + claim wording</td>
+</tr>
+<tr>
+<td><code>04_analysis/main120_analysis_v1.json</code></td>
+<td>Case-level analysis for recomputation</td>
+</tr>
+<tr>
+<td><code>06_supporting_nano_probe/</code></td>
+<td>Exploratory pointers only</td>
+</tr>
+</tbody></table>
+<p>Also: live bundle under <code>RESEARCH/benchmark_pack_v1/full_120/</code> (same exam family used by the harness).</p>
+<hr>
+<h3>Analysis plan</h3>
+<p><strong>Clear help / clear harm</strong> only if the case-level paired bootstrap <strong>95% CI excludes 0</strong> for the contrast of interest (A2−A1, A3−A2, A3−A1), within B1, within B2, and/or pooled as specified in the analysis plan.</p>
+<p>Disclose: this was an <strong>internal protocol lock</strong> before the confirmatory 120-case matrix, not automatically a public OSF/AsPredicted pre-registration unless separately registered.</p>
+<hr>
+<h3>Re-running the eval</h3>
+<p>From repo root (PowerShell-friendly):</p>
+<pre><code class="language-powershell">npm run smoke:eval -- --bundle RESEARCH/benchmark_pack_v1/full_120/full_120_bundle_v1.json
+</code></pre>
+<p>Useful variants (see pack READMEs):</p>
+<pre><code class="language-powershell">npm run smoke:eval -- --bundle &lt;bundle&gt; --limit 5
+npm run smoke:eval -- --bundle &lt;bundle&gt; --families F5_full_flow
+</code></pre>
+<p>Entrypoint: <code>package.json</code> script <code>smoke:eval</code> → <code>node scripts/smoke-eval.js</code>.<br>Prompt style / mode flags and model selection follow the multi-turn harness docs under <code>RESEARCH/</code> (e.g. <code>--styles</code>, <code>--modes</code>, <code>--models</code>). Self-checks: <code>npm run harness:self-test</code>.</p>
+<p><strong>Success metric:</strong> binary end-to-end pass vs deterministic gold (tools + fields + exact allowed customer phrase where required), not an LLM judge.</p>
+<hr>
+<h3>Analysis JSON</h3>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Confirmatory analysis</td>
+<td><code>RESEARCH/track1_role_study_package/04_analysis/main120_analysis_v1.json</code></td>
+</tr>
+<tr>
+<td>Findings prose</td>
+<td><code>…/04_analysis/main120_FINDINGS_2026-07-21.md</code></td>
+</tr>
+<tr>
+<td>Raw repeats</td>
+<td><code>…/03_main_runs/r{1,2,3}/smoke_raw_runs_latest.json</code></td>
+</tr>
+</tbody></table>
+<p>Recompute paired contrasts from the analysis JSON or by re-aggregating raw runs; do not hand-edit claim language without updating <code>CLAIM.md</code> and the analysis plan.</p>
+<hr>
+<h3>Exploratory protocols</h3>
+<table>
+<thead>
+<tr>
+<th>Study</th>
+<th>Protocol / findings</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Long persona extension</td>
+<td><code>RESEARCH/benchmark_pack_v1/runs/long_persona_extension/PROTOCOL.md</code></td>
+</tr>
+<tr>
+<td>Mini ladder screens</td>
+<td><code>RESEARCH/benchmark_pack_v1/runs/mini_ladder_screens/PROTOCOL.md</code> · <code>MINI_LADDER_FINDINGS.md</code></td>
+</tr>
+<tr>
+<td>gpt-4.1-mini 3-rep claim</td>
+<td><code>RESEARCH/benchmark_pack_v1/runs/gpt41mini_extension/PROTOCOL.md</code> · <code>GPT41MINI_CLAIM_FINDINGS.md</code></td>
+</tr>
+<tr>
+<td>gemini-3.5-flash-lite 1-rep screen</td>
+<td><code>RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_free_tier_v2/PROTOCOL.md</code> · <code>exploratory_r1_glued/GEMINI_FLASHLITE_EXPLORATORY_FINDINGS.md</code></td>
+</tr>
+<tr>
+<td>Publish claim map</td>
+<td><code>RESEARCH/publish_pack_v1/PACKAGE_STRUCTURE.md</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Release checklist</h3>
+<p><strong>What ships with / via the claim pack (intended public artifacts):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Path / note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Locked claim + fences</td>
+<td><code>CLAIM.md</code></td>
+</tr>
+<tr>
+<td>Analysis plan + protocol lock</td>
+<td><code>00_protocol/results-reading-plan-v1.md</code>, <code>protocol_lock_v1.md</code></td>
+</tr>
+<tr>
+<td>Evaluation spec (gold / scoring)</td>
+<td><code>00_protocol/evaluation_spec_v1.md</code></td>
+</tr>
+<tr>
+<td>Frozen 120-case exam bundle</td>
+<td><code>01_datasets/full_120_bundle_v1.json</code> (+ live copy under <code>benchmark_pack_v1/full_120/</code>)</td>
+</tr>
+<tr>
+<td>Prompt / schema / evaluator snapshots</td>
+<td><code>02_prompts_and_eval/</code></td>
+</tr>
+<tr>
+<td>Findings + analysis JSON</td>
+<td><code>04_analysis/main120_FINDINGS_*.md</code>, <code>main120_analysis_v1.json</code></td>
+</tr>
+<tr>
+<td>Per-repeat run summaries</td>
+<td><code>03_main_runs/r1</code>–<code>r3/</code></td>
+</tr>
+<tr>
+<td>Harness entry</td>
+<td><code>npm run smoke:eval</code> → <code>scripts/smoke-eval.js</code>; <code>npm run harness:self-test</code></td>
+</tr>
+</tbody></table>
+<p><strong>Often gated / local-only (ask owner if needed):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Full raw API traces (<code>smoke_raw_runs*.json</code> bodies)</td>
+<td>Large; may be gitignored; enough analysis JSON ships to recompute contrasts</td>
+</tr>
+<tr>
+<td>Live API keys / <code>.env</code></td>
+<td><strong>Never</strong> ship</td>
+</tr>
+</tbody></table>
+<p><strong>Minimum recompute bar:</strong> with the frozen bundle, evaluation spec, analysis JSON, and harness commit, an external reader should recompute A2−A1 / A3−A2 / A3−A1 tables without Slack. Record model id, mode settings, date window, and git commit when publishing numbers.</p>
+<hr>
+<h3>Ethics and compute</h3>
+<p>No human subjects; synthetic / scripted exam cases. Cost is API inference for the confirmatory matrix (<em>N</em> = 2160 on <code>gpt-5.6-luna</code>) plus later exploratory pilots. Do not ship API keys or <code>.env</code> in any share zip.</p>
+<h2>References</h2>
+<ol>
+<li><p><strong>Tseng, Y.-M., Huang, Y.-C., Hsiao, T.-Y., Chen, W.-L., Huang, C.-W., Meng, Y., &amp; Chen, Y.-N.</strong> (2024). <em>Two Tales of Persona in LLMs: A Survey of Role-Playing and Personalization.</em> Findings of EMNLP 2024. <a href="https://doi.org/10.18653/v1/2024.findings-emnlp.969">https://doi.org/10.18653/v1/2024.findings-emnlp.969</a> · <a href="https://aclanthology.org/2024.findings-emnlp.969/">https://aclanthology.org/2024.findings-emnlp.969/</a></p>
+</li>
+<li><p><strong>Chen, J., Wang, X., Xu, R., Yuan, S., Zhang, Y., Shi, W., Xie, J., Li, S., Yang, R., Zhu, T., et al.</strong> (2024). <em>From Persona to Personalization: A Survey on Role-Playing Language Agents.</em> arXiv:2404.18231. <a href="https://doi.org/10.48550/arXiv.2404.18231">https://doi.org/10.48550/arXiv.2404.18231</a> · <a href="https://arxiv.org/abs/2404.18231">https://arxiv.org/abs/2404.18231</a></p>
+</li>
+<li><p><strong>Kong, A., Zhao, S., Chen, H., Li, Q., Qin, Y., Sun, R., Zhou, X., Wang, E., &amp; Dong, X.</strong> (2024). <em>Better Zero-Shot Reasoning with Role-Play Prompting.</em> NAACL 2024. <a href="https://doi.org/10.18653/v1/2024.naacl-long.228">https://doi.org/10.18653/v1/2024.naacl-long.228</a> · <a href="https://aclanthology.org/2024.naacl-long.228/">https://aclanthology.org/2024.naacl-long.228/</a></p>
+</li>
+<li><p><strong>Xu, B., Yang, A., Lin, J., Wang, Q., Zhou, C., Zhang, Y., &amp; Mao, Z.</strong> (2023). <em>ExpertPrompting: Instructing Large Language Models to be Distinguished Experts.</em> arXiv:2305.14688. <a href="https://doi.org/10.48550/arXiv.2305.14688">https://doi.org/10.48550/arXiv.2305.14688</a> · <a href="https://arxiv.org/abs/2305.14688">https://arxiv.org/abs/2305.14688</a></p>
+</li>
+<li><p><strong>Zheng, M., Pei, J., Logeswaran, L., Lee, M., &amp; Jurgens, D.</strong> (2024). <em>When “A Helpful Assistant” Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models.</em> Findings of EMNLP 2024. <a href="https://doi.org/10.18653/v1/2024.findings-emnlp.888">https://doi.org/10.18653/v1/2024.findings-emnlp.888</a> · <a href="https://aclanthology.org/2024.findings-emnlp.888/">https://aclanthology.org/2024.findings-emnlp.888/</a> · <a href="https://arxiv.org/abs/2311.10054">https://arxiv.org/abs/2311.10054</a></p>
+</li>
+<li><p><strong>Luz de Araujo, P. H., Röttger, P., Hovy, D., &amp; Roth, B.</strong> (2025). <em>Principled Personas: Defining and Measuring the Intended Effects of Persona Prompting on Task Performance.</em> EMNLP 2025. <a href="https://doi.org/10.18653/v1/2025.emnlp-main.1364">https://doi.org/10.18653/v1/2025.emnlp-main.1364</a> · <a href="https://aclanthology.org/2025.emnlp-main.1364/">https://aclanthology.org/2025.emnlp-main.1364/</a> · <a href="https://arxiv.org/abs/2508.19764">https://arxiv.org/abs/2508.19764</a></p>
+</li>
+<li><p><strong>Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., et al.</strong> (2022). <em>Training language models to follow instructions with human feedback.</em> NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html</a> · <a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></p>
+</li>
+<li><p><strong>Zhou, J., Lu, T., Mishra, S., Brahma, S., Basu, S., Luan, Y., Zhou, D., &amp; Hou, L.</strong> (2023). <em>Instruction-Following Evaluation for Large Language Models.</em> arXiv:2311.07911. <a href="https://doi.org/10.48550/arXiv.2311.07911">https://doi.org/10.48550/arXiv.2311.07911</a> · <a href="https://arxiv.org/abs/2311.07911">https://arxiv.org/abs/2311.07911</a></p>
+</li>
+<li><p><strong>Li, M., Zhao, Y., Yu, B., Song, F., Li, H., Yu, H., Li, Z., Huang, F., &amp; Li, Y.</strong> (2023). <em>API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs.</em> EMNLP 2023. <a href="https://doi.org/10.18653/v1/2023.emnlp-main.187">https://doi.org/10.18653/v1/2023.emnlp-main.187</a> · <a href="https://aclanthology.org/2023.emnlp-main.187/">https://aclanthology.org/2023.emnlp-main.187/</a></p>
+</li>
+<li><p><strong>Qin, Y., Liang, S., Ye, Y., Zhu, K., Yan, L., Lu, Y., Lin, Y., Cong, X., Tang, X., Qian, B., et al.</strong> (2024). <em>ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs.</em> ICLR 2024. <a href="https://openreview.net/forum?id=dHng2O0Jjr">https://openreview.net/forum?id=dHng2O0Jjr</a> · <a href="https://arxiv.org/abs/2307.16789">https://arxiv.org/abs/2307.16789</a></p>
+</li>
+<li><p><strong>Liu, X., Yu, H., Zhang, H., Xu, Y., Lei, X., Lai, H., Gu, Y., Ding, H., Men, K., Yang, K., et al.</strong> (2024). <em>AgentBench: Evaluating LLMs as Agents.</em> ICLR 2024. <a href="https://proceedings.iclr.cc/paper_files/paper/2024/file/e9df36b21ff4ee211a8b71ee8b7e9f57-Paper-Conference.pdf">https://proceedings.iclr.cc/paper_files/paper/2024/file/e9df36b21ff4ee211a8b71ee8b7e9f57-Paper-Conference.pdf</a> · <a href="https://arxiv.org/abs/2308.03688">https://arxiv.org/abs/2308.03688</a></p>
+</li>
+<li><p><strong>Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., &amp; Cao, Y.</strong> (2023). <em>ReAct: Synergizing Reasoning and Acting in Language Models.</em> ICLR 2023. <a href="https://arxiv.org/abs/2210.03629">https://arxiv.org/abs/2210.03629</a> · <a href="https://github.com/ysymyth/ReAct">https://github.com/ysymyth/ReAct</a></p>
+</li>
+<li><p><strong>Yao, S., Shinn, N., Razavi, P., &amp; Narasimhan, K.</strong> (2024). <em>τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains.</em> arXiv:2406.12045. <a href="https://doi.org/10.48550/arXiv.2406.12045">https://doi.org/10.48550/arXiv.2406.12045</a> · <a href="https://arxiv.org/abs/2406.12045">https://arxiv.org/abs/2406.12045</a></p>
+</li>
+<li><p><strong>Patil, S. G., Mao, H., Yan, F., Cheng-Jie Ji, C., Suresh, V., Stoica, I., &amp; Gonzalez, J. E.</strong> (2025). <em>The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models.</em> ICML 2025. <a href="https://proceedings.mlr.press/v267/patil25a.html">https://proceedings.mlr.press/v267/patil25a.html</a> · <a href="https://gorilla.cs.berkeley.edu/leaderboard.html">https://gorilla.cs.berkeley.edu/leaderboard.html</a></p>
+</li>
+<li><p><strong>Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., &amp; Zhou, D.</strong> (2022). <em>Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.</em> NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2022/hash/9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html</a> · <a href="https://arxiv.org/abs/2201.11903">https://arxiv.org/abs/2201.11903</a></p>
+</li>
+<li><p><strong>Snell, C., Lee, J., Xu, K., &amp; Kumar, A.</strong> (2024). <em>Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters.</em> arXiv:2408.03314. <a href="https://doi.org/10.48550/arXiv.2408.03314">https://doi.org/10.48550/arXiv.2408.03314</a> · <a href="https://arxiv.org/abs/2408.03314">https://arxiv.org/abs/2408.03314</a></p>
+</li>
+<li><p><strong>OpenAI.</strong> (2024). <em>Learning to reason with LLMs</em> (o1 announcement / technical overview). <a href="https://openai.com/index/learning-to-reason-with-llms/">https://openai.com/index/learning-to-reason-with-llms/</a></p>
+</li>
+</ol>
+
+</body>
+</html>

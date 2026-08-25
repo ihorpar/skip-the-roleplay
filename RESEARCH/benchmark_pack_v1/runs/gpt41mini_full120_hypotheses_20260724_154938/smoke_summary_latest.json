@@ -1,0 +1,137 @@
+{
+  "started_at": "2026-07-24T19:49:38.976Z",
+  "finished_at": "2026-07-24T20:09:56.365Z",
+  "bundle_path": "RESEARCH/benchmark_pack_v1/full_120/full_120_bundle_v1.json",
+  "run_config": {
+    "harnessMode": "multi_turn",
+    "models": [
+      {
+        "provider": "openai",
+        "model": "gpt-4.1-mini"
+      }
+    ],
+    "promptStyles": [
+      "A1_task",
+      "A2_role",
+      "A3_comp",
+      "S_role_long_pure"
+    ],
+    "modes": [
+      "B1_instant"
+    ],
+    "caseCount": 120,
+    "runCount": 480,
+    "concurrency": 2
+  },
+  "overall": {
+    "total_runs": 480,
+    "scored_runs": 480,
+    "infra_error_runs": 0,
+    "eval_unscorable_runs": 0,
+    "pass_rate": 0.6166666666666667,
+    "json_valid_rate": 1,
+    "schema_valid_rate": 0.8854166666666666,
+    "tool_trigger_precision": 1,
+    "tool_trigger_recall": 0.9338565022421524,
+    "tool_argument_accuracy": 1,
+    "tool_call_exact_match_rate": 0.79375,
+    "over_action_rate": 0.16458333333333333,
+    "under_action_rate": 0.10833333333333334
+  },
+  "by_model": {
+    "openai:gpt-4.1-mini": {
+      "total_runs": 480,
+      "scored_runs": 480,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6166666666666667,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.8854166666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9338565022421524,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.79375,
+      "over_action_rate": 0.16458333333333333,
+      "under_action_rate": 0.10833333333333334
+    }
+  },
+  "by_prompt_style": {
+    "A1_task": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6416666666666667,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9417040358744395,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.8416666666666667,
+      "over_action_rate": 0.125,
+      "under_action_rate": 0.09166666666666666
+    },
+    "A2_role": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.675,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9166666666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9461883408071748,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.8083333333333333,
+      "over_action_rate": 0.13333333333333333,
+      "under_action_rate": 0.1
+    },
+    "A3_comp": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6083333333333333,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9166666666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9327354260089686,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.775,
+      "over_action_rate": 0.16666666666666666,
+      "under_action_rate": 0.11666666666666667
+    },
+    "S_role_long_pure": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.5416666666666666,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.8083333333333333,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9147982062780269,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.75,
+      "over_action_rate": 0.23333333333333334,
+      "under_action_rate": 0.125
+    }
+  },
+  "by_mode": {
+    "B1_instant": {
+      "total_runs": 480,
+      "scored_runs": 480,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6166666666666667,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.8854166666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9338565022421524,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.79375,
+      "over_action_rate": 0.16458333333333333,
+      "under_action_rate": 0.10833333333333334
+    }
+  }
+}

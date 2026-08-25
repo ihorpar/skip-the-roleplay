@@ -1,0 +1,89 @@
+{
+  "started_at": "2026-07-22T03:12:55.216Z",
+  "finished_at": "2026-07-22T03:15:06.129Z",
+  "bundle_path": "RESEARCH/benchmark_pack_v1/full_120/full_120_bundle_v1.json",
+  "run_config": {
+    "harnessMode": "multi_turn",
+    "models": [
+      {
+        "provider": "openai",
+        "model": "gpt-5-nano"
+      }
+    ],
+    "promptStyles": [
+      "A1_task"
+    ],
+    "modes": [
+      "B1_instant"
+    ],
+    "caseCount": 120,
+    "runCount": 120,
+    "concurrency": 3
+  },
+  "overall": {
+    "total_runs": 120,
+    "scored_runs": 120,
+    "infra_error_runs": 0,
+    "eval_unscorable_runs": 0,
+    "pass_rate": 0.016666666666666666,
+    "json_valid_rate": 1,
+    "schema_valid_rate": 0.11666666666666667,
+    "tool_trigger_precision": 1,
+    "tool_trigger_recall": 0.5919282511210763,
+    "tool_argument_accuracy": 1,
+    "tool_call_exact_match_rate": 0.4083333333333333,
+    "over_action_rate": 0.35833333333333334,
+    "under_action_rate": 0.4
+  },
+  "by_model": {
+    "openai:gpt-5-nano": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.016666666666666666,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.11666666666666667,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.5919282511210763,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.4083333333333333,
+      "over_action_rate": 0.35833333333333334,
+      "under_action_rate": 0.4
+    }
+  },
+  "by_prompt_style": {
+    "A1_task": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.016666666666666666,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.11666666666666667,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.5919282511210763,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.4083333333333333,
+      "over_action_rate": 0.35833333333333334,
+      "under_action_rate": 0.4
+    }
+  },
+  "by_mode": {
+    "B1_instant": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.016666666666666666,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.11666666666666667,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.5919282511210763,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.4083333333333333,
+      "over_action_rate": 0.35833333333333334,
+      "under_action_rate": 0.4
+    }
+  }
+}

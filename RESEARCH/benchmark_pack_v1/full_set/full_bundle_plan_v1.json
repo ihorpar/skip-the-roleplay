@@ -1,0 +1,1941 @@
+{
+  "plan_version": "v1",
+  "source_config_path": "RESEARCH/benchmark_pack_v1/full_set/generator_config_v1.json",
+  "bundle_id": "track1_full_plan_v1",
+  "total_tasks": 120,
+  "generated_at": "2026-04-21T01:05:25.712Z",
+  "families": {
+    "F1_extract": [
+      "F1_001",
+      "F1_002",
+      "F1_003",
+      "F1_004",
+      "F1_005",
+      "F1_006",
+      "F1_007",
+      "F1_008",
+      "F1_009",
+      "F1_010"
+    ],
+    "F2_partial_flow_a": [
+      "F2_001",
+      "F2_002",
+      "F2_003",
+      "F2_004",
+      "F2_005",
+      "F2_006",
+      "F2_007",
+      "F2_008",
+      "F2_009",
+      "F2_010"
+    ],
+    "F3_partial_flow_b": [
+      "F3_001",
+      "F3_002",
+      "F3_003",
+      "F3_004",
+      "F3_005",
+      "F3_006",
+      "F3_007",
+      "F3_008",
+      "F3_009",
+      "F3_010"
+    ],
+    "F4_select": [
+      "F4_001",
+      "F4_002",
+      "F4_003",
+      "F4_004",
+      "F4_005",
+      "F4_006",
+      "F4_007",
+      "F4_008",
+      "F4_009",
+      "F4_010",
+      "F4_011",
+      "F4_012",
+      "F4_013",
+      "F4_014",
+      "F4_015"
+    ],
+    "F5_full_flow": [
+      "F5_001",
+      "F5_002",
+      "F5_003",
+      "F5_004",
+      "F5_005",
+      "F5_006",
+      "F5_007",
+      "F5_008",
+      "F5_009",
+      "F5_010",
+      "F5_011",
+      "F5_012",
+      "F5_013",
+      "F5_014",
+      "F5_015",
+      "F5_016",
+      "F5_017",
+      "F5_018",
+      "F5_019",
+      "F5_020",
+      "F5_021",
+      "F5_022",
+      "F5_023",
+      "F5_024",
+      "F5_025",
+      "F5_026",
+      "F5_027",
+      "F5_028",
+      "F5_029",
+      "F5_030",
+      "F5_031",
+      "F5_032",
+      "F5_033",
+      "F5_034",
+      "F5_035"
+    ],
+    "F6_robustness_hard_cases": [
+      "F6_001",
+      "F6_002",
+      "F6_003",
+      "F6_004",
+      "F6_005",
+      "F6_006",
+      "F6_007",
+      "F6_008",
+      "F6_009",
+      "F6_010",
+      "F6_011",
+      "F6_012",
+      "F6_013",
+      "F6_014",
+      "F6_015",
+      "F6_016",
+      "F6_017",
+      "F6_018",
+      "F6_019",
+      "F6_020",
+      "F6_021",
+      "F6_022",
+      "F6_023",
+      "F6_024",
+      "F6_025",
+      "F6_026",
+      "F6_027",
+      "F6_028",
+      "F6_029",
+      "F6_030",
+      "F6_031",
+      "F6_032",
+      "F6_033",
+      "F6_034",
+      "F6_035",
+      "F6_036",
+      "F6_037",
+      "F6_038",
+      "F6_039",
+      "F6_040"
+    ]
+  },
+  "tasks": [
+    {
+      "case_id": "F1_001",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 1
+    },
+    {
+      "case_id": "F1_002",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 2
+    },
+    {
+      "case_id": "F1_003",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 3
+    },
+    {
+      "case_id": "F1_004",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 4
+    },
+    {
+      "case_id": "F1_005",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 5
+    },
+    {
+      "case_id": "F1_006",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 6
+    },
+    {
+      "case_id": "F1_007",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 7
+    },
+    {
+      "case_id": "F1_008",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 8
+    },
+    {
+      "case_id": "F1_009",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 9
+    },
+    {
+      "case_id": "F1_010",
+      "task_family": "F1_extract",
+      "target_branch_id": "extract_only",
+      "base_scenario_id": "F1__extract_only",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 10
+    },
+    {
+      "case_id": "F2_001",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "non_new_job",
+      "base_scenario_id": "F2__non_new_job",
+      "module_ids": [
+        "non_new_job_distraction",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "excluded_intent_distraction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 11
+    },
+    {
+      "case_id": "F2_002",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "non_new_job",
+      "base_scenario_id": "F2__non_new_job",
+      "module_ids": [
+        "non_new_job_distraction",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "excluded_intent_distraction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 12
+    },
+    {
+      "case_id": "F2_003",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F2__missing_service_inputs",
+      "module_ids": [
+        "baseline_clean",
+        "missing_unit_type"
+      ],
+      "pressure_tags": [],
+      "task_variant_id": "base",
+      "global_index": 13
+    },
+    {
+      "case_id": "F2_004",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F2__missing_service_inputs",
+      "module_ids": [
+        "baseline_clean",
+        "missing_unit_type"
+      ],
+      "pressure_tags": [],
+      "task_variant_id": "base",
+      "global_index": 14
+    },
+    {
+      "case_id": "F2_005",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F2__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type"
+      ],
+      "task_variant_id": "base",
+      "global_index": 15
+    },
+    {
+      "case_id": "F2_006",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F2__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type"
+      ],
+      "task_variant_id": "base",
+      "global_index": 16
+    },
+    {
+      "case_id": "F2_007",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "ready_for_slot_fetch",
+      "base_scenario_id": "F2__ready_for_slot_fetch",
+      "module_ids": [
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 17
+    },
+    {
+      "case_id": "F2_008",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "ready_for_slot_fetch",
+      "base_scenario_id": "F2__ready_for_slot_fetch",
+      "module_ids": [
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 18
+    },
+    {
+      "case_id": "F2_009",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "ready_for_slot_fetch",
+      "base_scenario_id": "F2__ready_for_slot_fetch",
+      "module_ids": [
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 19
+    },
+    {
+      "case_id": "F2_010",
+      "task_family": "F2_partial_flow_a",
+      "target_branch_id": "ready_for_slot_fetch",
+      "base_scenario_id": "F2__ready_for_slot_fetch",
+      "module_ids": [
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 20
+    },
+    {
+      "case_id": "F3_001",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F3__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 21
+    },
+    {
+      "case_id": "F3_002",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F3__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 22
+    },
+    {
+      "case_id": "F3_003",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "missing_slot_inputs",
+      "base_scenario_id": "F3__missing_slot_inputs",
+      "module_ids": [
+        "baseline_clean",
+        "missing_unit_type"
+      ],
+      "pressure_tags": [],
+      "task_variant_id": "base",
+      "global_index": 23
+    },
+    {
+      "case_id": "F3_004",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F3__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 24
+    },
+    {
+      "case_id": "F3_005",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F3__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 25
+    },
+    {
+      "case_id": "F3_006",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_empty",
+      "base_scenario_id": "F3__slots_empty",
+      "module_ids": [
+        "empty_slot_result",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "empty_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 26
+    },
+    {
+      "case_id": "F3_007",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_returned",
+      "base_scenario_id": "F3__slots_returned",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 27
+    },
+    {
+      "case_id": "F3_008",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_returned",
+      "base_scenario_id": "F3__slots_returned",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 28
+    },
+    {
+      "case_id": "F3_009",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_returned",
+      "base_scenario_id": "F3__slots_returned",
+      "module_ids": [
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 29
+    },
+    {
+      "case_id": "F3_010",
+      "task_family": "F3_partial_flow_b",
+      "target_branch_id": "slots_returned",
+      "base_scenario_id": "F3__slots_returned",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 30
+    },
+    {
+      "case_id": "F4_001",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 31
+    },
+    {
+      "case_id": "F4_002",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 32
+    },
+    {
+      "case_id": "F4_003",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 33
+    },
+    {
+      "case_id": "F4_004",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 34
+    },
+    {
+      "case_id": "F4_005",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 35
+    },
+    {
+      "case_id": "F4_006",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 36
+    },
+    {
+      "case_id": "F4_007",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 37
+    },
+    {
+      "case_id": "F4_008",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 38
+    },
+    {
+      "case_id": "F4_009",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 39
+    },
+    {
+      "case_id": "F4_010",
+      "task_family": "F4_select",
+      "target_branch_id": "slot_selected",
+      "base_scenario_id": "F4__slot_selected",
+      "module_ids": [
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 40
+    },
+    {
+      "case_id": "F4_011",
+      "task_family": "F4_select",
+      "target_branch_id": "no_valid_slot",
+      "base_scenario_id": "F4__no_valid_slot",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 41
+    },
+    {
+      "case_id": "F4_012",
+      "task_family": "F4_select",
+      "target_branch_id": "no_valid_slot",
+      "base_scenario_id": "F4__no_valid_slot",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 42
+    },
+    {
+      "case_id": "F4_013",
+      "task_family": "F4_select",
+      "target_branch_id": "no_valid_slot",
+      "base_scenario_id": "F4__no_valid_slot",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 43
+    },
+    {
+      "case_id": "F4_014",
+      "task_family": "F4_select",
+      "target_branch_id": "no_valid_slot",
+      "base_scenario_id": "F4__no_valid_slot",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 44
+    },
+    {
+      "case_id": "F4_015",
+      "task_family": "F4_select",
+      "target_branch_id": "no_valid_slot",
+      "base_scenario_id": "F4__no_valid_slot",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 45
+    },
+    {
+      "case_id": "F5_001",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F5__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "busy_result",
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 46
+    },
+    {
+      "case_id": "F5_002",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F5__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "busy_result",
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 47
+    },
+    {
+      "case_id": "F5_003",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F5__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "busy_result",
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 48
+    },
+    {
+      "case_id": "F5_004",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F5__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "busy_result",
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 49
+    },
+    {
+      "case_id": "F5_005",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F5__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "busy_result",
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 50
+    },
+    {
+      "case_id": "F5_006",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 51
+    },
+    {
+      "case_id": "F5_007",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 52
+    },
+    {
+      "case_id": "F5_008",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 53
+    },
+    {
+      "case_id": "F5_009",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 54
+    },
+    {
+      "case_id": "F5_010",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 55
+    },
+    {
+      "case_id": "F5_011",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 56
+    },
+    {
+      "case_id": "F5_012",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 57
+    },
+    {
+      "case_id": "F5_013",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 58
+    },
+    {
+      "case_id": "F5_014",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 59
+    },
+    {
+      "case_id": "F5_015",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 60
+    },
+    {
+      "case_id": "F5_016",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F5__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter",
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 61
+    },
+    {
+      "case_id": "F5_017",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 62
+    },
+    {
+      "case_id": "F5_018",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 63
+    },
+    {
+      "case_id": "F5_019",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 64
+    },
+    {
+      "case_id": "F5_020",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 65
+    },
+    {
+      "case_id": "F5_021",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 66
+    },
+    {
+      "case_id": "F5_022",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 67
+    },
+    {
+      "case_id": "F5_023",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "name_conflict"
+      ],
+      "pressure_tags": [
+        "name_conflict"
+      ],
+      "task_variant_id": "base",
+      "global_index": 68
+    },
+    {
+      "case_id": "F5_024",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "similar_slot_ids"
+      ],
+      "pressure_tags": [
+        "similar_slot_ids"
+      ],
+      "task_variant_id": "base",
+      "global_index": 69
+    },
+    {
+      "case_id": "F5_025",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "temporal_boundary"
+      ],
+      "pressure_tags": [
+        "temporal_boundary"
+      ],
+      "task_variant_id": "base",
+      "global_index": 70
+    },
+    {
+      "case_id": "F5_026",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "unsorted_slots"
+      ],
+      "pressure_tags": [
+        "unsorted_slots"
+      ],
+      "task_variant_id": "base",
+      "global_index": 71
+    },
+    {
+      "case_id": "F5_027",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F5__booking_success",
+      "module_ids": [
+        "user_says_skip_checks"
+      ],
+      "pressure_tags": [
+        "user_says_skip_checks"
+      ],
+      "task_variant_id": "base",
+      "global_index": 72
+    },
+    {
+      "case_id": "F5_028",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 73
+    },
+    {
+      "case_id": "F5_029",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 74
+    },
+    {
+      "case_id": "F5_030",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 75
+    },
+    {
+      "case_id": "F5_031",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 76
+    },
+    {
+      "case_id": "F5_032",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 77
+    },
+    {
+      "case_id": "F5_033",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 78
+    },
+    {
+      "case_id": "F5_034",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 79
+    },
+    {
+      "case_id": "F5_035",
+      "task_family": "F5_full_flow",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F5__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 80
+    },
+    {
+      "case_id": "F6_001",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F6__missing_service_inputs",
+      "module_ids": [
+        "unsupported_user_assumption",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 81
+    },
+    {
+      "case_id": "F6_002",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F6__missing_service_inputs",
+      "module_ids": [
+        "unsupported_user_assumption",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 82
+    },
+    {
+      "case_id": "F6_003",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F6__missing_service_inputs",
+      "module_ids": [
+        "unsupported_user_assumption",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 83
+    },
+    {
+      "case_id": "F6_004",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F6__missing_service_inputs",
+      "module_ids": [
+        "unsupported_user_assumption",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 84
+    },
+    {
+      "case_id": "F6_005",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "missing_service_inputs",
+      "base_scenario_id": "F6__missing_service_inputs",
+      "module_ids": [
+        "unsupported_user_assumption",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 85
+    },
+    {
+      "case_id": "F6_006",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F6__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 86
+    },
+    {
+      "case_id": "F6_007",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F6__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 87
+    },
+    {
+      "case_id": "F6_008",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F6__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 88
+    },
+    {
+      "case_id": "F6_009",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F6__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type",
+        "unsupported_user_assumption"
+      ],
+      "task_variant_id": "base",
+      "global_index": 89
+    },
+    {
+      "case_id": "F6_010",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "not_serviceable",
+      "base_scenario_id": "F6__not_serviceable",
+      "module_ids": [
+        "unsupported_concrete_unit_type",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "unsupported_concrete_unit_type"
+      ],
+      "task_variant_id": "base",
+      "global_index": 90
+    },
+    {
+      "case_id": "F6_011",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F6__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 91
+    },
+    {
+      "case_id": "F6_012",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F6__slots_busy",
+      "module_ids": [
+        "service_busy_result",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 92
+    },
+    {
+      "case_id": "F6_013",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F6__slots_busy",
+      "module_ids": [
+        "baseline_clean",
+        "service_busy_result"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 93
+    },
+    {
+      "case_id": "F6_014",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "slots_busy",
+      "base_scenario_id": "F6__slots_busy",
+      "module_ids": [
+        "baseline_clean",
+        "service_busy_result"
+      ],
+      "pressure_tags": [
+        "busy_result"
+      ],
+      "task_variant_id": "base",
+      "global_index": 94
+    },
+    {
+      "case_id": "F6_015",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "no_valid_after_filter_slots",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "no_valid_after_filter"
+      ],
+      "task_variant_id": "base",
+      "global_index": 95
+    },
+    {
+      "case_id": "F6_016",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "baseline_clean",
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 96
+    },
+    {
+      "case_id": "F6_017",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "baseline_clean",
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 97
+    },
+    {
+      "case_id": "F6_018",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "baseline_clean",
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 98
+    },
+    {
+      "case_id": "F6_019",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "baseline_clean",
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 99
+    },
+    {
+      "case_id": "F6_020",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "no_valid_after_filter",
+      "base_scenario_id": "F6__no_valid_after_filter",
+      "module_ids": [
+        "baseline_clean",
+        "later_correction"
+      ],
+      "pressure_tags": [
+        "later_correction"
+      ],
+      "task_variant_id": "base",
+      "global_index": 100
+    },
+    {
+      "case_id": "F6_021",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 101
+    },
+    {
+      "case_id": "F6_022",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 102
+    },
+    {
+      "case_id": "F6_023",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 103
+    },
+    {
+      "case_id": "F6_024",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 104
+    },
+    {
+      "case_id": "F6_025",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 105
+    },
+    {
+      "case_id": "F6_026",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 106
+    },
+    {
+      "case_id": "F6_027",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 107
+    },
+    {
+      "case_id": "F6_028",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 108
+    },
+    {
+      "case_id": "F6_029",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 109
+    },
+    {
+      "case_id": "F6_030",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 110
+    },
+    {
+      "case_id": "F6_031",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 111
+    },
+    {
+      "case_id": "F6_032",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_success",
+      "base_scenario_id": "F6__booking_success",
+      "module_ids": [
+        "baseline_clean",
+        "historical_value"
+      ],
+      "pressure_tags": [
+        "historical_value"
+      ],
+      "task_variant_id": "base",
+      "global_index": 112
+    },
+    {
+      "case_id": "F6_033",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 113
+    },
+    {
+      "case_id": "F6_034",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 114
+    },
+    {
+      "case_id": "F6_035",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 115
+    },
+    {
+      "case_id": "F6_036",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 116
+    },
+    {
+      "case_id": "F6_037",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 117
+    },
+    {
+      "case_id": "F6_038",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 118
+    },
+    {
+      "case_id": "F6_039",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 119
+    },
+    {
+      "case_id": "F6_040",
+      "task_family": "F6_robustness_hard_cases",
+      "target_branch_id": "booking_failure",
+      "base_scenario_id": "F6__booking_failure",
+      "module_ids": [
+        "booking_failure_fixture",
+        "baseline_clean"
+      ],
+      "pressure_tags": [
+        "booking_failure"
+      ],
+      "task_variant_id": "base",
+      "global_index": 120
+    }
+  ],
+  "derived_pressure_counts": {
+    "later_correction": 17,
+    "historical_value": 18,
+    "excluded_intent_distraction": 2,
+    "unsupported_concrete_unit_type": 9,
+    "user_says_skip_checks": 10,
+    "busy_result": 11,
+    "empty_result": 1,
+    "temporal_boundary": 10,
+    "unsorted_slots": 10,
+    "similar_slot_ids": 9,
+    "no_valid_after_filter": 17,
+    "name_conflict": 6,
+    "booking_failure": 16,
+    "unsupported_user_assumption": 8
+  }
+}

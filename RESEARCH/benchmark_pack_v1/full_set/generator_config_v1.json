@@ -1,0 +1,231 @@
+{
+  "config_version": "v1",
+  "bundle_id": "track1_full_plan_v1",
+  "total_tasks": 120,
+  "family_allocations": {
+    "F1_extract": 10,
+    "F2_partial_flow_a": 10,
+    "F3_partial_flow_b": 10,
+    "F4_select": 15,
+    "F5_full_flow": 35,
+    "F6_robustness_hard_cases": 40
+  },
+  "family_rules": {
+    "F1_extract": {
+      "allowed_branch_ids": ["extract_only"],
+      "allowed_module_counts": [0, 1, 2],
+      "required_core_modules": [],
+      "required_output_scope": "extraction_only"
+    },
+    "F2_partial_flow_a": {
+      "allowed_branch_ids": ["non_new_job", "missing_service_inputs", "not_serviceable", "ready_for_slot_fetch"],
+      "allowed_module_counts": [0, 1, 2],
+      "required_core_modules": [],
+      "required_output_scope": "serviceability_endpoint"
+    },
+    "F3_partial_flow_b": {
+      "allowed_branch_ids": ["not_serviceable", "missing_slot_inputs", "slots_busy", "slots_empty", "slots_returned"],
+      "allowed_module_counts": [0, 1, 2],
+      "required_core_modules": [],
+      "required_output_scope": "slot_fetch_endpoint"
+    },
+    "F4_select": {
+      "allowed_branch_ids": ["slot_selected", "no_valid_slot"],
+      "allowed_module_counts": [0, 1, 2],
+      "required_core_modules": [],
+      "required_output_scope": "selection_endpoint"
+    },
+    "F5_full_flow": {
+      "allowed_branch_ids": ["slots_busy", "no_valid_after_filter", "booking_success", "booking_failure"],
+      "allowed_module_counts": [1, 2],
+      "required_core_modules": [],
+      "required_output_scope": "booking_endpoint"
+    },
+    "F6_robustness_hard_cases": {
+      "allowed_branch_ids": ["missing_service_inputs", "not_serviceable", "slots_busy", "no_valid_after_filter", "booking_success", "booking_failure"],
+      "allowed_module_counts": [1, 2, 3],
+      "required_core_modules": [],
+      "required_output_scope": "hard_case_booking_or_stop"
+    }
+  },
+  "branch_quotas": {
+    "F1_extract": {
+      "extract_only": 10
+    },
+    "F2_partial_flow_a": {
+      "non_new_job": 2,
+      "missing_service_inputs": 2,
+      "not_serviceable": 2,
+      "ready_for_slot_fetch": 4
+    },
+    "F3_partial_flow_b": {
+      "not_serviceable": 2,
+      "missing_slot_inputs": 1,
+      "slots_busy": 2,
+      "slots_empty": 1,
+      "slots_returned": 4
+    },
+    "F4_select": {
+      "slot_selected": 10,
+      "no_valid_slot": 5
+    },
+    "F5_full_flow": {
+      "slots_busy": 5,
+      "no_valid_after_filter": 11,
+      "booking_success": 11,
+      "booking_failure": 8
+    },
+    "F6_robustness_hard_cases": {
+      "missing_service_inputs": 5,
+      "not_serviceable": 5,
+      "slots_busy": 4,
+      "no_valid_after_filter": 6,
+      "booking_success": 12,
+      "booking_failure": 8
+    }
+  },
+  "pressure_tag_targets": {
+    "user_says_skip_checks": 10,
+    "later_correction": 12,
+    "historical_value": 6,
+    "unsupported_concrete_unit_type": 12,
+    "busy_result": 9,
+    "empty_result": 2,
+    "no_valid_after_filter": 17,
+    "similar_slot_ids": 9,
+    "unsorted_slots": 10,
+    "booking_failure": 16,
+    "name_conflict": 6,
+    "temporal_boundary": 10,
+    "excluded_intent_distraction": 8,
+    "unsupported_user_assumption": 8
+  },
+  "module_catalog": {
+    "baseline_clean": {
+      "kind": "neutral",
+      "pressure_tags": [],
+      "compatible_families": ["F1_extract", "F2_partial_flow_a", "F3_partial_flow_b", "F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["extract_only", "non_new_job", "missing_service_inputs", "not_serviceable", "ready_for_slot_fetch", "missing_slot_inputs", "slots_busy", "slots_empty", "slots_returned", "slot_selected", "no_valid_slot", "no_valid_after_filter", "booking_success", "booking_failure"],
+      "excludes": []
+    },
+    "later_correction": {
+      "kind": "text_mutation",
+      "pressure_tags": ["later_correction"],
+      "compatible_families": ["F1_extract", "F3_partial_flow_b", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["extract_only", "slots_returned", "booking_success", "booking_failure", "no_valid_after_filter"],
+      "excludes": ["historical_value"]
+    },
+    "historical_value": {
+      "kind": "text_mutation",
+      "pressure_tags": ["historical_value"],
+      "compatible_families": ["F1_extract", "F3_partial_flow_b", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["extract_only", "slots_returned", "booking_success", "not_serviceable"],
+      "excludes": ["later_correction"]
+    },
+    "unsupported_concrete_unit_type": {
+      "kind": "extraction_pressure",
+      "pressure_tags": ["unsupported_concrete_unit_type"],
+      "compatible_families": ["F2_partial_flow_a", "F3_partial_flow_b", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["not_serviceable"],
+      "excludes": ["missing_zip", "missing_unit_type"]
+    },
+    "missing_zip": {
+      "kind": "missing_info",
+      "pressure_tags": [],
+      "compatible_families": ["F2_partial_flow_a", "F3_partial_flow_b", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["missing_service_inputs"],
+      "excludes": ["unsupported_concrete_unit_type", "non_new_job_distraction"]
+    },
+    "missing_unit_type": {
+      "kind": "missing_info",
+      "pressure_tags": [],
+      "compatible_families": ["F2_partial_flow_a", "F3_partial_flow_b", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["missing_service_inputs", "missing_slot_inputs"],
+      "excludes": ["unsupported_concrete_unit_type", "non_new_job_distraction"]
+    },
+    "non_new_job_distraction": {
+      "kind": "intent_pressure",
+      "pressure_tags": ["excluded_intent_distraction"],
+      "compatible_families": ["F2_partial_flow_a"],
+      "compatible_branch_ids": ["non_new_job"],
+      "excludes": ["missing_zip", "missing_unit_type", "unsupported_concrete_unit_type"]
+    },
+    "service_busy_result": {
+      "kind": "fixture_pressure",
+      "pressure_tags": ["busy_result"],
+      "compatible_families": ["F3_partial_flow_b", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["slots_busy"],
+      "excludes": ["empty_slot_result", "no_valid_after_filter_slots"]
+    },
+    "empty_slot_result": {
+      "kind": "fixture_pressure",
+      "pressure_tags": ["empty_result"],
+      "compatible_families": ["F3_partial_flow_b"],
+      "compatible_branch_ids": ["slots_empty"],
+      "excludes": ["service_busy_result", "no_valid_after_filter_slots"]
+    },
+    "no_valid_after_filter_slots": {
+      "kind": "fixture_pressure",
+      "pressure_tags": ["no_valid_after_filter"],
+      "compatible_families": ["F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["no_valid_slot", "no_valid_after_filter"],
+      "excludes": ["service_busy_result", "empty_slot_result", "valid_slot_selection"]
+    },
+    "valid_slot_selection": {
+      "kind": "fixture_pressure",
+      "pressure_tags": [],
+      "compatible_families": ["F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["slot_selected", "booking_success", "booking_failure"],
+      "excludes": ["no_valid_after_filter_slots"]
+    },
+    "similar_slot_ids": {
+      "kind": "selection_pressure",
+      "pressure_tags": ["similar_slot_ids"],
+      "compatible_families": ["F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["slot_selected", "booking_success", "booking_failure", "no_valid_after_filter"],
+      "excludes": []
+    },
+    "unsorted_slots": {
+      "kind": "selection_pressure",
+      "pressure_tags": ["unsorted_slots"],
+      "compatible_families": ["F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["slot_selected", "booking_success", "booking_failure", "no_valid_after_filter"],
+      "excludes": []
+    },
+    "temporal_boundary": {
+      "kind": "selection_pressure",
+      "pressure_tags": ["temporal_boundary"],
+      "compatible_families": ["F4_select", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["slot_selected", "no_valid_slot", "no_valid_after_filter", "booking_success", "booking_failure"],
+      "excludes": []
+    },
+    "booking_failure_fixture": {
+      "kind": "fixture_pressure",
+      "pressure_tags": ["booking_failure"],
+      "compatible_families": ["F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["booking_failure"],
+      "excludes": []
+    },
+    "user_says_skip_checks": {
+      "kind": "instruction_pressure",
+      "pressure_tags": ["user_says_skip_checks"],
+      "compatible_families": ["F2_partial_flow_a", "F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["ready_for_slot_fetch", "booking_success", "booking_failure", "slots_busy"],
+      "excludes": []
+    },
+    "name_conflict": {
+      "kind": "entity_pressure",
+      "pressure_tags": ["name_conflict"],
+      "compatible_families": ["F5_full_flow", "F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["booking_success", "booking_failure"],
+      "excludes": []
+    },
+    "unsupported_user_assumption": {
+      "kind": "instruction_pressure",
+      "pressure_tags": ["unsupported_user_assumption"],
+      "compatible_families": ["F6_robustness_hard_cases"],
+      "compatible_branch_ids": ["missing_service_inputs", "not_serviceable", "booking_success", "booking_failure"],
+      "excludes": []
+    }
+  }
+}

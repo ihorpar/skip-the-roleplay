@@ -1,0 +1,1877 @@
+{
+  "schema_version": "benchmark_data_model_v1",
+  "pack_id": "micro_pilot_runnable_v1",
+  "cases": [
+    {
+      "case_id": "MP_F1_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F1_001",
+        "task_variant_id": "base",
+        "task_family": "F1_extract",
+        "title": "Noisy extraction with stale zip mention",
+        "input": {
+          "user_text": "Hey, Mira here. Our building elevator was down all morning so I could not message earlier. Dishwasher in my apartment keeps stopping at rinse. We moved from 10021; current place is 10012.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [],
+        "pressure_tags": [
+          "later_correction",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F1 noisy extraction baseline"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F1_001",
+        "expected_branch_id": "extract_only",
+        "gold_extraction": {
+          "booking_name": "Mira",
+          "intent": "new_job",
+          "zip_code": "10012",
+          "unit_type": "dishwasher",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "slot_fetch": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [],
+        "expected_semantic_output": {
+          "booking_name": "Mira",
+          "intent": "new_job",
+          "zip_code": "10012",
+          "unit_type": "dishwasher",
+          "unit_class": "residential"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F1_001",
+        "service_check": {
+          "expected_calls": []
+        },
+        "check_slots": {
+          "expected_calls": []
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F2_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_001",
+        "task_variant_id": "base",
+        "task_family": "F2_partial_flow_a",
+        "title": "Non-new-job status check stop",
+        "input": {
+          "user_text": "Hi, Theo from 10001. Just checking if the tech is still coming today for the washer issue from last week.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check"
+        ],
+        "pressure_tags": [
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F2 non-new-job stop"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_001",
+        "expected_branch_id": "non_new_job",
+        "gold_extraction": {
+          "booking_name": "Theo",
+          "intent": "status_check",
+          "zip_code": "10001",
+          "unit_type": "washer",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "slot_fetch": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [],
+        "expected_semantic_output": {
+          "booking_name": "Theo",
+          "intent": "status_check",
+          "zip_code": "10001",
+          "unit_type": "washer",
+          "unit_class": "residential",
+          "final_status": "stopped_non_new_job",
+          "customer_response": "sorry, I can only help with new booking requests"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_001",
+        "service_check": {
+          "expected_calls": []
+        },
+        "check_slots": {
+          "expected_calls": []
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F2_002",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_002",
+        "task_variant_id": "base",
+        "task_family": "F2_partial_flow_a",
+        "title": "Serviceable with skip-check pressure",
+        "input": {
+          "user_text": "I am Elise. Dryer in my apartment at 10001 is blowing cold air only. If your system already knows this block, no need to re-check, just keep going.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check"
+        ],
+        "pressure_tags": [
+          "user_says_skip_checks"
+        ],
+        "task_notes": "F2 serviceable ready-for-slot-fetch"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_002",
+        "expected_branch_id": "ready_for_slot_fetch",
+        "gold_extraction": {
+          "booking_name": "Elise",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dryer",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dryer",
+              "unit_class": "residential"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Elise",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dryer",
+          "unit_class": "residential",
+          "final_status": "ready_for_slot_fetch",
+          "customer_response": "we can continue with scheduling"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F2_002",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dryer",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": []
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F3_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_001",
+        "task_variant_id": "base",
+        "task_family": "F3_partial_flow_b",
+        "title": "Unsupported concrete unit type",
+        "input": {
+          "user_text": "Rafael here, 10001. My wine cooler at home stopped holding temperature after a storm and groceries are piling up.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots"
+        ],
+        "pressure_tags": [
+          "unsupported_concrete_unit_type",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F3 unsupported unit should stop before slot fetch"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_001",
+        "expected_branch_id": "not_serviceable",
+        "gold_extraction": {
+          "booking_name": "Rafael",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "other_type",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "other_type",
+              "unit_class": "residential"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Rafael",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "other_type",
+          "unit_class": "residential",
+          "final_status": "stopped_unserviceable",
+          "customer_response": "sorry, we can't service this unit"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_001",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "other_type",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": false,
+                "failure_reason": "unsupported_unit"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": []
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F3_002",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_002",
+        "task_variant_id": "base",
+        "task_family": "F3_partial_flow_b",
+        "title": "Slots returned endpoint",
+        "input": {
+          "user_text": "Nora calling from 10003. Our clinic break-room microwave keeps tripping the breaker, and patients have been nonstop all morning.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots"
+        ],
+        "pressure_tags": [
+          "unsorted_slots",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F3 slots-returned endpoint"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_002",
+        "expected_branch_id": "slots_returned",
+        "gold_extraction": {
+          "booking_name": "Nora",
+          "intent": "new_job",
+          "zip_code": "10003",
+          "unit_type": "microwave",
+          "unit_class": "commercial"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10003",
+              "unit_type": "microwave",
+              "unit_class": "commercial"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10003",
+              "unit_type": "microwave",
+              "unit_class": "commercial"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Nora",
+          "intent": "new_job",
+          "zip_code": "10003",
+          "unit_type": "microwave",
+          "unit_class": "commercial",
+          "final_status": "slots_returned",
+          "returned_slot_ids": [
+            "slot_071",
+            "slot_017",
+            "slot_017A"
+          ],
+          "customer_response": "available booking times were found"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F3_002",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10003",
+                "unit_type": "microwave",
+                "unit_class": "commercial"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10003",
+                "unit_type": "microwave",
+                "unit_class": "commercial"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_071",
+                    "start_time": "2026-04-20T09:00:00-04:00",
+                    "technician": "Noah"
+                  },
+                  {
+                    "slot_id": "slot_017",
+                    "start_time": "2026-04-20T08:30:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_017A",
+                    "start_time": "2026-04-20T10:00:00-04:00",
+                    "technician": "Liam"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F4_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F4_001",
+        "task_variant_id": "base",
+        "task_family": "F4_select",
+        "title": "Equal-time slot trap",
+        "input": {
+          "user_text": "Ava here, 10001. Refrigerator at my apartment is warm. Neighbor says mornings are quieter in the building.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T10:00:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots"
+        ],
+        "pressure_tags": [
+          "temporal_boundary",
+          "unsorted_slots",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F4 equal-time exclusion and earliest-future selection"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F4_001",
+        "expected_branch_id": "slot_selected",
+        "gold_extraction": {
+          "booking_name": "Ava",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Ava",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential",
+          "final_status": "selection_complete",
+          "selected_slot_id": "slot_future_1015",
+          "customer_response": "a valid booking time is available"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F4_001",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_eq_now",
+                    "start_time": "2026-04-19T10:00:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_past",
+                    "start_time": "2026-04-19T09:30:00-04:00",
+                    "technician": "Noah"
+                  },
+                  {
+                    "slot_id": "slot_future_1015",
+                    "start_time": "2026-04-19T10:15:00-04:00",
+                    "technician": "Liam"
+                  },
+                  {
+                    "slot_id": "slot_future_1100",
+                    "start_time": "2026-04-19T11:00:00-04:00",
+                    "technician": "Zoe"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F5_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_001",
+        "task_variant_id": "base",
+        "task_family": "F5_full_flow",
+        "title": "Booking success full flow",
+        "input": {
+          "user_text": "Jonah here, 10001 apartment. Dishwasher will not start; groceries are coming later so earlier is better.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T08:00:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F5 booking success"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_001",
+        "expected_branch_id": "booking_success",
+        "gold_extraction": {
+          "booking_name": "Jonah",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dishwasher",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dishwasher",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dishwasher",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Jonah",
+              "slot_id": "slot_700",
+              "date_time": "2026-04-19T09:00:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Jonah",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dishwasher",
+          "unit_class": "residential",
+          "final_status": "booking_confirmed",
+          "selected_slot_id": "slot_700",
+          "customer_response": "your booking is confirmed"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_001",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dishwasher",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dishwasher",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_700",
+                    "start_time": "2026-04-19T09:00:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_701",
+                    "start_time": "2026-04-19T10:30:00-04:00",
+                    "technician": "Noah"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Jonah",
+                "slot_id": "slot_700",
+                "date_time": "2026-04-19T09:00:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_success",
+                "confirmation_id": "conf_mp_001"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "MP_F5_002",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_002",
+        "task_variant_id": "base",
+        "task_family": "F5_full_flow",
+        "title": "Busy stop full flow",
+        "input": {
+          "user_text": "Leah, 10001 apartment. Oven is not heating and dinner prep is in chaos tonight.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "busy_result",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F5 busy stop"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_002",
+        "expected_branch_id": "slots_busy",
+        "gold_extraction": {
+          "booking_name": "Leah",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "oven_range",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "oven_range",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "oven_range",
+              "unit_class": "residential"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Leah",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "oven_range",
+          "unit_class": "residential",
+          "final_status": "stopped_busy",
+          "customer_response": "sorry, no booking times are available right now"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_002",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "oven_range",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "oven_range",
+                "unit_class": "residential"
+              },
+              "result_type": "busy",
+              "result": {
+                "slots": []
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F5_003",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_003",
+        "task_variant_id": "base",
+        "task_family": "F5_full_flow",
+        "title": "No valid future after filtering",
+        "input": {
+          "user_text": "Imani here in 10001, home dryer drum spins but there is no heat. I can step out whenever needed.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T14:00:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "no_valid_after_filter",
+          "temporal_boundary",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F5 E3 branch"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_003",
+        "expected_branch_id": "no_valid_after_filter",
+        "gold_extraction": {
+          "booking_name": "Imani",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dryer",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dryer",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dryer",
+              "unit_class": "residential"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Imani",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dryer",
+          "unit_class": "residential",
+          "final_status": "stopped_no_valid_future_slots",
+          "customer_response": "sorry, no valid future booking times are available"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_003",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dryer",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dryer",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_past_1330",
+                    "start_time": "2026-04-19T13:30:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_eq_1400",
+                    "start_time": "2026-04-19T14:00:00-04:00",
+                    "technician": "Noah"
+                  },
+                  {
+                    "slot_id": "slot_past_1200",
+                    "start_time": "2026-04-19T12:00:00-04:00",
+                    "technician": "Liam"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F5_004",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_004",
+        "task_variant_id": "base",
+        "task_family": "F5_full_flow",
+        "title": "Booking failure exact non-confirmation response",
+        "input": {
+          "user_text": "Owen, 10001 apartment. Dishwasher leaks under the door and the floor is getting slippery.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T09:00:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "booking_failure",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F5 booking failure"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_004",
+        "expected_branch_id": "booking_failure",
+        "gold_extraction": {
+          "booking_name": "Owen",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dishwasher",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dishwasher",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "dishwasher",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Owen",
+              "slot_id": "slot_820",
+              "date_time": "2026-04-19T09:45:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Owen",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "dishwasher",
+          "unit_class": "residential",
+          "final_status": "booking_failed",
+          "selected_slot_id": "slot_820",
+          "customer_response": "sorry, I couldn't complete the booking"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F5_004",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dishwasher",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "dishwasher",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_820",
+                    "start_time": "2026-04-19T09:45:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_821",
+                    "start_time": "2026-04-19T10:15:00-04:00",
+                    "technician": "Noah"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Owen",
+                "slot_id": "slot_820",
+                "date_time": "2026-04-19T09:45:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_failure",
+                "confirmation_id": "not_applicable"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "MP_F6_001",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_001",
+        "task_variant_id": "base",
+        "task_family": "F6_robustness_hard_cases",
+        "title": "Later correction hard case",
+        "input": {
+          "user_text": "Hi, Priya here. I typed 10011 in my notes, but actual ZIP is 10001. Earlier I said freezer, but this is the refrigerator section warming up. Lobby repainting is noisy this week.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T10:30:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "later_correction",
+          "historical_value",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F6 later-correction should use corrected zip and unit type"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_001",
+        "expected_branch_id": "booking_success",
+        "gold_extraction": {
+          "booking_name": "Priya",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Priya",
+              "slot_id": "slot_910",
+              "date_time": "2026-04-19T11:00:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Priya",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential",
+          "final_status": "booking_confirmed",
+          "selected_slot_id": "slot_910",
+          "customer_response": "your booking is confirmed"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_001",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_910",
+                    "start_time": "2026-04-19T11:00:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_911",
+                    "start_time": "2026-04-19T11:30:00-04:00",
+                    "technician": "Noah"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Priya",
+                "slot_id": "slot_910",
+                "date_time": "2026-04-19T11:00:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_success",
+                "confirmation_id": "conf_mp_006"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "MP_F6_002",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_002",
+        "task_variant_id": "base",
+        "task_family": "F6_robustness_hard_cases",
+        "title": "Similar slot IDs hard case",
+        "input": {
+          "user_text": "Caleb from 10001 apartment. Microwave died during meal prep; also the doorman keeps buzzing me about package labels.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T08:30:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "similar_slot_ids",
+          "unsorted_slots",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F6 similar ID and ordering pressure"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_002",
+        "expected_branch_id": "booking_success",
+        "gold_extraction": {
+          "booking_name": "Caleb",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "microwave",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "microwave",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "microwave",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Caleb",
+              "slot_id": "slot_071",
+              "date_time": "2026-04-19T08:45:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Caleb",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "microwave",
+          "unit_class": "residential",
+          "final_status": "booking_confirmed",
+          "selected_slot_id": "slot_071",
+          "customer_response": "your booking is confirmed"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_002",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "microwave",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "microwave",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_017",
+                    "start_time": "2026-04-19T09:00:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_071",
+                    "start_time": "2026-04-19T08:45:00-04:00",
+                    "technician": "Noah"
+                  },
+                  {
+                    "slot_id": "slot_017A",
+                    "start_time": "2026-04-19T09:15:00-04:00",
+                    "technician": "Liam"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Caleb",
+                "slot_id": "slot_071",
+                "date_time": "2026-04-19T08:45:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_success",
+                "confirmation_id": "conf_mp_007"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "MP_F6_003",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_003",
+        "task_variant_id": "base",
+        "task_family": "F6_robustness_hard_cases",
+        "title": "Unsupported user assumption hard case",
+        "input": {
+          "user_text": "Marta here. Same place as last time, you should already have it. Dishwasher is dead again. I cannot look up the ZIP right now because I am in a rideshare.",
+          "structured_slots": [],
+          "current_local_datetime": "not_applicable",
+          "timezone": "not_applicable"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "unsupported_user_assumption",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "F6 should not accept unsupported assumption as required input"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_003",
+        "expected_branch_id": "missing_service_inputs",
+        "gold_extraction": {
+          "booking_name": "Marta",
+          "intent": "new_job",
+          "zip_code": "unknown",
+          "unit_type": "dishwasher",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "not_required",
+            "unit_type": "not_required",
+            "unit_class": "not_required"
+          },
+          "booking": {
+            "booking_name": "not_required",
+            "slot_id": "not_required",
+            "date_time": "not_required"
+          }
+        },
+        "expected_tool_sequence": [],
+        "expected_semantic_output": {
+          "booking_name": "Marta",
+          "intent": "new_job",
+          "zip_code": "unknown",
+          "unit_type": "dishwasher",
+          "unit_class": "residential",
+          "final_status": "stopped_missing_required_info",
+          "customer_response": "What is your zip code?"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_003",
+        "service_check": {
+          "expected_calls": []
+        },
+        "check_slots": {
+          "expected_calls": []
+        },
+        "book_slot": {
+          "expected_calls": []
+        }
+      }
+    },
+    {
+      "case_id": "MP_F6_004",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_004",
+        "task_variant_id": "base",
+        "task_family": "F6_robustness_hard_cases",
+        "title": "Name conflict hard case",
+        "input": {
+          "user_text": "Liam calling for Nora at apartment 10001. The washer is banging hard on spin and the hallway lights are flickering again.",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T11:00:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "name_conflict",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "Only dedicated name-conflict case in micro-pilot"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_004",
+        "expected_branch_id": "booking_success",
+        "gold_extraction": {
+          "booking_name": "Nora",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "washer",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "washer",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "washer",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Nora",
+              "slot_id": "slot_940",
+              "date_time": "2026-04-19T11:30:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Nora",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "washer",
+          "unit_class": "residential",
+          "final_status": "booking_confirmed",
+          "selected_slot_id": "slot_940",
+          "customer_response": "your booking is confirmed"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_004",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "washer",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "washer",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_940",
+                    "start_time": "2026-04-19T11:30:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_941",
+                    "start_time": "2026-04-19T12:00:00-04:00",
+                    "technician": "Noah"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Nora",
+                "slot_id": "slot_940",
+                "date_time": "2026-04-19T11:30:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_success",
+                "confirmation_id": "conf_mp_008"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "MP_F6_005",
+      "task": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_005",
+        "task_variant_id": "base",
+        "task_family": "F6_robustness_hard_cases",
+        "title": "Temporal boundary hard case",
+        "input": {
+          "user_text": "Ethan here, 10001 apartment. Refrigerator started beeping — can you get someone out as soon as you can?",
+          "structured_slots": [],
+          "current_local_datetime": "2026-04-19T23:50:00-04:00",
+          "timezone": "America/New_York"
+        },
+        "available_tools": [
+          "service_check",
+          "check_slots",
+          "book_slot"
+        ],
+        "pressure_tags": [
+          "temporal_boundary",
+          "irrelevant_chatter"
+        ],
+        "task_notes": "Boundary where equal-now must be rejected and midnight future accepted; ASAP wording aligns with earliest-future policy (no conflicting preference)"
+      },
+      "gold": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_005",
+        "expected_branch_id": "booking_success",
+        "gold_extraction": {
+          "booking_name": "Ethan",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential"
+        },
+        "operational_requirements": {
+          "service_check": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_known_unit_type",
+            "unit_class": "allow_unknown"
+          },
+          "slot_fetch": {
+            "zip_code": "required_concrete",
+            "unit_type": "required_supported_enum",
+            "unit_class": "allow_unknown"
+          },
+          "booking": {
+            "booking_name": "required_supported",
+            "slot_id": "required_concrete",
+            "date_time": "required_concrete"
+          }
+        },
+        "expected_tool_sequence": [
+          {
+            "tool_name": "service_check",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "check_slots",
+            "arguments_normalized": {
+              "zip_code": "10001",
+              "unit_type": "refrigerator",
+              "unit_class": "residential"
+            }
+          },
+          {
+            "tool_name": "book_slot",
+            "arguments_normalized": {
+              "booking_name": "Ethan",
+              "slot_id": "slot_midnight",
+              "date_time": "2026-04-20T00:00:00-04:00"
+            }
+          }
+        ],
+        "expected_semantic_output": {
+          "booking_name": "Ethan",
+          "intent": "new_job",
+          "zip_code": "10001",
+          "unit_type": "refrigerator",
+          "unit_class": "residential",
+          "final_status": "booking_confirmed",
+          "selected_slot_id": "slot_midnight",
+          "customer_response": "your booking is confirmed"
+        }
+      },
+      "fixtures": {
+        "schema_version": "benchmark_data_model_v1",
+        "task_id": "MP_F6_005",
+        "service_check": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result": {
+                "serviceable": true,
+                "failure_reason": "not_applicable"
+              }
+            }
+          ]
+        },
+        "check_slots": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "zip_code": "10001",
+                "unit_type": "refrigerator",
+                "unit_class": "residential"
+              },
+              "result_type": "slots_returned",
+              "result": {
+                "slots": [
+                  {
+                    "slot_id": "slot_eq_now",
+                    "start_time": "2026-04-19T23:50:00-04:00",
+                    "technician": "Maya"
+                  },
+                  {
+                    "slot_id": "slot_midnight",
+                    "start_time": "2026-04-20T00:00:00-04:00",
+                    "technician": "Noah"
+                  },
+                  {
+                    "slot_id": "slot_0030",
+                    "start_time": "2026-04-20T00:30:00-04:00",
+                    "technician": "Liam"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "book_slot": {
+          "expected_calls": [
+            {
+              "arguments_normalized": {
+                "booking_name": "Ethan",
+                "slot_id": "slot_midnight",
+                "date_time": "2026-04-20T00:00:00-04:00"
+              },
+              "result": {
+                "booking_result_type": "booking_success",
+                "confirmation_id": "conf_mp_009"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

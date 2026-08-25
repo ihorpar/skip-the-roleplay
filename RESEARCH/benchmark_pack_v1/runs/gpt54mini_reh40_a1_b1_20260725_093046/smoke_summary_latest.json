@@ -1,0 +1,89 @@
+{
+  "started_at": "2026-07-25T13:30:47.380Z",
+  "finished_at": "2026-07-25T13:31:55.326Z",
+  "bundle_path": "RESEARCH/benchmark_pack_v1/rehearsal_40/rehearsal_40_bundle_v1.json",
+  "run_config": {
+    "harnessMode": "multi_turn",
+    "models": [
+      {
+        "provider": "openai",
+        "model": "gpt-5.4-mini"
+      }
+    ],
+    "promptStyles": [
+      "A1_task"
+    ],
+    "modes": [
+      "B1_instant"
+    ],
+    "caseCount": 40,
+    "runCount": 40,
+    "concurrency": 2
+  },
+  "overall": {
+    "total_runs": 40,
+    "scored_runs": 40,
+    "infra_error_runs": 0,
+    "eval_unscorable_runs": 0,
+    "pass_rate": 0.75,
+    "json_valid_rate": 1,
+    "schema_valid_rate": 0.9,
+    "tool_trigger_precision": 1,
+    "tool_trigger_recall": 0.9113924050632911,
+    "tool_argument_accuracy": 1,
+    "tool_call_exact_match_rate": 0.825,
+    "over_action_rate": 0.1,
+    "under_action_rate": 0.15
+  },
+  "by_model": {
+    "openai:gpt-5.4-mini": {
+      "total_runs": 40,
+      "scored_runs": 40,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.75,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9113924050632911,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.825,
+      "over_action_rate": 0.1,
+      "under_action_rate": 0.15
+    }
+  },
+  "by_prompt_style": {
+    "A1_task": {
+      "total_runs": 40,
+      "scored_runs": 40,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.75,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9113924050632911,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.825,
+      "over_action_rate": 0.1,
+      "under_action_rate": 0.15
+    }
+  },
+  "by_mode": {
+    "B1_instant": {
+      "total_runs": 40,
+      "scored_runs": 40,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.75,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9113924050632911,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.825,
+      "over_action_rate": 0.1,
+      "under_action_rate": 0.15
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "manifest_version": "v1",
+  "pack_id": "rehearsal_40_v1",
+  "status": "ready_for_api_rehearsal",
+  "total_cases": 40,
+  "family_counts": {
+    "F1_extract": 3,
+    "F2_partial_flow_a": 3,
+    "F3_partial_flow_b": 3,
+    "F4_select": 5,
+    "F5_full_flow": 12,
+    "F6_robustness_hard_cases": 14
+  },
+  "case_ids_by_family": {
+    "F1_extract": [
+      "MP_F1_001",
+      "R40_F1_001",
+      "R40_F1_002"
+    ],
+    "F2_partial_flow_a": [
+      "MP_F2_001",
+      "MP_F2_002",
+      "R40_F2_001"
+    ],
+    "F3_partial_flow_b": [
+      "MP_F3_001",
+      "MP_F3_002",
+      "R40_F3_001"
+    ],
+    "F4_select": [
+      "MP_F4_001",
+      "R40_F4_001",
+      "R40_F4_002",
+      "R40_F4_003",
+      "R40_F4_004"
+    ],
+    "F5_full_flow": [
+      "MP_F5_001",
+      "MP_F5_002",
+      "MP_F5_003",
+      "MP_F5_004",
+      "R40_F5_001",
+      "R40_F5_002",
+      "R40_F5_003",
+      "R40_F5_004",
+      "R40_F5_005",
+      "R40_F5_006",
+      "R40_F5_007",
+      "R40_F5_008"
+    ],
+    "F6_robustness_hard_cases": [
+      "MP_F6_001",
+      "MP_F6_002",
+      "MP_F6_003",
+      "MP_F6_004",
+      "MP_F6_005",
+      "R40_F6_001",
+      "R40_F6_002",
+      "R40_F6_003",
+      "R40_F6_004",
+      "R40_F6_005",
+      "R40_F6_006",
+      "R40_F6_007",
+      "R40_F6_008",
+      "R40_F6_009"
+    ]
+  },
+  "case_ids_by_branch": {
+    "extract_only": [
+      "MP_F1_001",
+      "R40_F1_001",
+      "R40_F1_002"
+    ],
+    "non_new_job": [
+      "MP_F2_001"
+    ],
+    "ready_for_slot_fetch": [
+      "MP_F2_002"
+    ],
+    "not_serviceable": [
+      "MP_F3_001",
+      "R40_F2_001",
+      "R40_F6_007"
+    ],
+    "slots_returned": [
+      "MP_F3_002"
+    ],
+    "slot_selected": [
+      "MP_F4_001",
+      "R40_F4_001",
+      "R40_F4_002"
+    ],
+    "booking_success": [
+      "MP_F5_001",
+      "MP_F6_001",
+      "MP_F6_002",
+      "MP_F6_004",
+      "MP_F6_005",
+      "R40_F5_001",
+      "R40_F5_002",
+      "R40_F6_001",
+      "R40_F6_002",
+      "R40_F6_003"
+    ],
+    "slots_busy": [
+      "MP_F5_002",
+      "R40_F3_001",
+      "R40_F5_005",
+      "R40_F5_006",
+      "R40_F6_005"
+    ],
+    "no_valid_after_filter": [
+      "MP_F5_003",
+      "R40_F5_007",
+      "R40_F5_008",
+      "R40_F6_006"
+    ],
+    "booking_failure": [
+      "MP_F5_004",
+      "R40_F5_003",
+      "R40_F5_004",
+      "R40_F6_004",
+      "R40_F6_009"
+    ],
+    "missing_service_inputs": [
+      "MP_F6_003",
+      "R40_F6_008"
+    ],
+    "no_valid_slot": [
+      "R40_F4_003",
+      "R40_F4_004"
+    ]
+  },
+  "micro_pilot_case_ids": [
+    "MP_F1_001",
+    "MP_F2_001",
+    "MP_F2_002",
+    "MP_F3_001",
+    "MP_F3_002",
+    "MP_F4_001",
+    "MP_F5_001",
+    "MP_F5_002",
+    "MP_F5_003",
+    "MP_F5_004",
+    "MP_F6_001",
+    "MP_F6_002",
+    "MP_F6_003",
+    "MP_F6_004",
+    "MP_F6_005"
+  ],
+  "new_case_ids": [
+    "R40_F1_001",
+    "R40_F1_002",
+    "R40_F2_001",
+    "R40_F3_001",
+    "R40_F4_001",
+    "R40_F4_002",
+    "R40_F4_003",
+    "R40_F4_004",
+    "R40_F5_001",
+    "R40_F5_002",
+    "R40_F5_003",
+    "R40_F5_004",
+    "R40_F5_005",
+    "R40_F5_006",
+    "R40_F5_007",
+    "R40_F5_008",
+    "R40_F6_001",
+    "R40_F6_002",
+    "R40_F6_003",
+    "R40_F6_004",
+    "R40_F6_005",
+    "R40_F6_006",
+    "R40_F6_007",
+    "R40_F6_008",
+    "R40_F6_009"
+  ],
+  "notes": [
+    "Includes all 15 micro-pilot cases unchanged (MP_* ids).",
+    "Adds 25 new R40_F*_### cases to hit family targets.",
+    "New F6 booking_success capped at 3 of 9.",
+    "Time-sensitive tasks include synthetic current_local_datetime + timezone.",
+    "booking_name is first-name-only in every case."
+  ]
+}

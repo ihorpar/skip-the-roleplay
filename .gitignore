@@ -1,0 +1,23 @@
+﻿node_modules/
+.env
+.env.*
+!.env.example
+
+# Research — full run traces stay out of the repo.
+RESEARCH/**/smoke_raw_runs*.json
+
+# Dated summary snapshots (keep only _latest).
+RESEARCH/**/smoke_summary_*.json
+RESEARCH/**/smoke_summary_*.md
+!RESEARCH/**/smoke_summary_latest.json
+!RESEARCH/**/smoke_summary_latest.md
+
+# Gemini 3.5 Flash-Lite exploratory runs — artifacts off-repo; PROTOCOL / FINDINGS / runner only.
+RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/
+!RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/
+!RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/PROTOCOL.md
+!RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/run_batches.js
+!RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/**/*FINDINGS*.md
+RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/batch*/
+RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/smoke_summary*
+RESEARCH/benchmark_pack_v1/runs/gemini35flashlite_*/**/smoke_summary*

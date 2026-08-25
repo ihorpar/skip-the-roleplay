@@ -1,0 +1,185 @@
+{
+  "label": "gemini_3.5_flash_lite_exploratory_r1_glued",
+  "model": "gemini-3.5-flash-lite",
+  "mode": "B1_instant",
+  "repeats": 1,
+  "status": "exploratory_not_claim",
+  "harness_note": "Final harness: parametersJsonSchema + VALIDATED + responseJsonSchema with optional slot fields + omit prompt lines. Glued from family batches; not a single contiguous job.",
+  "batch_map": {
+    "F6_robustness_hard_cases::A1_task": "batch15_f6_a1_gap",
+    "F6_robustness_hard_cases::A2_role": "batch16_f6_a2_gap",
+    "F6_robustness_hard_cases::A3_comp": "batch03_f6_a3",
+    "F6_robustness_hard_cases::S_role_long_pure": "batch04_f6_pure",
+    "F5_full_flow::A1_task": "batch05_f5_a1",
+    "F5_full_flow::A2_role": "batch06_f5_a2",
+    "F5_full_flow::A3_comp": "batch07_f5_a3",
+    "F5_full_flow::S_role_long_pure": "batch08_f5_pure",
+    "F4_select::A1_task": "batch09_f4_a1",
+    "F4_select::A2_role": "batch10_f4_a2",
+    "F4_select::A3_comp": "batch11_f4_a3",
+    "F4_select::S_role_long_pure": "batch12_f4_pure",
+    "F1_extract,F2_partial_flow_a,F3_partial_flow_b::A1_task": "batch13_f123_a1",
+    "F1_extract,F2_partial_flow_a,F3_partial_flow_b::A2_role": "batch14_f123_a2",
+    "F1_extract,F2_partial_flow_a,F3_partial_flow_b::A3_comp": "batch17_f123_a3_gap",
+    "F1_extract,F2_partial_flow_a,F3_partial_flow_b::S_role_long_pure": "batch18_f123_pure_gap"
+  },
+  "totals": {
+    "graded": 480,
+    "infra_excluded": 0,
+    "expected_graded": 480
+  },
+  "by_style": {
+    "A1_task": {
+      "n": 120,
+      "pass_count": 96,
+      "pass_rate": 0.8,
+      "schema_valid_rate": 0.9583333333333334
+    },
+    "A2_role": {
+      "n": 120,
+      "pass_count": 93,
+      "pass_rate": 0.775,
+      "schema_valid_rate": 0.9833333333333333
+    },
+    "A3_comp": {
+      "n": 120,
+      "pass_count": 92,
+      "pass_rate": 0.7666666666666667,
+      "schema_valid_rate": 0.9666666666666667
+    },
+    "S_role_long_pure": {
+      "n": 120,
+      "pass_count": 91,
+      "pass_rate": 0.7583333333333333,
+      "schema_valid_rate": 0.9416666666666667
+    }
+  },
+  "by_family_style": {
+    "F6_robustness_hard_cases|A1_task": {
+      "n": 40,
+      "pass_count": 32,
+      "pass_rate": 0.8
+    },
+    "F6_robustness_hard_cases|A2_role": {
+      "n": 40,
+      "pass_count": 29,
+      "pass_rate": 0.725
+    },
+    "F6_robustness_hard_cases|A3_comp": {
+      "n": 40,
+      "pass_count": 30,
+      "pass_rate": 0.75
+    },
+    "F6_robustness_hard_cases|S_role_long_pure": {
+      "n": 40,
+      "pass_count": 29,
+      "pass_rate": 0.725
+    },
+    "F5_full_flow|A1_task": {
+      "n": 35,
+      "pass_count": 28,
+      "pass_rate": 0.8
+    },
+    "F5_full_flow|A2_role": {
+      "n": 35,
+      "pass_count": 28,
+      "pass_rate": 0.8
+    },
+    "F5_full_flow|A3_comp": {
+      "n": 35,
+      "pass_count": 29,
+      "pass_rate": 0.8285714285714286
+    },
+    "F5_full_flow|S_role_long_pure": {
+      "n": 35,
+      "pass_count": 30,
+      "pass_rate": 0.8571428571428571
+    },
+    "F4_select|A1_task": {
+      "n": 15,
+      "pass_count": 12,
+      "pass_rate": 0.8
+    },
+    "F4_select|A2_role": {
+      "n": 15,
+      "pass_count": 12,
+      "pass_rate": 0.8
+    },
+    "F4_select|A3_comp": {
+      "n": 15,
+      "pass_count": 10,
+      "pass_rate": 0.6666666666666666
+    },
+    "F4_select|S_role_long_pure": {
+      "n": 15,
+      "pass_count": 10,
+      "pass_rate": 0.6666666666666666
+    },
+    "F1_extract|A1_task": {
+      "n": 10,
+      "pass_count": 10,
+      "pass_rate": 1
+    },
+    "F2_partial_flow_a|A1_task": {
+      "n": 10,
+      "pass_count": 6,
+      "pass_rate": 0.6
+    },
+    "F3_partial_flow_b|A1_task": {
+      "n": 10,
+      "pass_count": 8,
+      "pass_rate": 0.8
+    },
+    "F1_extract|A2_role": {
+      "n": 10,
+      "pass_count": 10,
+      "pass_rate": 1
+    },
+    "F2_partial_flow_a|A2_role": {
+      "n": 10,
+      "pass_count": 7,
+      "pass_rate": 0.7
+    },
+    "F3_partial_flow_b|A2_role": {
+      "n": 10,
+      "pass_count": 7,
+      "pass_rate": 0.7
+    },
+    "F1_extract|A3_comp": {
+      "n": 10,
+      "pass_count": 10,
+      "pass_rate": 1
+    },
+    "F2_partial_flow_a|A3_comp": {
+      "n": 10,
+      "pass_count": 6,
+      "pass_rate": 0.6
+    },
+    "F3_partial_flow_b|A3_comp": {
+      "n": 10,
+      "pass_count": 7,
+      "pass_rate": 0.7
+    },
+    "F1_extract|S_role_long_pure": {
+      "n": 10,
+      "pass_count": 10,
+      "pass_rate": 1
+    },
+    "F2_partial_flow_a|S_role_long_pure": {
+      "n": 10,
+      "pass_count": 6,
+      "pass_rate": 0.6
+    },
+    "F3_partial_flow_b|S_role_long_pure": {
+      "n": 10,
+      "pass_count": 6,
+      "pass_rate": 0.6
+    }
+  },
+  "contrasts_point_estimates_pp": {
+    "A2-A1": -2.500000000000002,
+    "A3-A2": -0.8333333333333304,
+    "A3-A1": -3.3333333333333326,
+    "pureLong-A1": -4.166666666666674
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "manifest_version": "v1",
+  "pack_id": "micro_pilot_runnable_v1",
+  "status": "frozen_baseline_candidate",
+  "required_minimum_coverage": {
+    "f1_noisy_extraction": "MP_F1_001",
+    "f2_non_new_job_stop": "MP_F2_001",
+    "f2_ready_for_slot_fetch": "MP_F2_002",
+    "f3_unsupported_concrete_type_unserviceable": "MP_F3_001",
+    "f3_slots_returned_endpoint": "MP_F3_002",
+    "f4_equal_time_slot_trap": "MP_F4_001",
+    "f5_booking_success": "MP_F5_001",
+    "f5_busy_stop": "MP_F5_002",
+    "f5_no_valid_after_filter_stop": "MP_F5_003",
+    "f5_booking_failure": "MP_F5_004",
+    "f6_later_correction": "MP_F6_001",
+    "f6_similar_slot_id": "MP_F6_002",
+    "f6_unsupported_user_assumption": "MP_F6_003",
+    "f6_name_conflict": "MP_F6_004",
+    "f6_temporal_boundary": "MP_F6_005"
+  },
+  "notes": [
+    "All fixtures are machine-readable.",
+    "Time-sensitive tasks use synthetic local datetime with timezone when applicable.",
+    "Name-conflict pressure is limited to one dedicated F6 case."
+  ]
+}
+

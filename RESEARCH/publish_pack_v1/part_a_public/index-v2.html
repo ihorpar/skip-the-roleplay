@@ -1,0 +1,1804 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A plain-language report on whether giving AI a role improves its performance on tasks that require tool use.">
+  <title>Does “you are an expert” still help? — TARK AI Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --ink-soft: #445064;
+      --muted: #687386;
+      --blue: #155eef;
+      --blue-dark: #0d47bd;
+      --blue-soft: #edf4ff;
+      --blue-line: #b9d3ff;
+      --line: #dfe5ee;
+      --paper: #ffffff;
+      --white: #ffffff;
+      --good: #087a55;
+      --good-soft: #eaf8f2;
+      --bad: #b23b32;
+      --bad-soft: #fff1ef;
+      --max: 74rem;
+      --reading: 46rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Public Sans", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--blue-dark);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 1px;
+    }
+
+    a:hover {
+      color: var(--blue);
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--blue) 45%, transparent);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 100;
+      padding: 0.65rem 0.9rem;
+      color: var(--white);
+      background: var(--blue-dark);
+      transform: translateY(-160%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .shell {
+      width: min(calc(100% - 2.5rem), var(--max));
+      margin-inline: auto;
+    }
+
+    .reading {
+      width: min(100%, var(--reading));
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      text-wrap: balance;
+    }
+
+    h1,
+    h2 {
+      font-family: "Newsreader", serif;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+    }
+
+    h1 {
+      max-width: 100%;
+      font-size: clamp(3rem, 8vw, 5.2rem);
+      line-height: 0.96;
+    }
+
+    h2 {
+      max-width: 18ch;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 1;
+    }
+
+    h3 {
+      font-size: 1rem;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      margin-bottom: 1rem;
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .lede {
+      max-width: 43rem;
+      margin-top: 1.6rem;
+      color: var(--ink-soft);
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      line-height: 1.5;
+    }
+
+    .model {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: rgba(252, 253, 255, 0.96);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      min-height: 3.75rem;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      flex: 0 0 auto;
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+      margin-left: auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 3.75rem;
+      padding-inline: 0.8rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:hover {
+      color: var(--blue-dark);
+    }
+
+    .hero {
+      padding: clamp(4rem, 10vw, 8rem) 0 clamp(3.5rem, 8vw, 6.5rem);
+    }
+
+    .hero-answer {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+      gap: clamp(2rem, 7vw, 7rem);
+      align-items: end;
+      margin-top: clamp(3rem, 7vw, 6rem);
+      padding-top: 1.5rem;
+      border-top: 3px solid var(--blue);
+    }
+
+    .answer-main {
+      font-family: "Newsreader", serif;
+      font-size: clamp(1.75rem, 4vw, 3.2rem);
+      font-weight: 650;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .answer-main em {
+      color: var(--blue-dark);
+      font-style: normal;
+    }
+
+    .answer-secondary {
+      padding-bottom: 0.35rem;
+    }
+
+    .answer-secondary p + p {
+      margin-top: 0.85rem;
+    }
+
+    .answer-secondary .jump {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: clamp(4.5rem, 9vw, 8rem) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(18rem, 0.42fr);
+      gap: clamp(2rem, 7vw, 7rem);
+      align-items: end;
+      margin-bottom: clamp(2.5rem, 6vw, 5rem);
+    }
+
+    .section-intro {
+      max-width: 32rem;
+      padding-bottom: 0.25rem;
+      font-size: 1.05rem;
+    }
+
+    .study-summary {
+      max-width: 48rem;
+      margin: 0 0 3rem;
+      font-size: 1.08rem;
+    }
+
+    .study-summary p + p {
+      margin-top: 1rem;
+    }
+
+    .experiment-formula {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 0 0 4rem;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .formula-part {
+      padding: 1.2rem 1rem 1.35rem 0;
+    }
+
+    .formula-part + .formula-part {
+      padding-left: 1rem;
+      border-left: 1px solid var(--line);
+    }
+
+    .formula-part strong {
+      display: block;
+      font-family: "Newsreader", serif;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: 1;
+    }
+
+    .formula-part span {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .formula-total {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--line);
+      color: var(--blue-dark);
+      font-weight: 700;
+    }
+
+    .prompt-lab {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.34fr) minmax(0, 0.66fr);
+      gap: clamp(1.5rem, 5vw, 4rem);
+      align-items: start;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      background: var(--blue-soft);
+    }
+
+    .prompt-tabs {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .prompt-tab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 3.5rem;
+      padding: 0.8rem 0.9rem;
+      border: 0;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.78);
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+    }
+
+    .prompt-tab:hover {
+      color: var(--blue-dark);
+      background: var(--white);
+    }
+
+    .prompt-tab:active {
+      transform: translateY(1px);
+    }
+
+    .prompt-tab[aria-selected="true"] {
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    .tab-icon {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex: none;
+    }
+
+    .tab-icon-check {
+      display: none;
+    }
+
+    .prompt-tab[aria-selected="true"] .tab-icon-check {
+      display: block;
+    }
+
+    .prompt-tab[aria-selected="true"] .tab-icon-arrow {
+      display: none;
+    }
+
+    .prompt-copy {
+      min-height: 12rem;
+    }
+
+    .prompt-copy .label {
+      display: block;
+      margin-bottom: 0.9rem;
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .prompt-copy blockquote {
+      margin: 0;
+      font-family: "Newsreader", serif;
+      font-size: clamp(1.55rem, 3.5vw, 2.7rem);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+    }
+
+    .prompt-copy .explanation {
+      margin-top: 1.2rem;
+      font-size: 0.92rem;
+    }
+
+    .exam-flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 4rem;
+      margin-bottom: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .flow-step {
+      position: relative;
+      padding: 1.25rem 1.5rem 1.25rem 0;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 1.1rem;
+      right: 0.6rem;
+      color: var(--blue);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .flow-step .number {
+      display: block;
+      margin-bottom: 0.65rem;
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .flow-step p {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .result-bars {
+      display: grid;
+      gap: 1.15rem;
+      max-width: 64rem;
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr) 4rem;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .result-label,
+    .result-value {
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .result-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-track {
+      height: 1.15rem;
+      background: #dbe3ef;
+    }
+
+    .result-fill {
+      height: 100%;
+      background: #7189ad;
+    }
+
+    .result-conclusion {
+      max-width: 48rem;
+      margin-top: 2rem;
+      font-size: 1.08rem;
+    }
+
+    .comparison-chart,
+    .difficulty-screen {
+      margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    }
+
+    .stacked-model-charts {
+      display: grid;
+      gap: clamp(3rem, 7vw, 5rem);
+    }
+
+    .model-chart + .model-chart {
+      padding-top: clamp(2.25rem, 5vw, 3.5rem);
+      border-top: 1px solid var(--line);
+    }
+
+    .model-chart-title {
+      display: flex;
+      align-items: baseline;
+      gap: 0.7rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .model-chart-title h3 {
+      font-size: 1.1rem;
+    }
+
+    .model-chart-title span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .model-chart-title::before {
+      content: "";
+      width: 0.8rem;
+      height: 0.8rem;
+      flex: none;
+      background: var(--blue);
+    }
+
+    .model-chart.mini .model-chart-title::before {
+      background: #c28b35;
+    }
+
+    .model-chart-axis,
+    .model-chart-row {
+      display: grid;
+      grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr) 4rem;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .model-chart-axis {
+      margin-bottom: 0.55rem;
+    }
+
+    .axis-scale {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .model-chart-row {
+      min-height: 2.8rem;
+      padding: 0.45rem 0;
+    }
+
+    .chart-label {
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .comparison-track {
+      position: relative;
+      height: 1.1rem;
+      background-color: #dbe3ef;
+    }
+
+    .comparison-track::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(to right, transparent calc(25% - 0.5px), rgba(57, 72, 94, 0.32) calc(25% - 0.5px), rgba(57, 72, 94, 0.32) calc(25% + 0.5px), transparent calc(25% + 0.5px), transparent calc(50% - 0.5px), rgba(57, 72, 94, 0.32) calc(50% - 0.5px), rgba(57, 72, 94, 0.32) calc(50% + 0.5px), transparent calc(50% + 0.5px), transparent calc(75% - 0.5px), rgba(57, 72, 94, 0.32) calc(75% - 0.5px), rgba(57, 72, 94, 0.32) calc(75% + 0.5px), transparent calc(75% + 0.5px));
+    }
+
+    .comparison-fill {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      background: var(--blue);
+    }
+
+    .model-chart.mini .comparison-fill {
+      background: #c28b35;
+    }
+
+    .comparison-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .difficulty-screen {
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .difficulty-screen h3 {
+      margin-bottom: 0.45rem;
+    }
+
+    .difficulty-screen .result-bars {
+      margin-top: 1.35rem;
+    }
+
+    .difficulty-screen .result-fill {
+      background: #9aacc5;
+    }
+
+    .difficulty-screen .result-row:last-child .result-fill {
+      background: var(--blue);
+    }
+
+    .difficulty-note {
+      margin-top: 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .followup-note {
+      display: grid;
+      grid-template-columns: minmax(0, 0.58fr) minmax(18rem, 0.42fr);
+      gap: clamp(2rem, 7vw, 7rem);
+      margin-top: clamp(2.5rem, 6vw, 4rem);
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .followup-note p {
+      max-width: 43rem;
+    }
+
+    .followup-note strong {
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .followup-context {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .shared-instructions {
+      max-width: var(--reading);
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .shared-instructions h3 {
+      margin-bottom: 0.65rem;
+    }
+
+    .shared-instructions p {
+      font-size: 0.93rem;
+    }
+
+    .instruction-lines {
+      margin: 1.1rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .instruction-lines li {
+      position: relative;
+      padding: 0.4rem 0 0.4rem 1.35rem;
+      color: var(--ink-soft);
+      font-size: 0.91rem;
+    }
+
+    .instruction-lines li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--blue);
+    }
+
+    .mode-result {
+      display: grid;
+      grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+      gap: clamp(2rem, 7vw, 7rem);
+      align-items: center;
+      margin-top: clamp(4rem, 8vw, 7rem);
+      padding-top: clamp(3rem, 6vw, 5rem);
+      border-top: 1px solid var(--line);
+    }
+
+    .mode-copy .mode-delta {
+      display: block;
+      margin-bottom: 0.9rem;
+      color: var(--blue-dark);
+      font-family: "Newsreader", serif;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 650;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    .mode-copy p {
+      margin-top: 1rem;
+    }
+
+    .mode-chart {
+      display: grid;
+      gap: 1.4rem;
+    }
+
+    .mode-row {
+      display: grid;
+      grid-template-columns: 12rem minmax(0, 1fr) 4rem;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .mode-label,
+    .mode-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .mode-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mode-track {
+      height: 1.15rem;
+      background: #dbe3ef;
+    }
+
+    .mode-fill {
+      height: 100%;
+      background: #8da3c4;
+    }
+
+    .mode-fill.thinking {
+      background: linear-gradient(90deg, var(--blue-dark), #4385ff);
+    }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(19rem, 0.5fr);
+      gap: clamp(2.5rem, 8vw, 8rem);
+      align-items: start;
+    }
+
+    .customer-message {
+      margin: 0 0 2rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-family: "Newsreader", serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      line-height: 1.3;
+    }
+
+    .rule {
+      margin-bottom: 1.5rem;
+      color: var(--ink-soft);
+    }
+
+    .slot-options {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .slot-button {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      min-height: 3.75rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: var(--white);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .slot-button:hover {
+      border-color: var(--blue);
+    }
+
+    .slot-button .slot-id {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .slot-button .slot-time {
+      font-weight: 700;
+    }
+
+    .slot-button.is-correct {
+      border-color: var(--good);
+      background: var(--good-soft);
+    }
+
+    .slot-button.is-wrong {
+      border-color: var(--bad);
+      background: var(--bad-soft);
+    }
+
+    .case-feedback {
+      min-height: 4.5rem;
+      margin-top: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .case-feedback strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .case-evidence {
+      padding-top: 1.25rem;
+      border-top: 3px solid var(--blue);
+    }
+
+    .case-evidence .pair {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .case-evidence .pair span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .case-evidence .pair strong {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .case-evidence p {
+      margin-top: 1.25rem;
+      font-size: 0.92rem;
+    }
+
+    .real-examples {
+      margin-top: clamp(3.5rem, 7vw, 6rem);
+    }
+
+    .real-examples h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .example-row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.45fr) minmax(0, 0.55fr);
+      gap: clamp(1.5rem, 5vw, 5rem);
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .example-row:first-of-type {
+      margin-top: 1.25rem;
+    }
+
+    .example-row blockquote {
+      margin: 0;
+      color: var(--ink-soft);
+      font-family: "Newsreader", serif;
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      line-height: 1.4;
+    }
+
+    .example-result h4 {
+      margin-bottom: 0.45rem;
+      font-size: 1rem;
+    }
+
+    .example-result p {
+      font-size: 0.93rem;
+    }
+
+    .failure-list {
+      margin-top: clamp(3.5rem, 7vw, 6rem);
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .failure-list h3 {
+      margin-bottom: 1rem;
+    }
+
+    .failure-row {
+      display: grid;
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+      gap: 1.25rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .failure-row strong {
+      color: var(--blue-dark);
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .failure-row p {
+      font-size: 0.95rem;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.58fr) minmax(18rem, 0.42fr);
+      gap: clamp(3rem, 9vw, 9rem);
+    }
+
+    .action-list {
+      margin: 2.5rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: action;
+    }
+
+    .action-list li {
+      counter-increment: action;
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      gap: 1rem;
+      padding: 1.15rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+    }
+
+    .action-list li::before {
+      content: counter(action, decimal-leading-zero);
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .limits {
+      padding: 1.5rem 0 0;
+      border-top: 3px solid var(--ink);
+    }
+
+    .limits h3 {
+      margin-bottom: 1rem;
+    }
+
+    .limits ul {
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--ink-soft);
+    }
+
+    .limits li + li {
+      margin-top: 0.8rem;
+    }
+
+    .research-note {
+      max-width: var(--reading);
+      margin-top: clamp(3rem, 7vw, 6rem);
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero-answer,
+      .section-head,
+      .mode-result,
+      .case-layout,
+      .action-grid,
+      .example-row,
+      .followup-note {
+        grid-template-columns: 1fr;
+      }
+
+      .model-chart-axis,
+      .model-chart-row {
+        grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr) 3.5rem;
+        gap: 0.55rem;
+      }
+
+      .answer-secondary,
+      .section-intro {
+        max-width: 42rem;
+      }
+
+      .prompt-lab {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-tab {
+        min-height: 3.75rem;
+        padding: 0.8rem 0.9rem;
+      }
+
+      .prompt-copy {
+        min-height: 10rem;
+      }
+
+      .case-evidence {
+        margin-top: 1rem;
+      }
+
+      .limits {
+        margin-top: 1rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      html {
+        scroll-padding-top: 4rem;
+      }
+
+      .shell {
+        width: min(calc(100% - 1.5rem), var(--max));
+      }
+
+      .topbar-inner {
+        min-height: 3.35rem;
+        gap: 0.5rem;
+      }
+
+      .brand {
+        padding-right: 0.45rem;
+      }
+
+      .nav a {
+        min-height: 3.35rem;
+        padding-inline: 0.65rem;
+        font-size: 0.78rem;
+      }
+
+      .hero {
+        padding-top: 3.5rem;
+      }
+
+      h1 {
+        font-size: clamp(3rem, 15vw, 4.5rem);
+      }
+
+      .experiment-formula {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .formula-part:nth-child(3) {
+        padding-left: 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .formula-part:nth-child(4) {
+        border-top: 1px solid var(--line);
+      }
+
+      .formula-total {
+        display: block;
+      }
+
+      .formula-total span {
+        display: block;
+        margin-top: 0.25rem;
+      }
+
+      .prompt-lab {
+        padding: 1.1rem;
+      }
+
+      .prompt-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-tab {
+        text-align: left;
+      }
+
+      .result-row {
+        grid-template-columns: 8.75rem minmax(0, 1fr) 3.5rem;
+        gap: 0.55rem;
+      }
+
+      .model-chart-axis,
+      .model-chart-row {
+        grid-template-columns: 7.25rem minmax(0, 1fr) 3.4rem;
+      }
+
+      .exam-flow {
+        grid-template-columns: 1fr;
+        margin-top: 3rem;
+      }
+
+      .flow-step {
+        padding: 0.8rem 0 1.35rem 2.75rem;
+        border-left: 1px solid var(--blue-line);
+      }
+
+      .flow-step:not(:last-child)::after {
+        content: "↓";
+        top: auto;
+        right: auto;
+        bottom: -0.15rem;
+        left: -0.42rem;
+        padding: 0.1rem;
+        background: var(--paper);
+      }
+
+      .flow-step .number {
+        position: absolute;
+        top: 0.85rem;
+        left: 0.8rem;
+      }
+
+      .mode-row {
+        grid-template-columns: 8.75rem minmax(0, 1fr) 3.5rem;
+        gap: 0.55rem;
+      }
+
+      .footer-inner {
+        display: block;
+      }
+
+      .footer-inner span {
+        display: block;
+      }
+
+      .footer-inner span + span {
+        margin-top: 0.35rem;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .brand {
+        display: none;
+      }
+
+      .nav {
+        margin-left: 0;
+      }
+
+      .result-row,
+      .mode-row {
+        grid-template-columns: 7.25rem minmax(0, 1fr) 3.4rem;
+      }
+
+      .slot-button {
+        min-height: 4rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .skip-link,
+      .prompt-tabs,
+      .slot-options {
+        display: none;
+      }
+
+      body {
+        color: #111827;
+        background: #ffffff;
+      }
+
+      .section {
+        break-inside: avoid;
+      }
+
+      .prompt-lab,
+      .mode-result {
+        background: #ffffff;
+        border: 1px solid #dfe5ee;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to the report</a>
+
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top">TARK AI · Part A</a>
+      <nav class="nav" aria-label="Report sections">
+        <a href="#study">Study</a>
+        <a href="#results">Results</a>
+        <a href="#case">Examples</a>
+        <a href="#takeaways">Takeaways</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top">
+      <div class="shell">
+        <p class="eyebrow">TARK AI Research · Public readout · July 2026</p>
+        <h1>Does telling an AI “you are an expert” still help?</h1>
+        <p class="lede">
+          Many prompts begin by giving the AI a role, such as “You are an expert in marketing.”
+          We tested whether this makes AI better at tasks where it has to do more than simply
+          answer a question.
+        </p>
+
+        <div class="hero-answer">
+          <p class="answer-main">
+            It didn’t. Adding a role did <em>not improve performance</em> in our test.
+          </p>
+          <div class="answer-secondary">
+            <p>
+              Giving the AI more time to think did. Success increased from
+              <strong>88.5% in non-thinking mode</strong> to
+              <strong>96.9% in thinking mode with medium effort</strong>.
+            </p>
+            <p class="jump"><a href="#study">What kind of task did we test? ↓</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="study">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 · The study</p>
+            <h2>When AI has to act, not just answer</h2>
+          </div>
+          <p class="section-intro">
+            These are often called <strong>agentic tasks</strong>. The AI must understand a request,
+            access external systems, follow business rules, and then respond based on what it finds.
+            Accessing those systems is commonly called <strong>tool calling</strong>.
+          </p>
+        </div>
+
+        <div class="study-summary">
+          <p>
+            For example, before answering a customer, the AI might need to check whether a company
+            serves their area, find available appointment times, or complete a booking.
+          </p>
+          <p>
+            For this study, we created 120 appliance-repair booking scenarios. The AI had to
+            understand each request, use the correct tools, follow the booking rules, and provide
+            the right response.
+          </p>
+        </div>
+
+        <div class="experiment-formula" role="group" aria-label="Study design formula">
+          <div class="formula-part">
+            <strong>120</strong>
+            <span>test scenarios</span>
+          </div>
+          <div class="formula-part">
+            <strong>3</strong>
+            <span>prompt versions</span>
+          </div>
+          <div class="formula-part">
+            <strong>2</strong>
+            <span>thinking modes</span>
+          </div>
+          <div class="formula-part">
+            <strong>3</strong>
+            <span>repeats</span>
+          </div>
+          <div class="formula-total">
+            <strong>2,160 test runs</strong>
+          </div>
+        </div>
+
+        <div class="prompt-lab">
+          <div class="prompt-tabs" role="tablist" aria-label="Compare prompt versions">
+            <button class="prompt-tab" id="prompt-tab-task" type="button" role="tab" data-prompt="task" aria-selected="true" aria-controls="prompt-panel">
+              <span>Instructions only</span>
+              <svg class="tab-icon tab-icon-arrow" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="tab-icon tab-icon-check" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m4.5 10.5 3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="prompt-tab" id="prompt-tab-role" type="button" role="tab" data-prompt="role" aria-selected="false" aria-controls="prompt-panel" tabindex="-1">
+              <span>Added role</span>
+              <svg class="tab-icon tab-icon-arrow" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="tab-icon tab-icon-check" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m4.5 10.5 3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="prompt-tab" id="prompt-tab-competencies" type="button" role="tab" data-prompt="competencies" aria-selected="false" aria-controls="prompt-panel" tabindex="-1">
+              <span>Added professional qualities</span>
+              <svg class="tab-icon tab-icon-arrow" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="tab-icon tab-icon-check" aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m4.5 10.5 3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="prompt-copy" id="prompt-panel" role="tabpanel" aria-labelledby="prompt-tab-task" aria-live="polite">
+            <span class="label" id="prompt-label">Instructions only</span>
+            <blockquote id="prompt-text">
+              No role was added to the prompt.
+            </blockquote>
+            <p class="explanation" id="prompt-explanation">
+              The prompt already explained the tools, booking rules, and required response.
+            </p>
+          </div>
+        </div>
+
+        <div class="shared-instructions">
+          <h3>What the AI already knew</h3>
+          <p>Every prompt version included the same detailed task instructions. Here is a short excerpt:</p>
+          <ul class="instruction-lines">
+            <li>Use the provided tools when operational steps require them.</li>
+            <li>For time filtering, valid slot means slot start_time &gt; current_local_datetime.</li>
+            <li>Never call book_slot for a slot that is not strictly in the future.</li>
+            <li>When multiple valid future slots exist, choose the earliest by start_time (then include its slot_id).</li>
+            <li>customer_response must exactly match one canonical response.</li>
+          </ul>
+        </div>
+
+        <ol class="exam-flow" aria-label="How each attempt was graded">
+          <li class="flow-step">
+            <span class="number">1</span>
+            <h3>Customer request</h3>
+            <p>A messy message about an appliance, a ZIP code, and a booking need.</p>
+          </li>
+          <li class="flow-step">
+            <span class="number">2</span>
+            <h3>Use external systems</h3>
+            <p>Check service, fetch times, and book only when the case allows it.</p>
+          </li>
+          <li class="flow-step">
+            <span class="number">3</span>
+            <h3>Follow the rules</h3>
+            <p>Choose the correct action and use the information returned by the tools.</p>
+          </li>
+          <li class="flow-step">
+            <span class="number">4</span>
+            <h3>Give the final response</h3>
+            <p>The complete result is checked against the correct answer.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="results">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 · The result</p>
+            <h2>Adding a role did not improve results</h2>
+          </div>
+          <p class="section-intro">
+            The three versions of the prompt performed about the same.
+          </p>
+        </div>
+
+        <div class="result-bars" role="group" aria-label="Success rate by prompt version">
+          <div class="result-row">
+            <span class="result-label">Instructions only</span>
+            <div class="result-track" aria-hidden="true">
+              <div class="result-fill" style="width: 92.9%"></div>
+            </div>
+            <span class="result-value">92.9%</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Instructions + role</span>
+            <div class="result-track" aria-hidden="true">
+              <div class="result-fill" style="width: 93.3%"></div>
+            </div>
+            <span class="result-value">93.3%</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Instructions + role + qualities</span>
+            <div class="result-track" aria-hidden="true">
+              <div class="result-fill" style="width: 91.9%"></div>
+            </div>
+            <span class="result-value">91.9%</span>
+          </div>
+        </div>
+        <p class="result-conclusion">
+          <strong>No. All three versions performed about the same.</strong>
+          Adding a role did not improve performance in this test.
+        </p>
+
+        <div class="mode-result">
+          <div class="mode-copy">
+            <span class="mode-delta">+8.4</span>
+            <h3>point improvement with thinking</h3>
+            <p>
+              Success increased from 88.5% in non-thinking mode to 96.9% in
+              thinking mode with medium effort.
+            </p>
+          </div>
+          <div class="mode-chart" role="group" aria-label="Success rate in non-thinking and medium-effort thinking modes">
+            <div class="mode-row">
+              <span class="mode-label">Non-thinking mode</span>
+              <div class="mode-track" aria-hidden="true">
+                <div class="mode-fill" style="width: 88.5%"></div>
+              </div>
+              <span class="mode-value">88.5%</span>
+            </div>
+            <div class="mode-row">
+              <span class="mode-label">Thinking mode · medium effort</span>
+              <div class="mode-track" aria-hidden="true">
+                <div class="mode-fill thinking" style="width: 96.9%"></div>
+              </div>
+              <span class="mode-value">96.9%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="case">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 · Real examples</p>
+            <h2>What the AI had to get right</h2>
+          </div>
+          <p class="section-intro">
+            These are real scenarios from the test. Try the first one, then see the
+            correct result for two more.
+          </p>
+        </div>
+
+        <div class="case-layout">
+          <div>
+            <h3 style="margin-bottom:1rem;">Choose the right time</h3>
+            <blockquote class="customer-message">
+              “Quinn at my house in 10012. Dishwasher stops mid-cycle; neighbors keep
+              asking about the water noise.”
+            </blockquote>
+            <p class="rule"><strong>Rule:</strong> choose the earliest future appointment.</p>
+
+            <div class="slot-options" role="group" aria-label="Choose the earliest appointment">
+              <button class="slot-button" type="button" data-slot="slot_017" aria-pressed="false">
+                <span class="slot-id">slot_017</span>
+                <span class="slot-time">9:00</span>
+              </button>
+              <button class="slot-button" type="button" data-slot="slot_071" aria-pressed="false">
+                <span class="slot-id">slot_071</span>
+                <span class="slot-time">8:30</span>
+              </button>
+              <button class="slot-button" type="button" data-slot="slot_017A" aria-pressed="false">
+                <span class="slot-id">slot_017A</span>
+                <span class="slot-time">9:15</span>
+              </button>
+            </div>
+
+            <div class="case-feedback" id="slot-feedback" aria-live="polite">
+              Pick one time to see why this case was difficult.
+            </div>
+          </div>
+
+          <aside class="case-evidence">
+            <h3>Across “pick the right time” cases</h3>
+            <div class="pair">
+              <span>Non-thinking mode</span>
+              <strong>84%</strong>
+            </div>
+            <div class="pair">
+              <span>Thinking mode (medium effort)</span>
+              <strong>99%</strong>
+            </div>
+            <p>
+              Thinking helped most when the AI had to compare appointment times and avoid
+              choosing times that had already passed.
+            </p>
+          </aside>
+        </div>
+
+        <div class="real-examples">
+          <h3>Two more scenarios</h3>
+          <div class="example-row">
+            <blockquote>
+              “Hey, Mira here. Our building elevator was down all morning so I could not
+              message earlier. Dishwasher in my apartment keeps stopping at rinse. We moved
+              from 10021; current place is 10012.”
+            </blockquote>
+            <div class="example-result">
+              <h4>Use the current ZIP</h4>
+              <p>
+                The correct result was to identify Mira, ZIP 10012, a dishwasher, and a home
+                appliance request. No tool calls were needed.
+              </p>
+            </div>
+          </div>
+          <div class="example-row">
+            <blockquote>
+              “Liam calling for Nora at apartment 10001. The washer is banging hard on spin
+              and the hallway lights are flickering again.”
+            </blockquote>
+            <div class="example-result">
+              <h4>Book for Nora, not Liam</h4>
+              <p>
+                The correct sequence was: check service, find times, then book the 11:30
+                appointment under Nora. The final response had to say:
+                <strong>“your booking is confirmed.”</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="failure-list">
+          <h3>What usually went wrong</h3>
+          <div class="failure-row">
+            <strong>~52</strong>
+            <p><strong>Skipped a required tool.</strong> The model replied before completing the allowed workflow.</p>
+          </div>
+          <div class="failure-row">
+            <strong>~39</strong>
+            <p><strong>Used an extra or wrong tool.</strong> It crossed a boundary set by the case.</p>
+          </div>
+          <div class="failure-row">
+            <strong>~17</strong>
+            <p><strong>Returned the wrong approved phrase.</strong> The answer was close, but it did not follow the required response.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="followup">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">04 · Weaker-model follow-up</p>
+            <h2>Role prompts did not close the model gap</h2>
+          </div>
+          <p class="section-intro">
+            We repeated the same prompt comparison with <span class="model">gpt-4.1-mini</span>
+            in non-thinking mode, then compared it with Luna under the same mode.
+          </p>
+        </div>
+
+        <div class="stacked-model-charts comparison-chart">
+          <section class="model-chart" aria-labelledby="luna-chart-title">
+            <div class="model-chart-title">
+              <h3 id="luna-chart-title">GPT-5.6 Luna</h3>
+              <span>Non-thinking mode</span>
+            </div>
+            <div class="model-chart-axis" aria-hidden="true">
+              <span></span>
+              <div class="axis-scale"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+              <span></span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions only</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 89.2%"></div></div>
+              <span class="comparison-value">89.2%</span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions + role</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 89.4%"></div></div>
+              <span class="comparison-value">89.4%</span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions + role + qualities</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 86.9%"></div></div>
+              <span class="comparison-value">86.9%</span>
+            </div>
+          </section>
+
+          <section class="model-chart mini" aria-labelledby="mini-chart-title">
+            <div class="model-chart-title">
+              <h3 id="mini-chart-title">GPT-4.1 Mini</h3>
+              <span>Non-thinking mode</span>
+            </div>
+            <div class="model-chart-axis" aria-hidden="true">
+              <span></span>
+              <div class="axis-scale"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+              <span></span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions only</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 63.1%"></div></div>
+              <span class="comparison-value">63.1%</span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions + role</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 66.9%"></div></div>
+              <span class="comparison-value">66.9%</span>
+            </div>
+            <div class="model-chart-row">
+              <span class="chart-label">Instructions + role + qualities</span>
+              <div class="comparison-track" aria-hidden="true"><div class="comparison-fill" style="width: 62.8%"></div></div>
+              <span class="comparison-value">62.8%</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="followup-note">
+          <p>
+            <strong>The model gap was much larger than the role effect.</strong>
+            Luna scored 89.2% with instructions only; GPT-4.1 Mini scored 63.1%.
+            Within either model, adding a role did not produce a clear improvement.
+          </p>
+          <p class="followup-context">
+            On GPT-4.1 Mini, the longer persona was also tested separately and scored
+            54.4%. That was the one clear negative result in the follow-up.
+          </p>
+        </div>
+
+        <div class="difficulty-screen">
+          <h3>The same test was harder for smaller models</h3>
+          <p>
+            A separate 40-scenario screen used instructions only in non-thinking mode.
+            It shows why the main model’s high score should not be mistaken for an easy test.
+          </p>
+          <div class="result-bars" role="group" aria-label="Success rate in a 40-scenario difficulty screen">
+            <div class="result-row">
+              <span class="result-label">GPT-5 Nano</span>
+              <div class="result-track" aria-hidden="true"><div class="result-fill" style="width: 0%"></div></div>
+              <span class="result-value">≈0%</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">GPT-5 Mini</span>
+              <div class="result-track" aria-hidden="true"><div class="result-fill" style="width: 20%"></div></div>
+              <span class="result-value">20%</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">GPT-5.4 Nano</span>
+              <div class="result-track" aria-hidden="true"><div class="result-fill" style="width: 40%"></div></div>
+              <span class="result-value">≈40%</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">GPT-5.4 Mini</span>
+              <div class="result-track" aria-hidden="true"><div class="result-fill" style="width: 75%"></div></div>
+              <span class="result-value">75%</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">GPT-5.6 Luna</span>
+              <div class="result-track" aria-hidden="true"><div class="result-fill" style="width: 92.5%"></div></div>
+              <span class="result-value">92.5%</span>
+            </div>
+          </div>
+          <p class="difficulty-note">
+            This screen measured model difficulty, not the effect of adding a role.
+            The smaller-model results are approximate where marked.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="takeaways">
+      <div class="shell">
+        <div class="action-grid">
+          <div>
+            <p class="eyebrow">05 · What to do</p>
+            <h2>What this means in practice</h2>
+            <ol class="action-list">
+              <li>
+                <span><strong>Write clear instructions.</strong> Explain which tools to use, what rules to follow, and when to stop.</span>
+              </li>
+              <li>
+                <span><strong>Add specific guidance for mistakes you observe.</strong> Fix the failure itself instead of adding generic professional traits.</span>
+              </li>
+              <li>
+                <span><strong>Use thinking mode for difficult decisions.</strong> Medium effort helped most with time filtering and appointment selection.</span>
+              </li>
+              <li>
+                <span><strong>Do not assume that giving AI a role will improve accuracy.</strong> It did not improve performance in this test.</span>
+              </li>
+            </ol>
+          </div>
+
+          <aside class="limits">
+            <h3>Scope</h3>
+            <p>
+              The main study used one model and one scheduling workflow. We also ran
+              follow-up checks on weaker models, including the larger test shown above.
+              Roles may still matter for other tasks or for more carefully designed prompts.
+            </p>
+          </aside>
+        </div>
+
+        <p class="research-note">
+          The complete methods, statistical analysis, prompts, and reproducibility notes
+          are included in Part B.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>TARK AI Research · Part A</span>
+      <span>Main study: 2,160 test runs on OpenAI <span class="model">gpt-5.6-luna</span></span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const promptData = {
+        task: {
+          label: "Instructions only",
+          text: "No role was added to the prompt.",
+          explanation: "The prompt already explained the tools, booking rules, and required response."
+        },
+        role: {
+          label: "Added to the prompt",
+          text: "You are a scheduling agent for an appliance repair company.",
+          explanation: "The instructions and tools stayed the same."
+        },
+        competencies: {
+          label: "Added to the prompt",
+          text: "You are a scheduling agent for an appliance repair company with strong professional competencies in careful listening, clear judgment, accurate follow-through, and disciplined adherence to procedures.",
+          explanation: "The instructions and tools stayed the same."
+        }
+      };
+
+      const promptButtons = [...document.querySelectorAll("[data-prompt]")];
+      const promptLabel = document.getElementById("prompt-label");
+      const promptText = document.getElementById("prompt-text");
+      const promptExplanation = document.getElementById("prompt-explanation");
+      const promptPanel = document.getElementById("prompt-panel");
+
+      const selectPrompt = (button) => {
+        const next = promptData[button.dataset.prompt];
+        promptButtons.forEach((item) => {
+          const selected = item === button;
+          item.setAttribute("aria-selected", selected ? "true" : "false");
+          item.tabIndex = selected ? 0 : -1;
+        });
+        promptPanel.setAttribute("aria-labelledby", button.id);
+        promptLabel.textContent = next.label;
+        promptText.textContent = next.text;
+        promptExplanation.textContent = next.explanation;
+      };
+
+      promptButtons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+          selectPrompt(button);
+        });
+        button.addEventListener("keydown", (event) => {
+          if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"].includes(event.key)) return;
+          event.preventDefault();
+          const direction = ["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1;
+          const nextIndex = (index + direction + promptButtons.length) % promptButtons.length;
+          promptButtons[nextIndex].focus();
+          selectPrompt(promptButtons[nextIndex]);
+        });
+      });
+
+      const slotButtons = [...document.querySelectorAll("[data-slot]")];
+      const slotFeedback = document.getElementById("slot-feedback");
+      const correctSlot = "slot_071";
+
+      slotButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          slotButtons.forEach((item) => {
+            item.classList.remove("is-correct", "is-wrong");
+            item.setAttribute("aria-pressed", "false");
+          });
+
+          const isCorrect = button.dataset.slot === correctSlot;
+          button.classList.add(isCorrect ? "is-correct" : "is-wrong");
+          button.setAttribute("aria-pressed", "true");
+
+          if (isCorrect) {
+            slotFeedback.innerHTML =
+              "<strong>Correct: slot_071 at 8:30.</strong>The booking then fails, so the correct final response is “sorry, I couldn't complete the booking.”";
+          } else {
+            const correctButton = slotButtons.find((item) => item.dataset.slot === correctSlot);
+            correctButton.classList.add("is-correct");
+            slotFeedback.innerHTML =
+              "<strong>Not this one.</strong>The earliest future time is 8:30, under slot_071. The booking then fails, so the final response must say “sorry, I couldn't complete the booking.”";
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

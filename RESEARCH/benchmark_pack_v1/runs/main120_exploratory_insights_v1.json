@@ -1,0 +1,442 @@
+{
+  "generated_at": "2026-07-22T03:08:17.602Z",
+  "note": "Exploratory cuts from 2160 scored runs. Not claim-authority except where matching findings.",
+  "totals": {
+    "scored": 2160,
+    "pass": 2003,
+    "fail": 157
+  },
+  "fail_share_in_B1_pct": 79,
+  "by_mode": {
+    "B1_instant": {
+      "n": 1080,
+      "pass": 956,
+      "fail": 124,
+      "pass_pct": 88.5
+    },
+    "B2_thinking": {
+      "n": 1080,
+      "pass": 1047,
+      "fail": 33,
+      "pass_pct": 96.9
+    }
+  },
+  "ops_by_mode": {
+    "B1_instant": {
+      "median_latency_ms": 3355,
+      "over_action_pct": 8.4,
+      "under_action_pct": 5.6,
+      "tool_call_exact_match_pct": 90.4
+    },
+    "B2_thinking": {
+      "median_latency_ms": 4192,
+      "over_action_pct": 1.1,
+      "under_action_pct": 1,
+      "tool_call_exact_match_pct": 98.9
+    }
+  },
+  "family_x_mode": {
+    "F1_extract": {
+      "B1": {
+        "n": 90,
+        "pass": 90,
+        "fail": 0,
+        "pass_pct": 100
+      },
+      "B2": {
+        "n": 90,
+        "pass": 90,
+        "fail": 0,
+        "pass_pct": 100
+      }
+    },
+    "F2_partial_flow_a": {
+      "B1": {
+        "n": 90,
+        "pass": 80,
+        "fail": 10,
+        "pass_pct": 88.9
+      },
+      "B2": {
+        "n": 90,
+        "pass": 89,
+        "fail": 1,
+        "pass_pct": 98.9
+      }
+    },
+    "F3_partial_flow_b": {
+      "B1": {
+        "n": 90,
+        "pass": 77,
+        "fail": 13,
+        "pass_pct": 85.6
+      },
+      "B2": {
+        "n": 90,
+        "pass": 81,
+        "fail": 9,
+        "pass_pct": 90
+      }
+    },
+    "F4_select": {
+      "B1": {
+        "n": 135,
+        "pass": 113,
+        "fail": 22,
+        "pass_pct": 83.7
+      },
+      "B2": {
+        "n": 135,
+        "pass": 134,
+        "fail": 1,
+        "pass_pct": 99.3
+      }
+    },
+    "F5_full_flow": {
+      "B1": {
+        "n": 315,
+        "pass": 270,
+        "fail": 45,
+        "pass_pct": 85.7
+      },
+      "B2": {
+        "n": 315,
+        "pass": 298,
+        "fail": 17,
+        "pass_pct": 94.6
+      }
+    },
+    "F6_robustness_hard_cases": {
+      "B1": {
+        "n": 360,
+        "pass": 326,
+        "fail": 34,
+        "pass_pct": 90.6
+      },
+      "B2": {
+        "n": 360,
+        "pass": 355,
+        "fail": 5,
+        "pass_pct": 98.6
+      }
+    }
+  },
+  "tag_fail_rate": {
+    "later_correction": {
+      "fail": 10,
+      "n": 234,
+      "fail_pct": 4.3
+    },
+    "irrelevant_chatter": {
+      "fail": 24,
+      "n": 828,
+      "fail_pct": 2.9
+    },
+    "user_says_skip_checks": {
+      "fail": 3,
+      "n": 126,
+      "fail_pct": 2.4
+    },
+    "unsupported_concrete_unit_type": {
+      "fail": 23,
+      "n": 108,
+      "fail_pct": 21.3
+    },
+    "unsorted_slots": {
+      "fail": 61,
+      "n": 558,
+      "fail_pct": 10.9
+    },
+    "temporal_boundary": {
+      "fail": 54,
+      "n": 450,
+      "fail_pct": 12
+    },
+    "busy_result": {
+      "fail": 3,
+      "n": 252,
+      "fail_pct": 1.2
+    },
+    "no_valid_after_filter": {
+      "fail": 44,
+      "n": 324,
+      "fail_pct": 13.6
+    },
+    "booking_failure": {
+      "fail": 20,
+      "n": 288,
+      "fail_pct": 6.9
+    },
+    "historical_value": {
+      "fail": 0,
+      "n": 180,
+      "fail_pct": 0
+    },
+    "similar_slot_ids": {
+      "fail": 33,
+      "n": 216,
+      "fail_pct": 15.3
+    },
+    "unsupported_user_assumption": {
+      "fail": 7,
+      "n": 144,
+      "fail_pct": 4.9
+    },
+    "name_conflict": {
+      "fail": 0,
+      "n": 126,
+      "fail_pct": 0
+    },
+    "excluded_intent_distraction": {
+      "fail": 0,
+      "n": 18,
+      "fail_pct": 0
+    },
+    "empty_result": {
+      "fail": 18,
+      "n": 18,
+      "fail_pct": 100
+    }
+  },
+  "primary_failure_subcodes": {
+    "output.schema_invalid": 13,
+    "extraction.unit_type_wrong": 13,
+    "tool_trigger.missing_required": 59,
+    "tool_trigger.unwarranted": 43,
+    "customer_response.wrong_canonical_response": 18,
+    "not_applicable": 10,
+    "extraction.unit_class_wrong": 1
+  },
+  "top_fail_cases": [
+    {
+      "case_id": "F120_F3_004",
+      "fail_runs": 18,
+      "of_max": 18,
+      "family": "F3_partial_flow_b",
+      "branch": "slots_empty",
+      "tags": [
+        "empty_result"
+      ],
+      "user_text": "Rita from the office break room at 10003. Refrigerator is warm and the staff fridge smell is getting worse."
+    },
+    {
+      "case_id": "F120_F5_002",
+      "fail_runs": 15,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "booking_success",
+      "tags": [
+        "unsorted_slots"
+      ],
+      "user_text": "Gabe from the clinic kitchen at 10003. Microwave sparks; lunch trays need to keep moving."
+    },
+    {
+      "case_id": "F120_F4_006",
+      "fail_runs": 10,
+      "of_max": 18,
+      "family": "F4_select",
+      "branch": "slot_selected",
+      "tags": [
+        "similar_slot_ids",
+        "temporal_boundary"
+      ],
+      "user_text": "Aiden, 10001 apartment. Range will not ignite after we tried lighting it earlier."
+    },
+    {
+      "case_id": "F120_F2_003",
+      "fail_runs": 9,
+      "of_max": 18,
+      "family": "F2_partial_flow_a",
+      "branch": "missing_service_inputs",
+      "tags": [],
+      "user_text": "Jules, apartment 10001. Something in the kitchen stopped working after dinner and I am not sure which appliance it is — just that food prep is stuck."
+    },
+    {
+      "case_id": "F120_F5_020",
+      "fail_runs": 9,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "no_valid_after_filter",
+      "tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "user_text": "Zed from the clinic kitchen at 10003. Microwave died during the late tray rush."
+    },
+    {
+      "case_id": "F120_F6_019",
+      "fail_runs": 9,
+      "of_max": 18,
+      "family": "F6_robustness_hard_cases",
+      "branch": "not_serviceable",
+      "tags": [
+        "unsupported_concrete_unit_type",
+        "irrelevant_chatter"
+      ],
+      "user_text": "Willa at my apartment in 10001. Built-in ice maker stopped making cubes after the party and guests keep asking about drinks."
+    },
+    {
+      "case_id": "MP_F5_003",
+      "fail_runs": 8,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "no_valid_after_filter",
+      "tags": [
+        "no_valid_after_filter",
+        "temporal_boundary",
+        "irrelevant_chatter"
+      ],
+      "user_text": "Imani here in 10001, home dryer drum spins but there is no heat. I can step out whenever needed."
+    },
+    {
+      "case_id": "F120_F6_009",
+      "fail_runs": 8,
+      "of_max": 18,
+      "family": "F6_robustness_hard_cases",
+      "branch": "booking_failure",
+      "tags": [
+        "booking_failure",
+        "similar_slot_ids",
+        "unsorted_slots"
+      ],
+      "user_text": "Lana at my house in 10012. Dryer has no heat; neighbors keep asking about the laundry smell."
+    },
+    {
+      "case_id": "R40_F5_008",
+      "fail_runs": 7,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "no_valid_after_filter",
+      "tags": [
+        "no_valid_after_filter",
+        "unsorted_slots",
+        "temporal_boundary"
+      ],
+      "user_text": "Rex at my house, 10012. Dryer drum spins but there is no heat and the laundry basket is overflowing."
+    },
+    {
+      "case_id": "F120_F5_009",
+      "fail_runs": 7,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "booking_failure",
+      "tags": [
+        "booking_failure",
+        "similar_slot_ids",
+        "unsorted_slots"
+      ],
+      "user_text": "Nora at my house in 10012. Washer bangs on spin and the hallway is loud enough already."
+    },
+    {
+      "case_id": "F120_F6_022",
+      "fail_runs": 7,
+      "of_max": 18,
+      "family": "F6_robustness_hard_cases",
+      "branch": "not_serviceable",
+      "tags": [
+        "unsupported_concrete_unit_type",
+        "later_correction",
+        "unsupported_user_assumption"
+      ],
+      "user_text": "Zack — wait, not 10011, apartment ZIP is 10001. Trash compactor jammed and the hallway smells. You already know this building, just send someone."
+    },
+    {
+      "case_id": "R40_F5_007",
+      "fail_runs": 6,
+      "of_max": 18,
+      "family": "F5_full_flow",
+      "branch": "no_valid_after_filter",
+      "tags": [
+        "no_valid_after_filter",
+        "temporal_boundary"
+      ],
+      "user_text": "Pia here in my apartment at 10001. Microwave died during leftovers; I can step out if needed."
+    }
+  ],
+  "branch_pass": {
+    "extract_only": {
+      "n": 180,
+      "pass": 180,
+      "pass_pct": 100,
+      "fail": 0
+    },
+    "non_new_job": {
+      "n": 36,
+      "pass": 34,
+      "pass_pct": 94.4,
+      "fail": 2
+    },
+    "ready_for_slot_fetch": {
+      "n": 72,
+      "pass": 72,
+      "pass_pct": 100,
+      "fail": 0
+    },
+    "not_serviceable": {
+      "n": 162,
+      "pass": 139,
+      "pass_pct": 85.8,
+      "fail": 23
+    },
+    "slots_returned": {
+      "n": 72,
+      "pass": 72,
+      "pass_pct": 100,
+      "fail": 0
+    },
+    "slot_selected": {
+      "n": 180,
+      "pass": 162,
+      "pass_pct": 90,
+      "fail": 18
+    },
+    "booking_success": {
+      "n": 396,
+      "pass": 379,
+      "pass_pct": 95.7,
+      "fail": 17
+    },
+    "slots_busy": {
+      "n": 252,
+      "pass": 249,
+      "pass_pct": 98.8,
+      "fail": 3
+    },
+    "no_valid_after_filter": {
+      "n": 252,
+      "pass": 213,
+      "pass_pct": 84.5,
+      "fail": 39
+    },
+    "booking_failure": {
+      "n": 288,
+      "pass": 268,
+      "pass_pct": 93.1,
+      "fail": 20
+    },
+    "missing_service_inputs": {
+      "n": 144,
+      "pass": 135,
+      "pass_pct": 93.8,
+      "fail": 9
+    },
+    "no_valid_slot": {
+      "n": 90,
+      "pass": 85,
+      "pass_pct": 94.4,
+      "fail": 5
+    },
+    "missing_slot_inputs": {
+      "n": 18,
+      "pass": 15,
+      "pass_pct": 83.3,
+      "fail": 3
+    },
+    "slots_empty": {
+      "n": 18,
+      "pass": 0,
+      "pass_pct": 0,
+      "fail": 18
+    }
+  }
+}

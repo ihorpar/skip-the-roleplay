@@ -1,0 +1,272 @@
+{
+  "model": "openai:gpt-4.1-mini",
+  "pack": "full_120",
+  "styles": [
+    "A1_task",
+    "A2_role",
+    "A3_comp",
+    "S_role_long_pure"
+  ],
+  "modes": [
+    "B1_instant"
+  ],
+  "repeats": 3,
+  "bootstrap": {
+    "B": 10000,
+    "seed": 20260724,
+    "unit": "ticket",
+    "pairing": "same_ticket_mean_over_repeats"
+  },
+  "reading_rule": "ticket-level paired bootstrap 95% CI must exclude 0",
+  "overall_runs": {
+    "r1": {
+      "n": 480,
+      "scored": 480,
+      "pass_pct": 61.666666666666664,
+      "infra": 0,
+      "unscorable": 0,
+      "dir": "RESEARCH/benchmark_pack_v1/runs/gpt41mini_full120_hypotheses_20260724_154938"
+    },
+    "r2": {
+      "n": 480,
+      "scored": 480,
+      "pass_pct": 62.5,
+      "infra": 0,
+      "unscorable": 0,
+      "dir": "RESEARCH/benchmark_pack_v1/runs/gpt41mini_full120_r2_20260724_234548"
+    },
+    "r3": {
+      "n": 480,
+      "scored": 480,
+      "pass_pct": 61.25,
+      "infra": 0,
+      "unscorable": 0,
+      "dir": "RESEARCH/benchmark_pack_v1/runs/gpt41mini_full120_r3_20260725_000049"
+    }
+  },
+  "infra_total": {
+    "infra": 0,
+    "unscorable": 0,
+    "scored": 1440
+  },
+  "pooled_scored": 1440,
+  "by_style": {
+    "A1_task": {
+      "pass": 227,
+      "n": 360,
+      "pass_pct": 63.05555555555556
+    },
+    "A2_role": {
+      "pass": 241,
+      "n": 360,
+      "pass_pct": 66.94444444444444
+    },
+    "A3_comp": {
+      "pass": 226,
+      "n": 360,
+      "pass_pct": 62.77777777777778
+    },
+    "S_role_long_pure": {
+      "pass": 196,
+      "n": 360,
+      "pass_pct": 54.44444444444444
+    }
+  },
+  "families": {
+    "F1_extract": {
+      "A1_task": {
+        "pass": 30,
+        "n": 30,
+        "pass_pct": 100
+      },
+      "A2_role": {
+        "pass": 30,
+        "n": 30,
+        "pass_pct": 100
+      },
+      "A3_comp": {
+        "pass": 29,
+        "n": 30,
+        "pass_pct": 96.66666666666667
+      },
+      "S_role_long_pure": {
+        "pass": 30,
+        "n": 30,
+        "pass_pct": 100
+      }
+    },
+    "F2_partial_flow_a": {
+      "A1_task": {
+        "pass": 21,
+        "n": 30,
+        "pass_pct": 70
+      },
+      "A2_role": {
+        "pass": 24,
+        "n": 30,
+        "pass_pct": 80
+      },
+      "A3_comp": {
+        "pass": 21,
+        "n": 30,
+        "pass_pct": 70
+      },
+      "S_role_long_pure": {
+        "pass": 15,
+        "n": 30,
+        "pass_pct": 50
+      }
+    },
+    "F3_partial_flow_b": {
+      "A1_task": {
+        "pass": 14,
+        "n": 30,
+        "pass_pct": 46.666666666666664
+      },
+      "A2_role": {
+        "pass": 19,
+        "n": 30,
+        "pass_pct": 63.333333333333336
+      },
+      "A3_comp": {
+        "pass": 17,
+        "n": 30,
+        "pass_pct": 56.666666666666664
+      },
+      "S_role_long_pure": {
+        "pass": 12,
+        "n": 30,
+        "pass_pct": 40
+      }
+    },
+    "F4_select": {
+      "A1_task": {
+        "pass": 34,
+        "n": 45,
+        "pass_pct": 75.55555555555556
+      },
+      "A2_role": {
+        "pass": 37,
+        "n": 45,
+        "pass_pct": 82.22222222222223
+      },
+      "A3_comp": {
+        "pass": 37,
+        "n": 45,
+        "pass_pct": 82.22222222222223
+      },
+      "S_role_long_pure": {
+        "pass": 28,
+        "n": 45,
+        "pass_pct": 62.22222222222222
+      }
+    },
+    "F5_full_flow": {
+      "A1_task": {
+        "pass": 62,
+        "n": 105,
+        "pass_pct": 59.04761904761905
+      },
+      "A2_role": {
+        "pass": 58,
+        "n": 105,
+        "pass_pct": 55.23809523809524
+      },
+      "A3_comp": {
+        "pass": 56,
+        "n": 105,
+        "pass_pct": 53.333333333333336
+      },
+      "S_role_long_pure": {
+        "pass": 50,
+        "n": 105,
+        "pass_pct": 47.61904761904762
+      }
+    },
+    "F6_robustness_hard_cases": {
+      "A1_task": {
+        "pass": 66,
+        "n": 120,
+        "pass_pct": 55
+      },
+      "A2_role": {
+        "pass": 73,
+        "n": 120,
+        "pass_pct": 60.833333333333336
+      },
+      "A3_comp": {
+        "pass": 66,
+        "n": 120,
+        "pass_pct": 55
+      },
+      "S_role_long_pure": {
+        "pass": 61,
+        "n": 120,
+        "pass_pct": 50.833333333333336
+      }
+    }
+  },
+  "contrasts": {
+    "A2-A1": {
+      "n": 120,
+      "mean_pp": 3.8888888888888884,
+      "ci95_lo": -1.6666666666666659,
+      "ci95_hi": 9.444444444444441,
+      "excludes0": false,
+      "clears_bar": false,
+      "ticket_flips": {
+        "win": 19,
+        "loss": 13,
+        "tie": 88,
+        "net": 6
+      },
+      "B": 10000
+    },
+    "A3-A2": {
+      "n": 120,
+      "mean_pp": -4.166666666666667,
+      "ci95_lo": -9.444444444444446,
+      "ci95_hi": 0.8333333333333334,
+      "excludes0": false,
+      "clears_bar": false,
+      "ticket_flips": {
+        "win": 8,
+        "loss": 16,
+        "tie": 96,
+        "net": -8
+      },
+      "B": 10000
+    },
+    "A3-A1": {
+      "n": 120,
+      "mean_pp": -0.2777777777777774,
+      "ci95_lo": -4.999999999999998,
+      "ci95_hi": 4.444444444444444,
+      "excludes0": false,
+      "clears_bar": false,
+      "ticket_flips": {
+        "win": 13,
+        "loss": 13,
+        "tie": 94,
+        "net": 0
+      },
+      "B": 10000
+    },
+    "pureLong-A1": {
+      "n": 120,
+      "mean_pp": -8.61111111111111,
+      "ci95_lo": -14.722222222222221,
+      "ci95_hi": -2.7777777777777746,
+      "excludes0": true,
+      "clears_bar": true,
+      "ticket_flips": {
+        "win": 10,
+        "loss": 25,
+        "tie": 85,
+        "net": -15
+      },
+      "B": 10000
+    }
+  },
+  "note": "Does NOT rewrite Luna CLAIM.md; separate model-transfer claim pack."
+}

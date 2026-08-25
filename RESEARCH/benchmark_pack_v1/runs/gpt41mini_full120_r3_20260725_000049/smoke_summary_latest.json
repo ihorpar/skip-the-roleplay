@@ -1,0 +1,137 @@
+{
+  "started_at": "2026-07-25T04:00:49.959Z",
+  "finished_at": "2026-07-25T04:16:08.251Z",
+  "bundle_path": "RESEARCH/benchmark_pack_v1/full_120/full_120_bundle_v1.json",
+  "run_config": {
+    "harnessMode": "multi_turn",
+    "models": [
+      {
+        "provider": "openai",
+        "model": "gpt-4.1-mini"
+      }
+    ],
+    "promptStyles": [
+      "A1_task",
+      "A2_role",
+      "A3_comp",
+      "S_role_long_pure"
+    ],
+    "modes": [
+      "B1_instant"
+    ],
+    "caseCount": 120,
+    "runCount": 480,
+    "concurrency": 2
+  },
+  "overall": {
+    "total_runs": 480,
+    "scored_runs": 480,
+    "infra_error_runs": 0,
+    "eval_unscorable_runs": 0,
+    "pass_rate": 0.6125,
+    "json_valid_rate": 1,
+    "schema_valid_rate": 0.88125,
+    "tool_trigger_precision": 1,
+    "tool_trigger_recall": 0.9405829596412556,
+    "tool_argument_accuracy": 1,
+    "tool_call_exact_match_rate": 0.7833333333333333,
+    "over_action_rate": 0.1625,
+    "under_action_rate": 0.10625
+  },
+  "by_model": {
+    "openai:gpt-4.1-mini": {
+      "total_runs": 480,
+      "scored_runs": 480,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6125,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.88125,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9405829596412556,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.7833333333333333,
+      "over_action_rate": 0.1625,
+      "under_action_rate": 0.10625
+    }
+  },
+  "by_prompt_style": {
+    "A1_task": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6166666666666667,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.8916666666666667,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9506726457399103,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.7916666666666666,
+      "over_action_rate": 0.15,
+      "under_action_rate": 0.09166666666666666
+    },
+    "A2_role": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.675,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9166666666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9551569506726457,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.8166666666666667,
+      "over_action_rate": 0.13333333333333333,
+      "under_action_rate": 0.08333333333333333
+    },
+    "A3_comp": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.65,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.9166666666666666,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9327354260089686,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.8,
+      "over_action_rate": 0.125,
+      "under_action_rate": 0.125
+    },
+    "S_role_long_pure": {
+      "total_runs": 120,
+      "scored_runs": 120,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.5083333333333333,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.8,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9237668161434978,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.725,
+      "over_action_rate": 0.24166666666666667,
+      "under_action_rate": 0.125
+    }
+  },
+  "by_mode": {
+    "B1_instant": {
+      "total_runs": 480,
+      "scored_runs": 480,
+      "infra_error_runs": 0,
+      "eval_unscorable_runs": 0,
+      "pass_rate": 0.6125,
+      "json_valid_rate": 1,
+      "schema_valid_rate": 0.88125,
+      "tool_trigger_precision": 1,
+      "tool_trigger_recall": 0.9405829596412556,
+      "tool_argument_accuracy": 1,
+      "tool_call_exact_match_rate": 0.7833333333333333,
+      "over_action_rate": 0.1625,
+      "under_action_rate": 0.10625
+    }
+  }
+}

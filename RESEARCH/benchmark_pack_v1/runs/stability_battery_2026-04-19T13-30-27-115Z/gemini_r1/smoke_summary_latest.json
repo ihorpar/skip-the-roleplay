@@ -1,0 +1,120 @@
+{
+  "started_at": "2026-04-19T13:33:33.768Z",
+  "finished_at": "2026-04-19T13:38:40.057Z",
+  "bundle_path": "RESEARCH/benchmark_pack_v1/micro_pilot/micro_pilot_bundle_v1.json",
+  "run_config": {
+    "models": [
+      {
+        "provider": "gemini",
+        "model": "gemini-3.5-flash"
+      }
+    ],
+    "promptStyles": [
+      "A1_task",
+      "A3_comp"
+    ],
+    "modes": [
+      "B1_instant",
+      "B2_thinking"
+    ],
+    "caseCount": 15,
+    "runCount": 60,
+    "concurrency": 1
+  },
+  "overall": {
+    "total_runs": 60,
+    "scored_runs": 0,
+    "infra_error_runs": 60,
+    "eval_unscorable_runs": 0,
+    "pass_rate": null,
+    "json_valid_rate": null,
+    "schema_valid_rate": null,
+    "tool_trigger_precision": null,
+    "tool_trigger_recall": null,
+    "tool_argument_accuracy": null,
+    "tool_call_exact_match_rate": null,
+    "over_action_rate": null,
+    "under_action_rate": null
+  },
+  "by_model": {
+    "gemini:gemini-3.5-flash": {
+      "total_runs": 60,
+      "scored_runs": 0,
+      "infra_error_runs": 60,
+      "eval_unscorable_runs": 0,
+      "pass_rate": null,
+      "json_valid_rate": null,
+      "schema_valid_rate": null,
+      "tool_trigger_precision": null,
+      "tool_trigger_recall": null,
+      "tool_argument_accuracy": null,
+      "tool_call_exact_match_rate": null,
+      "over_action_rate": null,
+      "under_action_rate": null
+    }
+  },
+  "by_prompt_style": {
+    "A1_task": {
+      "total_runs": 30,
+      "scored_runs": 0,
+      "infra_error_runs": 30,
+      "eval_unscorable_runs": 0,
+      "pass_rate": null,
+      "json_valid_rate": null,
+      "schema_valid_rate": null,
+      "tool_trigger_precision": null,
+      "tool_trigger_recall": null,
+      "tool_argument_accuracy": null,
+      "tool_call_exact_match_rate": null,
+      "over_action_rate": null,
+      "under_action_rate": null
+    },
+    "A3_comp": {
+      "total_runs": 30,
+      "scored_runs": 0,
+      "infra_error_runs": 30,
+      "eval_unscorable_runs": 0,
+      "pass_rate": null,
+      "json_valid_rate": null,
+      "schema_valid_rate": null,
+      "tool_trigger_precision": null,
+      "tool_trigger_recall": null,
+      "tool_argument_accuracy": null,
+      "tool_call_exact_match_rate": null,
+      "over_action_rate": null,
+      "under_action_rate": null
+    }
+  },
+  "by_mode": {
+    "B1_instant": {
+      "total_runs": 30,
+      "scored_runs": 0,
+      "infra_error_runs": 30,
+      "eval_unscorable_runs": 0,
+      "pass_rate": null,
+      "json_valid_rate": null,
+      "schema_valid_rate": null,
+      "tool_trigger_precision": null,
+      "tool_trigger_recall": null,
+      "tool_argument_accuracy": null,
+      "tool_call_exact_match_rate": null,
+      "over_action_rate": null,
+      "under_action_rate": null
+    },
+    "B2_thinking": {
+      "total_runs": 30,
+      "scored_runs": 0,
+      "infra_error_runs": 30,
+      "eval_unscorable_runs": 0,
+      "pass_rate": null,
+      "json_valid_rate": null,
+      "schema_valid_rate": null,
+      "tool_trigger_precision": null,
+      "tool_trigger_recall": null,
+      "tool_argument_accuracy": null,
+      "tool_call_exact_match_rate": null,
+      "over_action_rate": null,
+      "under_action_rate": null
+    }
+  }
+}
