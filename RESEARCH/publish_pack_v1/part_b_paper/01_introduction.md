@@ -21,4 +21,4 @@ We test this on an appliance-repair scheduling exam: simulated tools, Structured
 
 2. **A secondary mode result.** Medium reasoning effort lifts full-pass rates versus instant (+8.4 pp overall). Asking the model to think changes outcomes here. The short identity line does not.
 
-3. **Appendix follow-ups.** A3 is one generic sentence, not domain coaching. Longer-persona and other-model checks stay in the appendix and do not rewrite the Luna claim.
+3. **Appendix A.** On `gpt-4.1-mini`, a longer pure persona clearly hurt (−8.6 pp). Short role still did not clear the bar. Nano models show the exam is hard when the model is weak. None of that rewrites the Luna claim.

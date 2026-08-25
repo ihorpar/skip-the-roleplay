@@ -30,4 +30,4 @@ We ran OpenAI `gpt-5.6-luna` on 120 frozen cases. Prompt styles: task instructio
 
 Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 cleared that bar in instant, in thinking, or pooled. Short role and generic competencies did not show a clear help or clear harm **in this setup**. Pass rates are high, especially with thinking on, so a tiny true effect could still hide. Thinking beat instant by **+8.4 pp** (96.9% vs 88.5%). The title is about the role line, not that mode gap.
 
-**Limits.** A3 is one generic sentence, not domain coaching. Pass/fail is all-or-nothing. One confirmatory model, one domain.
+**Limits.** A3 is one generic sentence, not domain coaching. Pass/fail is all-or-nothing. One confirmatory model, one domain. A longer persona on `gpt-4.1-mini` hurt; that is a separate appendix claim.

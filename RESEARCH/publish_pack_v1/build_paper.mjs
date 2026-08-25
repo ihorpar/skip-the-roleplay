@@ -130,6 +130,10 @@ function wrapHeadingTables(html) {
     let extra = '';
     if (tableMatch) extra = tableMatch[0];
     else if (subTable) extra = subTable[0];
+    else {
+      const listMatch = afterLead.match(/^\s*<(ol|ul)\b[\s\S]*?<\/\1>/i);
+      if (listMatch && listMatch[0].length < 1400) extra = listMatch[0];
+    }
 
     if (!extra) {
       out += heading;

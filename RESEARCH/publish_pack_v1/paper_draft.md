@@ -14,7 +14,7 @@ We ran OpenAI `gpt-5.6-luna` on 120 frozen cases. Prompt styles: task instructio
 
 Under the locked rule (case-level paired bootstrap 95% CI must exclude 0), none of A2−A1, A3−A2, or A3−A1 cleared that bar in instant, in thinking, or pooled. Short role and generic competencies did not show a clear help or clear harm **in this setup**. Pass rates are high, especially with thinking on, so a tiny true effect could still hide. Thinking beat instant by **+8.4 pp** (96.9% vs 88.5%). The title is about the role line, not that mode gap.
 
-**Limits.** A3 is one generic sentence, not domain coaching. Pass/fail is all-or-nothing. One confirmatory model, one domain.
+**Limits.** A3 is one generic sentence, not domain coaching. Pass/fail is all-or-nothing. One confirmatory model, one domain. A longer persona on `gpt-4.1-mini` hurt; that is a separate appendix claim.
 
 ## 1. Introduction
 
@@ -34,7 +34,7 @@ We test this on an appliance-repair scheduling exam: simulated tools, Structured
 
 2. **A secondary mode result.** Medium reasoning effort lifts full-pass rates versus instant (+8.4 pp overall). Asking the model to think changes outcomes here. The short identity line does not.
 
-3. **Appendix follow-ups.** A3 is one generic sentence, not domain coaching. Longer-persona and other-model checks stay in the appendix and do not rewrite the Luna claim.
+3. **Appendix A.** On `gpt-4.1-mini`, a longer pure persona clearly hurt (−8.6 pp). Short role still did not clear the bar. Nano models show the exam is hard when the model is weak. None of that rewrites the Luna claim.
 
 ## 2. Related work
 
@@ -281,7 +281,7 @@ Mode is not a prompt-style contrast, but the lift is large and consistent. Overa
 
 ### Exploratory work
 
-Supporting checks on weaker models (nano) and longer pure personas are **exploratory**. A separate confirmatory matrix on `gpt-4.1-mini` (B1 only, 1440 graded attempts) is reported in `06_appendix_exploratory.md` and does **not** rewrite the Luna prompt-style claim; under the same analysis rule, only longer-persona vs task-only met the threshold there (hurt). A one-repeat `gemini-3.5-flash-lite` full_120 screen (~76–80% by style) is also appendix-only and is **not** claim-ready.
+The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On `gpt-4.1-mini` (B1 only, 1440 graded attempts) a longer pure persona **hurt** (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat `gemini-3.5-flash-lite` screen (~76–80% by style) is appendix-only and not claim-ready. Numbers and protocols are in Appendix A.
 
 ## 5. Discussion
 
