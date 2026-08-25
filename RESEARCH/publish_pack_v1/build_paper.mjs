@@ -58,7 +58,7 @@ const AUTHOR = 'Ihor Parinov (TARK AI)';
 const ORCID = '0009-0006-9411-8633';
 const ORCID_URL = `https://orcid.org/${ORCID}`;
 const DATE = 'August 2026';
-const VERSION = 'Preprint v1.1';
+const VERSION = 'Preprint v1.2';
 const REPO = 'https://github.com/ihorpar/skip-the-roleplay';
 const REPO_BRANCH = 'master';
 
@@ -112,7 +112,7 @@ const mdParts = [
   '',
   '### Persona prompting did not improve a real-world AI agent',
   '',
-  `**${AUTHOR}** · [ORCID ${ORCID}](${ORCID_URL}) · ${VERSION} · ${DATE}`,
+  `**${AUTHOR}** · [ORCID ${ORCID}](${ORCID_URL}) · ${VERSION} · ${DATE} · CC BY 4.0`,
   '',
   '## Abstract',
   '',
@@ -277,7 +277,7 @@ const html = `<!doctype html>
   <div class="titleblock">
     <h1>Skip the Roleplay</h1>
     <p class="sub">Persona prompting did not improve a real-world AI agent</p>
-    <p class="meta">${AUTHOR} &middot; <a href="${ORCID_URL}">ORCID ${ORCID}</a> &middot; ${VERSION} &middot; ${DATE}</p>
+    <p class="meta">${AUTHOR} &middot; <a href="${ORCID_URL}">ORCID ${ORCID}</a> &middot; ${VERSION} &middot; ${DATE} &middot; CC BY 4.0</p>
   </div>
 ${bodyHtml}
 </body>

@@ -2,7 +2,7 @@
 
 ### Persona prompting did not improve a real-world AI agent
 
-**Ihor Parinov (TARK AI)** · [ORCID 0009-0006-9411-8633](https://orcid.org/0009-0006-9411-8633) · Preprint v1.1 · August 2026
+**Ihor Parinov (TARK AI)** · [ORCID 0009-0006-9411-8633](https://orcid.org/0009-0006-9411-8633) · Preprint v1.2 · August 2026 · CC BY 4.0
 
 ## Abstract
 
@@ -150,6 +150,8 @@ Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trac
 | **B1** (instant) | `reasoning.effort = none`, `temperature = 0` |
 | **B2** (thinking) | `reasoning.effort = medium`, `temperature` omitted |
 
+B2 vs B1 compares the provider's two API modes, not reasoning tokens with every other decoding setting held fixed. Instant sets `temperature = 0`. Thinking omits temperature because that is how this API serves medium reasoning effort.
+
 Shared runtime notes (locked protocol): `max_output_tokens = 3000`; final answers via Structured Outputs (`json_schema` + enums); tool arguments via strict schemas with the same unit enums; request timeout 45 000 ms; up to 2 retries on timeout/network/429/5xx. Tool results are injected from fixtures; the loop terminates when the model returns a final structured answer or hits harness stop/timeout rules.
 
 ### Prompt-style conditions
@@ -275,7 +277,17 @@ Point estimates are small. Under the excludes-0 rule: **no clear help or harm** 
 
 Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: **96.9%** (B2) vs **88.5%** (B1), a **+8.4 pp** gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). Asking the model to think moves full-case pass here. The short identity line does not. The persona null still holds inside both modes.
 
-**Reliability.** Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all *k* repeats” as a confirmatory metric. Fail-reason splits (tool vs field vs phrase) by prompt style are out of the locked claim tables; secondary harness diagnostics exist but were not used for confirmatory prompt-style language.
+**Reliability.** Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all *k* repeats” as a confirmatory metric.
+
+**Tool diagnostics (exploratory).** The three shipped repeat summaries ([`03_main_runs/r1`](https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1)–`r3/smoke_summary_latest.json`) report run-level tool checks, not a locked fail-bucket table. Exact tool-trace rate sits about 2 pp above full pass in every style. The leftover is fields, status, and the canonical customer phrase together. That gap does not open under A2. Tools and full pass move together.
+
+| Style | Full pass % | Exact tool trace % | Extra or wrong tool % | Missing required tool % |
+|-------|------------:|-------------------:|----------------------:|------------------------:|
+| A1 | 92.9 | 94.7 | 4.3 | 3.5 |
+| A2 | 93.3 | 95.4 | 3.9 | 3.1 |
+| A3 | 91.9 | 93.8 | 6.1 | 3.5 |
+
+720 graded attempts per style. Tool-argument accuracy is 100% in every cell. These rates are not confirmatory endpoints.
 
 **What failures look like.** Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.
 

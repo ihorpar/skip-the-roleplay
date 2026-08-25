@@ -76,7 +76,17 @@ Point estimates are small. Under the excludes-0 rule: **no clear help or harm** 
 
 Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: **96.9%** (B2) vs **88.5%** (B1), a **+8.4 pp** gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). Asking the model to think moves full-case pass here. The short identity line does not. The persona null still holds inside both modes.
 
-**Reliability.** Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all *k* repeats” as a confirmatory metric. Fail-reason splits (tool vs field vs phrase) by prompt style are out of the locked claim tables; secondary harness diagnostics exist but were not used for confirmatory prompt-style language.
+**Reliability.** Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all *k* repeats” as a confirmatory metric.
+
+**Tool diagnostics (exploratory).** The three shipped repeat summaries (`03_main_runs/r1`–`r3/smoke_summary_latest.json`) report run-level tool checks, not a locked fail-bucket table. Exact tool-trace rate sits about 2 pp above full pass in every style. The leftover is fields, status, and the canonical customer phrase together. That gap does not open under A2. Tools and full pass move together.
+
+| Style | Full pass % | Exact tool trace % | Extra or wrong tool % | Missing required tool % |
+|-------|------------:|-------------------:|----------------------:|------------------------:|
+| A1 | 92.9 | 94.7 | 4.3 | 3.5 |
+| A2 | 93.3 | 95.4 | 3.9 | 3.1 |
+| A3 | 91.9 | 93.8 | 6.1 | 3.5 |
+
+720 graded attempts per style. Tool-argument accuracy is 100% in every cell. These rates are not confirmatory endpoints.
 
 **What failures look like.** Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.
 

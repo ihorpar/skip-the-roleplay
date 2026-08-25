@@ -56,7 +56,7 @@
   <div class="titleblock">
     <h1>Skip the Roleplay</h1>
     <p class="sub">Persona prompting did not improve a real-world AI agent</p>
-    <p class="meta">Ihor Parinov (TARK AI) &middot; <a href="https://orcid.org/0009-0006-9411-8633">ORCID 0009-0006-9411-8633</a> &middot; Preprint v1.1 &middot; August 2026</p>
+    <p class="meta">Ihor Parinov (TARK AI) &middot; <a href="https://orcid.org/0009-0006-9411-8633">ORCID 0009-0006-9411-8633</a> &middot; Preprint v1.2 &middot; August 2026 &middot; CC BY 4.0</p>
   </div>
 <h2>Abstract</h2>
 <p>Production agents that book jobs and call tools often start with a role line (&quot;you are a scheduling agent&quot;) and a sentence of generic professional virtues. The rest of the prompt is usually already a long, correct task policy plus strict tool and output schemas. We tested whether those extra identity lines change how often the agent fully completes the job.</p>
@@ -210,6 +210,7 @@
 <td><code>reasoning.effort = medium</code>, <code>temperature</code> omitted</td>
 </tr>
 </tbody></table></div>
+<p>B2 vs B1 compares the provider&#39;s two API modes, not reasoning tokens with every other decoding setting held fixed. Instant sets <code>temperature = 0</code>. Thinking omits temperature because that is how this API serves medium reasoning effort.</p>
 <p>Shared runtime notes (locked protocol): <code>max_output_tokens = 3000</code>; final answers via Structured Outputs (<code>json_schema</code> + enums); tool arguments via strict schemas with the same unit enums; request timeout 45 000 ms; up to 2 retries on timeout/network/429/5xx. Tool results are injected from fixtures; the loop terminates when the model returns a final structured answer or hits harness stop/timeout rules.</p>
 <div class="keep"><h3>Prompt-style conditions</h3>
 <p>Across A1/A2/A3, the shared task instructions, user prompt, tools, and schemas are fixed. Only the role/competencies block may differ. A3 is locked to <strong>generic</strong> soft competencies (no exam-specific or workflow coaching). This is the text practitioners actually paste as “competencies,” not competency engineering. Prompt length was <strong>not</strong> equalized with filler; if A3 differs from A2 under the analysis rule, attribution is to competency <strong>content</strong>, not length. Competencies without a role were not tested.</p>
@@ -448,9 +449,43 @@
 </svg>
 </div><p><em>Figure 3. All nine locked prompt-style contrasts. Every 95% interval crosses zero.</em></p></div>
 <p>Point estimates are small. Under the excludes-0 rule: <strong>no clear help or harm</strong> from short role / soft competencies.</p>
-<h3>Secondary result: thinking ≫ instant</h3>
+<div class="keep"><h3>Secondary result: thinking ≫ instant</h3>
 <p>Mode is not a prompt-style contrast, but the lift is large and consistent. Overall case-averaged pass: <strong>96.9%</strong> (B2) vs <strong>88.5%</strong> (B1), a <strong>+8.4 pp</strong> gap. The same direction appears inside every prompt style (A1: +7.5 pp; A2: +7.8 pp; A3: +10.0 pp). Asking the model to think moves full-case pass here. The short identity line does not. The persona null still holds inside both modes.</p>
-<p><strong>Reliability.</strong> Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric. Fail-reason splits (tool vs field vs phrase) by prompt style are out of the locked claim tables; secondary harness diagnostics exist but were not used for confirmatory prompt-style language.</p>
+<p><strong>Reliability.</strong> Three independent repeats feed case means; overall graded pass by repeat was stable (r1–r3 above). We do not report pass^k-style “pass on all <em>k</em> repeats” as a confirmatory metric.</p>
+<p><strong>Tool diagnostics (exploratory).</strong> The three shipped repeat summaries (<a href="https://github.com/ihorpar/skip-the-roleplay/tree/master/RESEARCH/track1_role_study_package/03_main_runs/r1"><code>03_main_runs/r1</code></a>–<code>r3/smoke_summary_latest.json</code>) report run-level tool checks, not a locked fail-bucket table. Exact tool-trace rate sits about 2 pp above full pass in every style. The leftover is fields, status, and the canonical customer phrase together. That gap does not open under A2. Tools and full pass move together.</p>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th align="right">Full pass %</th>
+<th align="right">Exact tool trace %</th>
+<th align="right">Extra or wrong tool %</th>
+<th align="right">Missing required tool %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td align="right">92.9</td>
+<td align="right">94.7</td>
+<td align="right">4.3</td>
+<td align="right">3.5</td>
+</tr>
+<tr>
+<td>A2</td>
+<td align="right">93.3</td>
+<td align="right">95.4</td>
+<td align="right">3.9</td>
+<td align="right">3.1</td>
+</tr>
+<tr>
+<td>A3</td>
+<td align="right">91.9</td>
+<td align="right">93.8</td>
+<td align="right">6.1</td>
+<td align="right">3.5</td>
+</tr>
+</tbody></table></div>
+<p>720 graded attempts per style. Tool-argument accuracy is 100% in every cell. These rates are not confirmatory endpoints.</p>
 <p><strong>What failures look like.</strong> Fails concentrate in B1. Two recurring patterns in the run logs: booking under the wrong name when the customer text contains a name conflict, and booking a slot whose start time equals the current clock when gold requires a future slot. Both are workflow-discipline errors rather than extraction errors. This is an exploratory observation from failure review, outside the claim tables.</p>
 <h3>Exploratory work</h3>
 <p>The exam is not a toy for every model. Under task-only instant, nano models sit near 0%. On <code>gpt-4.1-mini</code> (B1 only, 1440 graded attempts) a longer pure persona <strong>hurt</strong> (−8.6 pp; the interval stays below 0). Short role and generic competencies still did not meet the threshold. That is a separate claim. It does not rewrite the Luna null. A one-repeat <code>gemini-3.5-flash-lite</code> screen (~76–80% by style) is appendix-only and not claim-ready. Numbers and protocols are in Appendix A.</p>

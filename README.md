@@ -1,4 +1,4 @@
-﻿# Skip the Roleplay
+# Skip the Roleplay
 
 Persona prompting did not improve a real-world AI agent.
 
@@ -15,7 +15,7 @@ Under the locked analysis rule (case-level paired bootstrap 95% CI must exclude 
 - Story: [ihorparinov.com/research/skip-roleplay-part-a](https://ihorparinov.com/research/skip-roleplay-part-a/)
 - Paper DOI, always the latest version: [doi.org/10.5281/zenodo.22089532](https://doi.org/10.5281/zenodo.22089532)
 - This version: [zenodo.org/records/22090051](https://zenodo.org/records/22090051)
-- PDF in this repo: [`RESEARCH/publish_pack_v1/paper_draft.pdf`](RESEARCH/publish_pack_v1/paper_draft.pdf)
+- PDF in this repo: [`RESEARCH/publish_pack_v1/skip-the-roleplay.pdf`](RESEARCH/publish_pack_v1/skip-the-roleplay.pdf)
 
 ## Re-run the eval
 

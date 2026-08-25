@@ -86,6 +86,8 @@ Attempts that fail for API/harness reasons (timeout, rate limit, unscorable trac
 | **B1** (instant) | `reasoning.effort = none`, `temperature = 0` |
 | **B2** (thinking) | `reasoning.effort = medium`, `temperature` omitted |
 
+B2 vs B1 compares the provider's two API modes, not reasoning tokens with every other decoding setting held fixed. Instant sets `temperature = 0`. Thinking omits temperature because that is how this API serves medium reasoning effort.
+
 Shared runtime notes (locked protocol): `max_output_tokens = 3000`; final answers via Structured Outputs (`json_schema` + enums); tool arguments via strict schemas with the same unit enums; request timeout 45 000 ms; up to 2 retries on timeout/network/429/5xx. Tool results are injected from fixtures; the loop terminates when the model returns a final structured answer or hits harness stop/timeout rules.
 
 ## Prompt-style conditions
